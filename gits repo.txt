@@ -1,4 +1,0 @@
-используемый:
-https://github.com/onox/OpenRTI.git
-этот с улучшенями:
-https://github.com/vectorgrp/OpenRTI.git
