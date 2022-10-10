@@ -64,7 +64,7 @@ int MyCreateFederationExecution()
 
     try
     {
-        ambassador->createFederationExecution(L"TEST1", L"M:/GIT2/ieee1516/UnityTestHLA/Assets/Plugins/fdd_test.xml");
+        ambassador->createFederationExecution(L"TEST1", L"M:/GIT2/ieee1516/UnityTest/Assets/Plugins/fdd_test.xml");
     }
     catch (const rti1516e::Exception& e)
     {
