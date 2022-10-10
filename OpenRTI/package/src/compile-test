@@ -1,0 +1,128 @@
+#!/bin/sh
+
+# Crude compile test to check if all combinations build
+# The script needs an argument with the source directory
+if [ -z "$1" ] ; then
+    1>&2 echo "Need the source directory as a first argument"
+    exit 1
+fi
+
+builddir=/tmp/OpenRTI-compileTest-$$
+
+case `uname` in
+    CYGWIN*)
+        generators[0]="Visual Studio 17 2022"
+        # Puh, cl only understands a single standard that is baken in
+        # But we highjack this to walk the architetures now
+        stdflags[0]="-A Win32"
+        stdflags[1]="-A x64"
+        ;;
+    Linux*)
+        generators[0]=""
+        case `cmake --version` in
+            cmake\ version\ 3.*)
+                stdflags[0]="-DCMAKE_CXX_STANDARD=98"
+                stdflags[1]="-DCMAKE_CXX_STANDARD=11"
+                # stdflags[2]="-DCMAKE_CXX_STANDARD=14"
+                stdflags[2]="-DCMAKE_CXX_STANDARD=17"
+                stdflags[3]="-DCMAKE_CXX_STANDARD=20"
+                ;;
+            *)
+                stdflags[0]=""
+                ;;
+        esac
+        ;;
+    *)
+        generators[0]=""
+        stdflags[0]=""
+        ;;
+esac
+
+for generator in "${generators[@]}" ; do
+    for stdflag in "${stdflags[@]}" ; do
+        for build_shared in TRUE FALSE ; do
+            for buildconfig in Debug Release RelWithDebInfo ; do
+                # Put this into a subshell
+                (
+                    function cleanup {
+                        rm -rf "$builddir"
+                    }
+                    trap cleanup EXIT
+
+                    mkdir "$builddir"
+                    if [ "$?" != "0" ] ; then
+                        1>&2 echo "Cannot create temporary build directory"
+                        exit 1
+                    fi
+
+                    cd "$builddir" &&
+                        if [ "$?" != "0" ] ; then
+                            1>&2 echo "Cannot step into temporary build directory"
+                            exit 1
+                        fi
+                    if [ -z "$generator" ] ; then
+                        cmake \
+                            -DOPENRTI_BUILD_SHARED=$build_shared \
+                            -DCMAKE_BUILD_TYPE=$buildconfig \
+                            "$stdflag" \
+                            "$@"
+                        if [ "$?" != "0" ] ; then
+                            1>&2 echo "Configure step failed."
+                            exit 1
+                        fi
+                    else
+                        cmake -G "$generator" \
+                              -DOPENRTI_BUILD_SHARED=$build_shared \
+                              -DCMAKE_BUILD_TYPE=$buildconfig \
+                              "$stdflag" \
+                              "$@"
+                        if [ "$?" != "0" ] ; then
+                            1>&2 echo "Configure step failed."
+                            exit 1
+                        fi
+                    fi
+
+                    case `uname` in
+                        CYGWIN*)
+                            cmake --build . --config $buildconfig
+                            if [ "$?" != "0" ] ; then
+                                1>&2 echo "Build step failed."
+                                exit 1
+                            fi
+                            ;;
+                        SunOS*)
+                            gmake -j8
+                            if [ "$?" != "0" ] ; then
+                                1>&2 echo "Build step failed."
+                                exit 1
+                            fi
+                            ;;
+                        *)
+                            make -j8
+                            if [ "$?" != "0" ] ; then
+                                1>&2 echo "Build step failed."
+                                exit 1
+                            fi
+                            ;;
+                    esac
+
+                    case ${buildconfig}`uname` in
+                        *Linux|Release*CYGWIN*)
+                            ctest --buildconfig $buildconfig
+                            if [ "$?" != "0" ] ; then
+                                1>&2 echo "Tests failed."
+                                exit 1
+                            fi
+                            ;;
+                        *)
+                            ;;
+                    esac
+                    cd -
+                )
+                if [ "$?" != "0" ] ; then
+                    exit 1
+                fi
+            done
+        done
+    done
+done

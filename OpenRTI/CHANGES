@@ -1,0 +1,123 @@
+OpenRTI-0.11.0 (development)
+----------------------------
+
+ * Increase minimum supported cmake version to 2.8.13.
+ * For a more detailed list of changes see the git history.
+
+OpenRTI-0.10.0 (2022-04-11)
+----------------------------
+
+ * With the python binding, allow subclassing of RTIambassador. 
+ * Make use of current cmakes python detection.
+ * Fix logical time interval implementation for rti1516{,e}.
+ * Fix logical time implementation for RTI13.
+ * Try to prevent overflow with c++11 and infinite timeouts.
+ * RTI13: Prefer rti13 fed files over xml files in fed file parsing.
+ * Silence gcc warnings - rti can't adhere to that.
+ * Finally make OpenRTI work again with c++17 and newer.
+ * Several fixes to rti1516e {de,en}conding helpers.
+   Thanks to Victor Minaev.
+ * For a more detailed list of changes see the git history.
+
+OpenRTI-0.9.0 (2017-05-01)
+---------------------------
+
+ * Correct the logic for rti1516e's Federation Synchronized service.
+ * Fix enumeration of federation executions.
+ * Make the include subdirectory for each of the apis configurable.
+ * Change the default include subdirectory for the old style api to RTI13.
+ * Route CMAKE_<CONFIG>_POSTFIX correctly through the MSVC dll cyclic link.
+ * Route CMAKE_<CONFIG>_POSTFIX correctly through the win32 gcc dll cyclic link.
+ * Use the 'd' postfix for binary incompatible MSVC debug libraries.
+ * For a more detailed list of changes see the git history.
+
+OpenRTI-0.8.0 (2016-07-31)
+---------------------------
+
+ * Switched default transport to rti://localhost.
+ * Rework zlib transport compression selection.
+ * Fix a relative RPATH expansion issue.
+ * Embed the rti1516e::HLAstandardMIM.xml file into librti1516e.
+ * Provide a rti1516e python binding.
+ * Accept a url=<url> in rti1516 connect arguments.
+ * Implement loading fom modules from data: uri's as in rfc2397.
+ * Remove the leading underscore from the python binding implementations.
+ * Static builds should work now on most of the configurations.
+ * For a more detailed list of changes see the git history.
+
+OpenRTI-0.7.0 (2015-02-14)
+---------------------------
+
+ * Implement federate object modules also on join.
+ * Bail out on any failure experienced during rtinode startup.
+ * For a more detailed list of changes see the git history.
+
+OpenRTI-0.6.0 (2014-11-22)
+---------------------------
+
+ * Port to MinGW.
+ * Make use ot the memory model parameters in the atomic implementation.
+ * Bring the language binding of rti1516e to the same level than rti1516.
+ * Make advisory switches do something sensible, even if it is not coorrect.
+ * Implement requestClassAttributeUpdate.
+ * Fix default value for asynchronous delivery enabled.
+ * Add a new url protocol to configure an ambassador driven rtinode.
+ * Reorder build files to improve running tests on windows.
+ * Implement update rate parsing for rti1516e.
+ * Make std::wstring values contain utf-16/utf-32 instead of ucs-2/ucs-4.
+ * Fix timeout with connect failures on win32.
+ * For a more detailed list of changes see the git history.
+
+OpenRTI-0.5.0 2014-03-26
+---------------------------
+
+ * Rework the server class structure.
+ * Make every leaf server run in a thread.
+ * Present each sent timestmp on reflectAttributeValues. 
+ * Divide attribute updates into passels per order/transportation type.
+ * Rework timestamped queues.
+ * Fix timestamped message delivery just past getting time constrained.
+ * Fix order type of messages sent as timestamped.
+ * Handle ConnectionLostMessage.
+ * Fix timeout on connection refused.
+ * Use much more efficient WSASend/WSARecv in win32.
+ * Change epsilon handling in double logical times.
+ * Adapt to cmake upstream change regarding INTERFACE_LINK_LIBRARIES.
+ * Make all time advance modes work with time management enabled.
+ * Make librti1516e find its management object model file relative to its own location.
+ * Implement {enable,disable}Callbacks().
+ * Improove compatibility with macos.
+ * For a more detailed list of changes see the git history.
+
+OpenRTI-0.4.1 2013-??-??
+------------------------
+
+* Fix an assert with visual c++ 2012
+* Fix decoding of handles for rti1516/rti1516e
+* Fix an iterator problem with rti1516e::HLAfixedRecord
+* Fix rtinode pulling 100% cpu time under some circumstance.
+* Hide artificial HLA{interaction,object}Root in full qualified name lookup.
+* Strip full qualified rti1516 parts from {interaction,object} fdd class names.
+* Fix BasicDataElements decoding
+
+OpenRTI-0.4.0 2013-04-06
+------------------------
+
+ * Added this CHANGES file.
+ * Add the mozilla public license to the applicable licenses.
+ * Enable more already existing functionality in the RTI1516E binding.
+ * Import the most recent api header files for RTI1516E.
+ * Improove direct link compatibility with other RTI1516E implementations.
+ * Add bits of a RTI1516E encoding implementation.
+ * Enable test for interaction delivery.
+ * Add test for timestamped interaction delivery.
+ * Better root object name matching for compatibility between RTI variants.
+ * Avoid compression on localhost connects.
+ * Fixed a crash on exit with macos when stopping rtinode.
+ * Various bug fixes and typos.
+ * For a more detailed list of changes see the git history.
+
+OpenRTI-0.3.0 and before
+------------------------
+
+ * See git histroy.
