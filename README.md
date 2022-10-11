@@ -1,6 +1,9 @@
 # OpenRTI_Unity
-IEEE1516-2010 (HLA Evolved) for Unity C# 
+IEEE1516-2010 (HLA Evolved) for Unity C#
+used in company projects https://Lcontent.ru
+
 based on OpenRTI
+
 
 genaral OpenRTI repo:
 https://github.com/onox/OpenRTI.git
