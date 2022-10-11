@@ -11,8 +11,11 @@ https://github.com/vectorgrp/OpenRTI.git
 items:
 
 DLLtoUnity - VisualStudio project DLL for Unity<->OpenRTI communication
+
 OpenRTI - OpenRTI library (clone https://github.com/onox/OpenRTI.git)
+
 UnityTest - Unity test project (2021.3.8)
+
 
 use:
 
@@ -27,8 +30,11 @@ use:
 Состав:
 
 DLLtoUnity - собственно DLL для связи Unity<->OpenRTI
+
 OpenRTI - библиотека OpenRTI (клон https://github.com/onox/OpenRTI.git)
+
 UnityTest - тестовый проект Unity (2021.3.8)
+
 
 Порядок сборки:
 1. Установка cmake, установка VisualStudio (рекомендуется 2022)
