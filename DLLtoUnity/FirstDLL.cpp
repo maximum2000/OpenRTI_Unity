@@ -37,6 +37,8 @@ BOOL APIENTRY DllMain(HINSTANCE hModule, DWORD  reason, LPVOID lpReserved)
 int MyConnect()
 {
     LastErrorString = L"";
+    FederationName = L"";
+    FederateName = L"";
 
     try
     {
@@ -58,15 +60,17 @@ int MyConnect()
 }
 
 //создать федерат
-int MyCreateFederationExecution()
+int MyCreateFederationExecution(std::wstring name)
 {
     LastErrorString = L"";
+    FederationName = name;
 
     try
     {
         //M:/GIT2/ieee1516/UnityTest/Assets/Plugins
         //C:/WORK/OpenRTI_Unity/UnityTest/Assets/Plugins
-        ambassador->createFederationExecution(L"TEST1", L"C:/WORK/OpenRTI_Unity/UnityTest/Assets/Plugins/fdd_test.xml");
+        
+        ambassador->createFederationExecution(FederationName, L"C:/WORK/OpenRTI_Unity/UnityTest/Assets/Plugins/fdd_test.xml");
     }
     catch (const rti1516e::Exception& e)
     {
@@ -84,14 +88,15 @@ int MyCreateFederationExecution()
 }
 
 //присоедениться к федерации
-int MyJoinFederationExecution()
+int MyJoinFederationExecution(std::wstring name)
 {
     LastErrorString = L"";
+    FederateName = name;
 
     try
     {
         //подключаемс к федерации TEST1 как федерат с именем "federate"
-        ambassador->joinFederationExecution(L"federate", L"TEST1");
+        ambassador->joinFederationExecution(FederateName,FederationName );
     }
     catch (const rti1516e::Exception& e)
     {
@@ -244,10 +249,9 @@ int evokeCallback(double dT)
 }
 
 
-int StartRTI(char* myString, int length)
+//первичное подключение к серверу (RTInode)
+int Connect(char* myString, int length)
 {
-    //std::cout << "Max Gammer Test 1" << std::endl;
-
     //OpenRTI::RTI1516ESimpleAmbassador ambassador;
     ambassador = new OpenRTI::RTI1516EAmbassadorLContent();
     ambassador->setUseDataUrlObjectModels(false);
@@ -256,7 +260,6 @@ int StartRTI(char* myString, int length)
     When I call "connect" function with computer name as its input (i.e ambassador->connect("rti://rtinodeSystem")) the federate can join to rti(rtinode in TCP mode),
     but if I replace computer name with its IP (i.e ambassador->connect("rti://192.168.1.4")) it cannot. Why this happen?
     Is the syntax when we use the IP address something else(I am sure that the "rtinodeSystem"s IP is "192.168.1.4")?
-
     Maybe  turn off IPV6_V6ONLY ?
     */
 
@@ -268,33 +271,54 @@ int StartRTI(char* myString, int length)
         return 1;
     }
    
-    // create, must work
-    ret = MyCreateFederationExecution();
-    if (ret == 1)
-    {
-        std::string s(LastErrorString.begin(), LastErrorString.end());
-        strcpy_s(myString, length, s.c_str());
-        return 1;
-    }
-
-    // join must work
-    ret = MyJoinFederationExecution();
-    if (ret == 1)
-    {
-        std::string s(LastErrorString.begin(), LastErrorString.end());
-        strcpy_s(myString, length, s.c_str());
-        return 1;
-    }
-
-
-   
-   
-    
     //std::cout << "Max Gammer Test 2" << std::endl;
     std::string s("ok");
     strcpy_s(myString, length, s.c_str());
-
     return 0 ;
+}
+
+//создание федерации
+int CreateFederationExecution(char* myString, int length)
+{
+    std::wstringstream cls;
+    cls << myString;
+    std::wstring name = cls.str();
+
+    ambassador->SendLog(name, 0);
+
+    // create, must work
+    int ret = MyCreateFederationExecution(name);
+    if (ret == 1)
+    {
+        std::string s(LastErrorString.begin(), LastErrorString.end());
+        strcpy_s(myString, length, s.c_str());
+        return 1;
+    }
+    std::string s("ok");
+    strcpy_s(myString, length, s.c_str());
+    return 0;
+}
+
+//подключение нового федерата
+int JoinFederationExecution(char* myString, int length)
+{
+    std::wstringstream cls;
+    cls << myString;
+    std::wstring name = cls.str();
+
+    ambassador->SendLog(name,0);
+
+    // join must work
+    int ret = MyJoinFederationExecution(name);
+    if (ret == 1)
+    {
+        std::string s(LastErrorString.begin(), LastErrorString.end());
+        strcpy_s(myString, length, s.c_str());
+        return 1;
+    }
+    std::string s("ok");
+    strcpy_s(myString, length, s.c_str());
+    return 0;
 }
 
 

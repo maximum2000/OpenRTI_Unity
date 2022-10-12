@@ -19,7 +19,11 @@ public class TestDLL : MonoBehaviour
     public static extern int ListFederationExecutions(StringBuilder myString, int length);
 
     [DllImport("DLLtoUnity")]
-    public static extern int StartRTI(StringBuilder myString, int length);
+    public static extern int Connect(StringBuilder myString, int length);
+    [DllImport("DLLtoUnity")]
+    public static extern int CreateFederationExecution(StringBuilder myString, int length);
+    [DllImport("DLLtoUnity")]
+    public static extern int JoinFederationExecution(StringBuilder myString, int length);
 
     [DllImport("DLLtoUnity")]
     public static extern int RegisterFederationSynchronizationPoint(StringBuilder myString, int length);
@@ -28,17 +32,9 @@ public class TestDLL : MonoBehaviour
     public static extern int SynchronizationPointAchieved(StringBuilder myString, int length);
 
 
-
-    //[DllImport("DLLtoUnity")]
-    // public static extern int GetSynchronizationPointAchievedFlag(StringBuilder myString, int length);
-    //[DllImport("DLLtoUnity")]
-    //public static extern int GetFederationSynchronizedFlag(StringBuilder myString, int length);
-    //[DllImport("DLLtoUnity")]
-    //public static extern int GetSynchronizationPointFlag(StringBuilder myString, int length);
-    //[DllImport("DLLtoUnity")]
-    //public static extern int GetConnectionLost(StringBuilder myString, int length);
-
     public TextMeshProUGUI text1;
+    public TMP_InputField FedarationName;
+    public TMP_InputField FedarateName;
 
     //!!!
     //Debug
@@ -55,7 +51,7 @@ public class TestDLL : MonoBehaviour
     void OnDestroy()
     {
         RegisterDebugCallback(null);
-        RegisterÑonnectionLostCallback(null);
+        RegisterConnectionLostCallback(null);
         RegisterReportFederationExecutionsCallback(null);
         RegisterSynchronizationPointRegistrationSucceededCallback(null);
         RegisterSynchronizationPointRegistrationFailedCallback(null);
@@ -67,9 +63,9 @@ public class TestDLL : MonoBehaviour
 
     //!!!
     //connectionLost
-    private delegate void ñonnectionLostCallback(IntPtr message, int size);
+    private delegate void ConnectionLostCallback(IntPtr message, int size);
     [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
-    private static extern void RegisterÑonnectionLostCallback(ñonnectionLostCallback callback);
+    private static extern void RegisterConnectionLostCallback(ConnectionLostCallback callback);
 
     private static void ConnectionLost(IntPtr message, int size)
     {
@@ -187,12 +183,12 @@ public class TestDLL : MonoBehaviour
         text1.text = myString2;
     }
 
-    public void  Step1()
+    public void  Step1a()
     {
-        //ðåãèñòðàöèÿ callback-ôóíêöèé
+        //
         {
             RegisterDebugCallback(DebugLog);
-            RegisterÑonnectionLostCallback(ConnectionLost);
+            RegisterConnectionLostCallback(ConnectionLost);
             RegisterReportFederationExecutionsCallback(ReportFederationExecutions);
             RegisterSynchronizationPointRegistrationSucceededCallback(SynchronizationPointRegistrationSucceeded);
             RegisterSynchronizationPointRegistrationFailedCallback(SynchronizationPointRegistrationFailed);
@@ -202,9 +198,29 @@ public class TestDLL : MonoBehaviour
 
 
         StringBuilder str2 = new StringBuilder(100);
-        StartRTI(str2, str2.Capacity);
+        Connect(str2, str2.Capacity);
         string myString2 = str2.ToString();
-        Debug.Log("test: " + myString2);
+        Debug.Log("Connect: " + myString2);
+
+        text1.text = myString2;
+    }
+
+    public void  Step1b()
+    {
+        StringBuilder str2 = new StringBuilder(FedarationName.text, 100);
+        CreateFederationExecution(str2, str2.Capacity);
+        string myString2 = str2.ToString();
+        Debug.Log("CreateFederationExecution: " + myString2);
+
+        text1.text = myString2;
+    }
+
+    public void  Step1c()
+    {
+        StringBuilder str2 = new StringBuilder(FedarateName.text, 100);
+        JoinFederationExecution(str2, str2.Capacity);
+        string myString2 = str2.ToString();
+        Debug.Log("JoinFederationExecution: " + myString2);
 
         text1.text = myString2;
     }

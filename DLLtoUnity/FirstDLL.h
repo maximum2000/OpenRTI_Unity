@@ -24,7 +24,9 @@
 extern "C"
 {
     
-    DLLExport int StartRTI(char* myString, int length);
+    DLLExport int Connect(char* myString, int length);
+    DLLExport int CreateFederationExecution(char* myString, int length);
+    DLLExport int JoinFederationExecution(char* myString, int length);
 
     DLLExport int RegisterFederationSynchronizationPoint(char* myString, int length);
     DLLExport int SynchronizationPointAchieved(char* myString, int length);
@@ -38,6 +40,7 @@ extern "C"
 OpenRTI::RTI1516EAmbassadorLContent *ambassador;
 
 std::wstring LastErrorString;
-
+std::wstring FederationName;
+std::wstring FederateName;
 
 #endif

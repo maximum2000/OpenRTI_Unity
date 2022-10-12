@@ -39,7 +39,7 @@ extern "C"
 {
     typedef void(*ÒonnectionLostCallback)(const char* message, int size);
     static ÒonnectionLostCallback ÒonnectionLostCallbackFunction = nullptr;
-    __declspec(dllexport) void Register—onnectionLostCallback(ÒonnectionLostCallback callback);
+    __declspec(dllexport) void RegisterConnectionLostCallback(ÒonnectionLostCallback callback);
 }
 
 extern "C"
@@ -86,7 +86,7 @@ void RegisterDebugCallback(DebugCallback callback)
 {
     callbackFunction = callback;
 }
-void Register—onnectionLostCallback(ÒonnectionLostCallback callback)
+void RegisterConnectionLostCallback(ÒonnectionLostCallback callback)
 {
     ÒonnectionLostCallbackFunction = callback;
 }
