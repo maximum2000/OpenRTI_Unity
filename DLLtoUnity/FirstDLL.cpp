@@ -326,6 +326,138 @@ int JoinFederationExecution(char* myString, int length)
 /*
 
 
+ //rti1516::InteractionClassHandle
+    //rti1516::ParameterHandle class0Parameter0Handle;
+
+    try
+    {
+      _requestInteractionClassHandle = ambassador.getInteractionClassHandle(L"Request");
+      //ambassador.getInteractionClassHandle(L"HLAinteractionRoot.InteractionClass0");
+    }
+    catch (const rti1516::Exception& e)
+    {
+      std::wcout << L"rti1516::Exception: \"" << e.what() << L"\"" << std::endl;
+      return false;
+    }
+    catch (...)
+    {
+      std::wcout << L"Unknown Exception!" << std::endl;
+      return false;
+    }
+
+    try
+    {
+      _requestTypeHandle = ambassador.getParameterHandle(_requestInteractionClassHandle, L"requestType");
+    }
+    catch (const rti1516::Exception& e)
+    {
+      std::wcout << L"rti1516::Exception: \"" << e.what() << L"\"" << std::endl;
+      return false;
+    }
+    catch (...) {
+      std::wcout << L"Unknown Exception!" << std::endl;
+      return false;
+    }
+
+
+
+    try {
+      ambassador.subscribeInteractionClass(_requestInteractionClassHandle);
+    } catch (const rti1516::Exception& e) {
+      std::wcout << L"rti1516::Exception: \"" << e.what() << L"\"" << std::endl;
+      return false;
+    } catch (...) {
+      std::wcout << L"Unknown Exception!" << std::endl;
+      return false;
+    }
+
+    try {
+      ambassador.publishInteractionClass(_requestInteractionClassHandle);
+    } catch (const rti1516::Exception& e) {
+      std::wcout << L"rti1516::Exception: \"" << e.what() << L"\"" << std::endl;
+      return false;
+    } catch (...) {
+      std::wcout << L"Unknown Exception!" << std::endl;
+      return false;
+    }
+
+
+
+ ambassador.evokeCallback(10.0)
+
+rti1516::ParameterHandleValueMap parameterValues;
+interactionClassHandle = interactionClassHandle1;
+parameterValues[class1Parameter0Handle] = toVariableLengthData("parameter0");
+parameterValues[class1Parameter1Handle] = toVariableLengthData("parameter1");
+
+try {
+  ambassador.sendInteraction(interactionClassHandle, parameterValues, getFederateHandle().encode());
+
+  // Also send when we reponded, so that the requestor knows when we have sent something
+  parameterValues.clear();
+  parameterValues[_requestTypeHandle] = toVariableLengthData(unsigned(_requestType));
+  ambassador.sendInteraction(_requestInteractionClassHandle, parameterValues, _requestFederate);
+}
+catch (const rti1516::Exception& e)
+{
+  std::wcout << L"rti1516::Exception: \"" << e.what() << L"\"" << std::endl;
+  return false;
+}
+catch (...)
+{
+  std::wcout << L"Unknown Exception!" << std::endl;
+  return false;
+}
+
+
+
+
+
+
+  void receiveInteraction(rti1516::InteractionClassHandle interactionClassHandle,
+                          const rti1516::ParameterHandleValueMap& parameterValues,
+                          const rti1516::VariableLengthData& tag,
+                          rti1516::OrderType sentOrder,
+                          rti1516::TransportationType theType)
+      RTI_THROW ((rti1516::InteractionClassNotRecognized,
+             rti1516::InteractionParameterNotRecognized,
+             rti1516::InteractionClassNotSubscribed,
+             rti1516::FederateInternalError))
+  {
+    if (interactionClassHandle != _requestInteractionClassHandle) {
+      std::wcout << L"Received interaction class that was not subscribed!" << std::endl;
+      _fail = true;
+      _receivedInteraction = true;
+    }
+
+    if (getFederateHandle().encode() != tag)
+      return;
+
+    if (interactionClassHandle == _interactionClassHandles[0])
+      _receivedRequestType = Interaction0;
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // and now resign must work
       try {
         ambassador->resignFederationExecution(rti1516e::CANCEL_THEN_DELETE_THEN_DIVEST);
