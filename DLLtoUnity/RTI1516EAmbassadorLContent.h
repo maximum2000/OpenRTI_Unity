@@ -1122,6 +1122,13 @@ namespace OpenRTI
             const std::wstring& objectInstanceName)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            
+            SendLog(L"discoverObjectInstance 1", 0);
+
+            //Log(Assert, Error) << "discover "  << objectClassHandle.toString() << " " << objectInstanceHandle.toString() << std::endl;
+            
+            
+            // 
             // ObjectClassAttributeHandleSetMap::iterator i = _subscribedObjectClassAttributeHandleSetMap.find(objectClassHandle);
             // if (i == _subscribedObjectClassAttributeHandleSetMap.end()) {
             //     fail();
@@ -1150,6 +1157,8 @@ namespace OpenRTI
             rti1516e::SupplementalReflectInfo)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"reflectAttributeValues 1", 0);
+
             // _verifyReflectAttributeValues(objectInstanceHandle, attributeHandleValueMap);
         }
 
@@ -1159,6 +1168,7 @@ namespace OpenRTI
             const rti1516e::RegionHandleSet&, rti1516e::SupplementalReflectInfo)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"reflectAttributeValues 2", 0);
             // _verifyReflectAttributeValues(objectInstanceHandle, attributeHandleValueMap);
         }
 
@@ -1168,6 +1178,7 @@ namespace OpenRTI
             const rti1516e::LogicalTime&, rti1516e::OrderType, rti1516e::SupplementalReflectInfo)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"reflectAttributeValues 3", 0);
             // _verifyReflectAttributeValues(objectInstanceHandle, attributeHandleValueMap);
         }
 
@@ -1178,6 +1189,7 @@ namespace OpenRTI
             rti1516e::SupplementalReflectInfo)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"reflectAttributeValues 4", 0);
             // _verifyReflectAttributeValues(objectInstanceHandle, attributeHandleValueMap);
         }
 
@@ -1188,6 +1200,7 @@ namespace OpenRTI
             rti1516e::SupplementalReflectInfo)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"reflectAttributeValues 5", 0);
             // _verifyReflectAttributeValues(objectInstanceHandle, attributeHandleValueMap);
         }
 
@@ -1198,6 +1211,7 @@ namespace OpenRTI
             const rti1516e::RegionHandleSet&, rti1516e::SupplementalReflectInfo)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"reflectAttributeValues 6", 0);
             // _verifyReflectAttributeValues(objectInstanceHandle, attributeHandleValueMap);
         }
 
@@ -1206,6 +1220,24 @@ namespace OpenRTI
             rti1516e::SupplementalReceiveInfo theReceiveInfo)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            //if (interactionClassHandle != _requestInteractionClassHandle) 
+            //{
+            //    std::wcout << L"Received interaction class that was not subscribed!" << std::endl;
+            //}
+
+            //if (getFederateHandle().encode() != tag)
+
+            SendLog(L"receiveInteraction1", 0);
+
+            //через callback вызываем функцию на стороне с#
+            //std::string s(label.begin(), label.end());
+            //const char* tmsg = s.c_str();
+            //if (federationSynchronizedFunction != nullptr)
+            //{
+            //    federationSynchronizedFunction(tmsg, (int)strlen(tmsg));
+            //}
+
+
         }
 
         virtual void receiveInteraction(rti1516e::InteractionClassHandle, const rti1516e::ParameterHandleValueMap&,
@@ -1213,6 +1245,7 @@ namespace OpenRTI
             const rti1516e::RegionHandleSet&, rti1516e::SupplementalReceiveInfo theReceiveInfo)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"receiveInteraction2", 0);
         }
 
         virtual void receiveInteraction(rti1516e::InteractionClassHandle interaction,
@@ -1225,6 +1258,7 @@ namespace OpenRTI
             rti1516e::SupplementalReceiveInfo theReceiveInfo)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"receiveInteraction3", 0);
         }
 
         virtual void receiveInteraction(rti1516e::InteractionClassHandle interaction,
@@ -1238,6 +1272,7 @@ namespace OpenRTI
             rti1516e::SupplementalReceiveInfo theReceiveInfo)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"receiveInteraction4", 0);
         }
 
         virtual void receiveInteraction(rti1516e::InteractionClassHandle interaction,
@@ -1251,6 +1286,7 @@ namespace OpenRTI
             rti1516e::SupplementalReceiveInfo theReceiveInfo)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"receiveInteraction5", 0);
         }
 
         virtual void receiveInteraction(rti1516e::InteractionClassHandle interaction,
@@ -1265,6 +1301,7 @@ namespace OpenRTI
             rti1516e::SupplementalReceiveInfo theReceiveInfo)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"receiveInteraction6", 0);
         }
 
         virtual void removeObjectInstance(rti1516e::ObjectInstanceHandle objectInstanceHandle,
@@ -1273,6 +1310,7 @@ namespace OpenRTI
             rti1516e::SupplementalRemoveInfo theRemoveInfo)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"removeObjectInstance 1", 0);
             // _verifyRemoveObjectInstance(objectInstanceHandle);
         }
 
@@ -1284,6 +1322,7 @@ namespace OpenRTI
             rti1516e::SupplementalRemoveInfo theRemoveInfo)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"removeObjectInstance 2", 0);
             // _verifyRemoveObjectInstance(objectInstanceHandle);
         }
 
@@ -1296,6 +1335,7 @@ namespace OpenRTI
             rti1516e::SupplementalRemoveInfo theRemoveInfo)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"removeObjectInstance 3", 0);
             // _verifyRemoveObjectInstance(objectInstanceHandle);
         }
 

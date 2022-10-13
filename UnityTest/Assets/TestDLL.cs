@@ -14,6 +14,10 @@ public class TestDLL : MonoBehaviour
     [DllImport("DLLtoUnity")]
     public static extern int evokeCallback(double dT);
 
+    [DllImport("DLLtoUnity")]
+    public static extern int TestInteraction(StringBuilder myString, int length);
+    [DllImport("DLLtoUnity")]
+    public static extern int TestObjects(StringBuilder myString, int length);
 
     [DllImport("DLLtoUnity")]
     public static extern int ListFederationExecutions(StringBuilder myString, int length);
@@ -224,6 +228,28 @@ public class TestDLL : MonoBehaviour
 
         text1.text = myString2;
     }
+
+    public void  StepTest()
+    {
+        StringBuilder str2 = new StringBuilder( 100);
+        TestInteraction(str2, str2.Capacity);
+        string myString2 = str2.ToString();
+        Debug.Log("TestInteraction: " + myString2);
+        text1.text = myString2;
+    }
+
+    public void  StepTestObjects()
+    {
+        StringBuilder str2 = new StringBuilder( 100);
+        TestObjects(str2, str2.Capacity);
+        string myString2 = str2.ToString();
+        Debug.Log("TestObjects: " + myString2);
+        text1.text = myString2;
+    }
+
+
+    
+    
 
     // Start is called before the first frame update
     void Start()

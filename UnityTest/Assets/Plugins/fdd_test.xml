@@ -8,9 +8,9 @@
       </attribute>
 
       <objectClass>
-        <name>ObjectClass3</name>
+        <name>ObjectClass0</name>
         <attribute>
-          <name>Attribute3</name>
+          <name>Attribute0</name>
         </attribute>
       </objectClass>
     </objectClass>
@@ -20,9 +20,9 @@
       <name>HLAinteractionRoot</name>
    
       <interactionClass>
-        <name>InteractionClass3</name>
+        <name>InteractionClass0</name>
         <parameter>
-          <name>Parameter3</name>
+          <name>Parameter0</name>
         </parameter>
       </interactionClass>
 	  

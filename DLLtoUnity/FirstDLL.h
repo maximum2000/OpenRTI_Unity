@@ -18,6 +18,8 @@
 #define NOMINMAX
 #include <windows.h>
 
+//typedef std::map<rti1516e::ObjectClassHandle, rti1516e::AttributeHandleSet> ObjectClassAttributeHandleSet;
+
 
 #define DLLExport __declspec(dllexport)  //nothrow
 
@@ -32,8 +34,12 @@ extern "C"
     DLLExport int SynchronizationPointAchieved(char* myString, int length);
     DLLExport int ListFederationExecutions(char* myString, int length);
     DLLExport int evokeCallback(double dT);
-    
 
+    //Тест интеракций
+    DLLExport int TestInteraction(char* myString, int length); 
+    //Тест объектов
+    DLLExport int TestObjects(char* myString, int length);
+    
 }
 
 

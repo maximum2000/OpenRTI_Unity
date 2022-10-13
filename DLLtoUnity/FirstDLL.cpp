@@ -323,139 +323,307 @@ int JoinFederationExecution(char* myString, int length)
 
 
 
-/*
+inline rti1516e::VariableLengthData toVariableLengthData(const char* s)
+{
+    rti1516e::VariableLengthData variableLengthData;
+    if (s)
+    {
+        variableLengthData.setData(s, (unsigned long)strlen(s));
+    }
+    return variableLengthData;
+}
 
+inline rti1516e::VariableLengthData toVariableLengthData(const OpenRTI::Clock& c)
+{
+    // May be at some time make this endian safe
+    rti1516e::VariableLengthData variableLengthData;
+    variableLengthData.setData(&c, (unsigned long)sizeof(c));
+    return variableLengthData;
+}
 
- //rti1516::InteractionClassHandle
-    //rti1516::ParameterHandle class0Parameter0Handle;
+inline rti1516e::VariableLengthData toVariableLengthData(const std::wstring& s)
+{
+    rti1516e::VariableLengthData variableLengthData;
+    variableLengthData.setData(s.data(), (unsigned long)(sizeof(std::wstring::value_type) * s.size()));
+    return variableLengthData;
+}
+
+//--------------------------------------------------------
+//Тест интеракций
+int MyTestInteraction()
+{
+    LastErrorString = L"";
+
+    rti1516e::InteractionClassHandle InteractionClass0Handle;
+    rti1516e::ParameterHandle class0Parameter0Handle;
 
     try
     {
-      _requestInteractionClassHandle = ambassador.getInteractionClassHandle(L"Request");
-      //ambassador.getInteractionClassHandle(L"HLAinteractionRoot.InteractionClass0");
+        InteractionClass0Handle = ambassador->getInteractionClassHandle(L"HLAinteractionRoot.InteractionClass0");
     }
-    catch (const rti1516::Exception& e)
+    catch (const rti1516e::Exception& e)
     {
-      std::wcout << L"rti1516::Exception: \"" << e.what() << L"\"" << std::endl;
-      return false;
+        LastErrorString = e.what();
+        std::wcout << L"rti1516e::Exception: \"" << e.what() << L"\"" << std::endl;
+        return 1;
     }
     catch (...)
     {
-      std::wcout << L"Unknown Exception!" << std::endl;
-      return false;
+        LastErrorString = L"Unknown Exception!";
+        std::wcout << L"Unknown Exception!" << std::endl;
+        return 1;
     }
 
     try
     {
-      _requestTypeHandle = ambassador.getParameterHandle(_requestInteractionClassHandle, L"requestType");
+        class0Parameter0Handle = ambassador->getParameterHandle(InteractionClass0Handle, L"Parameter0");
     }
-    catch (const rti1516::Exception& e)
+    catch (const rti1516e::Exception& e)
     {
-      std::wcout << L"rti1516::Exception: \"" << e.what() << L"\"" << std::endl;
-      return false;
+        LastErrorString = e.what();
+        std::wcout << L"rti1516e::Exception: \"" << e.what() << L"\"" << std::endl;
+        return 1;
     }
-    catch (...) {
-      std::wcout << L"Unknown Exception!" << std::endl;
-      return false;
-    }
-
-
-
-    try {
-      ambassador.subscribeInteractionClass(_requestInteractionClassHandle);
-    } catch (const rti1516::Exception& e) {
-      std::wcout << L"rti1516::Exception: \"" << e.what() << L"\"" << std::endl;
-      return false;
-    } catch (...) {
-      std::wcout << L"Unknown Exception!" << std::endl;
-      return false;
-    }
-
-    try {
-      ambassador.publishInteractionClass(_requestInteractionClassHandle);
-    } catch (const rti1516::Exception& e) {
-      std::wcout << L"rti1516::Exception: \"" << e.what() << L"\"" << std::endl;
-      return false;
-    } catch (...) {
-      std::wcout << L"Unknown Exception!" << std::endl;
-      return false;
+    catch (...) 
+    {
+        LastErrorString = L"Unknown Exception!";
+        std::wcout << L"Unknown Exception!" << std::endl;
+        return 1;
     }
 
 
 
- ambassador.evokeCallback(10.0)
+    try 
+    {
+        ambassador->subscribeInteractionClass(InteractionClass0Handle);
+    }
+    catch (const rti1516e::Exception& e) 
+    {
+        LastErrorString = e.what();
+        std::wcout << L"rti1516::Exception: \"" << e.what() << L"\"" << std::endl;
+        return 1;
+    }
+    catch (...) 
+    {
+        LastErrorString = L"Unknown Exception!";
+        std::wcout << L"Unknown Exception!" << std::endl;
+        return 1;
+    }
 
-rti1516::ParameterHandleValueMap parameterValues;
-interactionClassHandle = interactionClassHandle1;
-parameterValues[class1Parameter0Handle] = toVariableLengthData("parameter0");
-parameterValues[class1Parameter1Handle] = toVariableLengthData("parameter1");
+    try 
+    {
+        ambassador->publishInteractionClass(InteractionClass0Handle);
+    }
+    catch (const rti1516e::Exception& e) 
+    {
+        LastErrorString = e.what();
+        std::wcout << L"rti1516::Exception: \"" << e.what() << L"\"" << std::endl;
+        return 1;
+    }
+    catch (...) 
+    {
+        LastErrorString = L"Unknown Exception!";
+        std::wcout << L"Unknown Exception!" << std::endl;
+        return 1;
+    }
 
-try {
-  ambassador.sendInteraction(interactionClassHandle, parameterValues, getFederateHandle().encode());
 
-  // Also send when we reponded, so that the requestor knows when we have sent something
-  parameterValues.clear();
-  parameterValues[_requestTypeHandle] = toVariableLengthData(unsigned(_requestType));
-  ambassador.sendInteraction(_requestInteractionClassHandle, parameterValues, _requestFederate);
+
+    ambassador->evokeCallback(1.0);
+
+    rti1516e::ParameterHandleValueMap parameterValues;
+    parameterValues[class0Parameter0Handle] = toVariableLengthData("parameter0");
+    //parameterValues[class1Parameter1Handle] = toVariableLengthData("parameter1");
+
+    try 
+    {
+        ambassador->sendInteraction(InteractionClass0Handle, parameterValues, ambassador->getFederateHandle().encode());
+    }
+    catch (const rti1516e::Exception& e)
+    {
+        LastErrorString = e.what();
+        std::wcout << L"rti1516::Exception: \"" << e.what() << L"\"" << std::endl;
+        return 1;
+    }
+    catch (...)
+    {
+        LastErrorString = L"Unknown Exception!";
+        std::wcout << L"Unknown Exception!" << std::endl;
+        return 1;
+    }
+
+    return 0;
+
 }
-catch (const rti1516::Exception& e)
+
+//Тест интеракций
+int TestInteraction(char* myString, int length)
 {
-  std::wcout << L"rti1516::Exception: \"" << e.what() << L"\"" << std::endl;
-  return false;
+    //std::wstringstream cls;
+    //cls << myString;
+    //std::wstring name = cls.str();
+
+    //ambassador->SendLog(name, 0);
+
+    // join must work
+    int ret = MyTestInteraction();
+    if (ret == 1)
+    {
+        std::string s(LastErrorString.begin(), LastErrorString.end());
+        strcpy_s(myString, length, s.c_str());
+        return 1;
+    }
+    std::string s("ok");
+    strcpy_s(myString, length, s.c_str());
+    return 0;
 }
-catch (...)
+//--------------------------------------------------------
+
+
+//--------------------------------------------------------
+//Тест объектов
+int MyTestObjects()
 {
-  std::wcout << L"Unknown Exception!" << std::endl;
-  return false;
-}
+    LastErrorString = L"";
+    rti1516e::ObjectClassHandle objectClassHandle;
+    rti1516e::AttributeHandleSet attributes;
 
+    rti1516e::ObjectInstanceHandle objectInstanceHandle;
 
-
-
-
-
-  void receiveInteraction(rti1516::InteractionClassHandle interactionClassHandle,
-                          const rti1516::ParameterHandleValueMap& parameterValues,
-                          const rti1516::VariableLengthData& tag,
-                          rti1516::OrderType sentOrder,
-                          rti1516::TransportationType theType)
-      RTI_THROW ((rti1516::InteractionClassNotRecognized,
-             rti1516::InteractionParameterNotRecognized,
-             rti1516::InteractionClassNotSubscribed,
-             rti1516::FederateInternalError))
-  {
-    if (interactionClassHandle != _requestInteractionClassHandle) {
-      std::wcout << L"Received interaction class that was not subscribed!" << std::endl;
-      _fail = true;
-      _receivedInteraction = true;
+    try 
+    {
+        objectClassHandle = ambassador->getObjectClassHandle(L"HLAobjectRoot.ObjectClass0");
+    } 
+    catch (const rti1516e::Exception& e) 
+    {
+        LastErrorString = e.what();
+        std::wcout << L"rti1516e::Exception: \"" << e.what() << L"\"" << std::endl;
+        return 1;
+    } 
+    catch (...) 
+    {
+        LastErrorString = L"Unknown Exception!";
+        std::wcout << L"Unknown Exception!" << std::endl;
+        return 1;
     }
 
-    if (getFederateHandle().encode() != tag)
-      return;
+    try 
+    {
+        attributes.insert(ambassador->getAttributeHandle(objectClassHandle, L"Attribute0"));
+        ambassador->publishObjectClassAttributes(objectClassHandle, attributes);
+    } 
+    catch (const rti1516e::Exception& e) 
+    {
+        std::wcout << L"rti1516e::Exception: \"" << e.what() << L"\"" << std::endl;
+        return 1;
+    } 
+    catch (...) 
+    {
+        std::wcout << L"Unknown Exception!" << std::endl;
+        return 1;
+    }
+    
 
-    if (interactionClassHandle == _interactionClassHandles[0])
-      _receivedRequestType = Interaction0;
-
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
+    // All is published, now subscribe step by step and see what we receive
+    try 
+    {
+        ambassador->subscribeObjectClassAttributes(objectClassHandle, attributes);
+    } 
+    catch (const rti1516e::Exception& e) 
+    {
+        LastErrorString = e.what();
+        std::wcout << L"rti1516e::Exception: \"" << e.what() << L"\"" << std::endl;
+        return 1;
+    } 
+    catch (...) 
+    {
+        LastErrorString = L"Unknown Exception!";
+        std::wcout << L"Unknown Exception!" << std::endl;
+        return 1;
+    }
 
 
+    try 
+    {
+        objectInstanceHandle = ambassador->registerObjectInstance(objectClassHandle);
+    } 
+    catch (const rti1516e::Exception& e) 
+    {
+        LastErrorString = e.what();
+        std::wcout << L"rti1516e::Exception: \"" << e.what() << L"\"" << std::endl;
+        return 1;
+    } 
+    catch (...) 
+    {
+        LastErrorString = L"Unknown Exception!";
+        std::wcout << L"Unknown Exception!" << std::endl;
+        return 1;
+    }
 
+    ambassador->evokeCallback(1.0);
+
+
+    try 
+    {
+        rti1516e::AttributeHandleValueMap attributeValues;
+        rti1516e::VariableLengthData tag = toVariableLengthData(OpenRTI::Clock::now());
+        for (rti1516e::AttributeHandleSet::const_iterator k = attributes.begin(); k != attributes.end(); ++k)
+        {
+            attributeValues[*k] = toVariableLengthData(ambassador->getAttributeName(objectClassHandle, *k));
+        }
+        ambassador->updateAttributeValues(objectInstanceHandle, attributeValues, tag);
+    } 
+    catch (const rti1516e::Exception& e) 
+    {
+        LastErrorString = e.what();
+        std::wcout << L"rti1516e::Exception: \"" << e.what() << L"\"" << std::endl;
+        return 1;
+    } 
+    catch (...) 
+    {
+        LastErrorString = L"Unknown Exception!";
+        std::wcout << L"Unknown Exception!" << std::endl;
+        return 1;
+    }
+
+
+
+    /*
+    * ambassador.deleteObjectInstance(objectInstanceHandle, toVariableLengthData("tag"));
+    * ambassador.unsubscribeObjectClass(subscribedObjectClass);    
+    */
+   
+    return 0;
+
+}
+
+//Тест объектов
+int TestObjects(char* myString, int length)
+{
+    //std::wstringstream cls;
+    //cls << myString;
+    //std::wstring name = cls.str();
+
+    //ambassador->SendLog(name, 0);
+
+    // join must work
+    int ret = MyTestObjects();
+    if (ret == 1)
+    {
+        std::string s(LastErrorString.begin(), LastErrorString.end());
+        strcpy_s(myString, length, s.c_str());
+        return 1;
+    }
+    std::string s("ok");
+    strcpy_s(myString, length, s.c_str());
+    return 0;
+}
+//--------------------------------------------------------
+
+
+/*
+ 
 
 
 // and now resign must work
