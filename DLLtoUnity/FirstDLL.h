@@ -5,27 +5,20 @@
 #include <iostream>
 #include <memory>
 
-
-
-
 #include <RTI/RTIambassadorFactory.h>
 #include <RTI/RTIambassador.h>
-
-
 //#include <RTI1516ETestLib.h>
+
 #include "RTI1516EAmbassadorLContent.h"
 
 #define NOMINMAX
 #include <windows.h>
 
-//typedef std::map<rti1516e::ObjectClassHandle, rti1516e::AttributeHandleSet> ObjectClassAttributeHandleSet;
-
-
 #define DLLExport __declspec(dllexport)  //nothrow
 
+//экпортируемые функции
 extern "C"
 {
-    
     DLLExport int Connect(char* myString, int length);
     DLLExport int CreateFederationExecution(char* myString, int length);
     DLLExport int JoinFederationExecution(char* myString, int length);
@@ -39,7 +32,6 @@ extern "C"
     DLLExport int TestInteraction(char* myString, int length); 
     //Тест объектов
     DLLExport int TestObjects(char* myString, int length);
-    
 }
 
 

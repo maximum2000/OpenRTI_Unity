@@ -1,14 +1,22 @@
-﻿//https://stackoverflow.com/questions/49793560/build-c-plugin-for-unity
+﻿/***************************************************************************
+FirstDLL.cpp  -  IEEE1516-2010 (HLA Evolved) for Unity C#
+used in company projects https://Lcontent.ru
+based on OpenRTI
+-------------------
+begin                : 30 сентября 2022
+copyright            : (C) 2022 by Гаммер Максим Дмитриевич (maximum2000)
+email                : MaxGammer@gmail.com
+***************************************************************************/
+
+//https://stackoverflow.com/questions/49793560/build-c-plugin-for-unity
 //https://github.com/onox/OpenRTI.git
 
-
-
 #include "FirstDLL.h"
-
 
 #ifdef __cplusplus
 extern "C"
 #endif
+
 BOOL APIENTRY DllMain(HINSTANCE hModule, DWORD  reason, LPVOID lpReserved)
 {
     switch (reason)
@@ -29,9 +37,7 @@ BOOL APIENTRY DllMain(HINSTANCE hModule, DWORD  reason, LPVOID lpReserved)
     return TRUE;
 }
 
-
-
-
+//------------------------[    ПОДКЛЮЧЕНИЕ    ]----------------------------------------------------------
 
 //подключиться к серверу федерации
 int MyConnect()
@@ -56,6 +62,33 @@ int MyConnect()
         std::wcout << LastErrorString << std::endl;
         return 1;
     }
+    return 0;
+}
+//первичное подключение к серверу (RTInode)
+int Connect(char* myString, int length)
+{
+    //OpenRTI::RTI1516ESimpleAmbassador ambassador;
+    ambassador = new OpenRTI::RTI1516EAmbassadorLContent();
+    ambassador->setUseDataUrlObjectModels(false);
+
+    /*
+    When I call "connect" function with computer name as its input (i.e ambassador->connect("rti://rtinodeSystem")) the federate can join to rti(rtinode in TCP mode),
+    but if I replace computer name with its IP (i.e ambassador->connect("rti://192.168.1.4")) it cannot. Why this happen?
+    Is the syntax when we use the IP address something else(I am sure that the "rtinodeSystem"s IP is "192.168.1.4")?
+    Maybe  turn off IPV6_V6ONLY ?
+    */
+
+    int ret = MyConnect();
+    if (ret == 1)
+    {
+        std::string s(LastErrorString.begin(), LastErrorString.end());
+        strcpy_s(myString, length, s.c_str());
+        return 1;
+    }
+
+    //std::cout << "Max Gammer Test 2" << std::endl;
+    std::string s("ok");
+    strcpy_s(myString, length, s.c_str());
     return 0;
 }
 
@@ -86,6 +119,27 @@ int MyCreateFederationExecution(std::wstring name)
     }
     return 0;
 }
+//создание федерации
+int CreateFederationExecution(char* myString, int length)
+{
+    std::wstringstream cls;
+    cls << myString;
+    std::wstring name = cls.str();
+
+    ambassador->SendLog(name, 0);
+
+    // create, must work
+    int ret = MyCreateFederationExecution(name);
+    if (ret == 1)
+    {
+        std::string s(LastErrorString.begin(), LastErrorString.end());
+        strcpy_s(myString, length, s.c_str());
+        return 1;
+    }
+    std::string s("ok");
+    strcpy_s(myString, length, s.c_str());
+    return 0;
+}
 
 //присоедениться к федерации
 int MyJoinFederationExecution(std::wstring name)
@@ -112,6 +166,70 @@ int MyJoinFederationExecution(std::wstring name)
     }
     return 0;
 }
+//подключение нового федерата
+int JoinFederationExecution(char* myString, int length)
+{
+    std::wstringstream cls;
+    cls << myString;
+    std::wstring name = cls.str();
+
+    ambassador->SendLog(name, 0);
+
+    // join must work
+    int ret = MyJoinFederationExecution(name);
+    if (ret == 1)
+    {
+        std::string s(LastErrorString.begin(), LastErrorString.end());
+        strcpy_s(myString, length, s.c_str());
+        return 1;
+    }
+    std::string s("ok");
+    strcpy_s(myString, length, s.c_str());
+    return 0;
+}
+
+//отправить сообщение о получении списка федератов
+int MyListFederationExecutions()
+{
+    LastErrorString = L"";
+
+    try
+    {
+        ambassador->mylistFederationExecutions();
+    }
+    catch (const rti1516e::Exception& e)
+    {
+        LastErrorString = e.what();
+        std::wcout << L"rti1516e::Exception: \"" << LastErrorString << L"\"" << std::endl;
+        return 1;
+    }
+    catch (...)
+    {
+        LastErrorString = L"Unknown Exception!";
+        std::wcout << LastErrorString << std::endl;
+        return 1;
+    }
+    return 0;
+}
+//отправить сообщение о получении списка федератов, ответ будет в callback'е reportFederationExecutions...
+int ListFederationExecutions(char* myString, int length)
+{
+    ambassador->evokeCallback(1.0);
+    int ret = MyListFederationExecutions();
+    if (ret == 1)
+    {
+        std::string s(LastErrorString.begin(), LastErrorString.end());
+        strcpy_s(myString, length, s.c_str());
+        return 1;
+    }
+    std::string s("ok");
+    strcpy_s(myString, length, s.c_str());
+    return 0;
+}
+
+//ambassador->resignFederationExecution(rti1516e::CANCEL_THEN_DELETE_THEN_DIVEST);
+//ambassador->destroyFederationExecution(getFederationExecution());
+
 
 //------------------------[    СИНХРОНИЗАЦИЯ    ]----------------------------------------------------------
 
@@ -154,7 +272,6 @@ int RegisterFederationSynchronizationPoint(char* myString, int length)
     strcpy_s(myString, length, s.c_str());
     return 0;
 }
-
 
 //отправить сообщение о установлении точки синхронизации
 int MySynchronizationPointAchieved()
@@ -201,128 +318,14 @@ int SynchronizationPointAchieved(char* myString, int length)
 
 
 
-//отправить сообщение о получении списка федератов
-int MyListFederationExecutions()
-{
-    LastErrorString = L"";
-
-    try
-    {
-        ambassador->mylistFederationExecutions();
-    }
-    catch (const rti1516e::Exception& e)
-    {
-        LastErrorString = e.what();
-        std::wcout << L"rti1516e::Exception: \"" << LastErrorString << L"\"" << std::endl;
-        return 1;
-    }
-    catch (...)
-    {
-        LastErrorString = L"Unknown Exception!";
-        std::wcout << LastErrorString << std::endl;
-        return 1;
-    }
-    return 0;
-}
-//отправить сообщение о получении списка федератов, ответ будет в callback'е reportFederationExecutions...
-int ListFederationExecutions(char* myString, int length)
-{
-    ambassador->evokeCallback(1.0);
-    int ret = MyListFederationExecutions();
-    if (ret == 1)
-    {
-        std::string s(LastErrorString.begin(), LastErrorString.end());
-        strcpy_s(myString, length, s.c_str());
-        return 1;
-    }
-    std::string s("ok");
-    strcpy_s(myString, length, s.c_str());
-    return 0;
-}
-
-
-
+//обновить федерат
 int evokeCallback(double dT)
 {
     ambassador->evokeCallback(dT);
     return 0;
 }
 
-
-//первичное подключение к серверу (RTInode)
-int Connect(char* myString, int length)
-{
-    //OpenRTI::RTI1516ESimpleAmbassador ambassador;
-    ambassador = new OpenRTI::RTI1516EAmbassadorLContent();
-    ambassador->setUseDataUrlObjectModels(false);
-
-    /*
-    When I call "connect" function with computer name as its input (i.e ambassador->connect("rti://rtinodeSystem")) the federate can join to rti(rtinode in TCP mode),
-    but if I replace computer name with its IP (i.e ambassador->connect("rti://192.168.1.4")) it cannot. Why this happen?
-    Is the syntax when we use the IP address something else(I am sure that the "rtinodeSystem"s IP is "192.168.1.4")?
-    Maybe  turn off IPV6_V6ONLY ?
-    */
-
-    int ret = MyConnect();
-    if (ret == 1)
-    {
-        std::string s(LastErrorString.begin(), LastErrorString.end());
-        strcpy_s(myString, length, s.c_str());
-        return 1;
-    }
-   
-    //std::cout << "Max Gammer Test 2" << std::endl;
-    std::string s("ok");
-    strcpy_s(myString, length, s.c_str());
-    return 0 ;
-}
-
-//создание федерации
-int CreateFederationExecution(char* myString, int length)
-{
-    std::wstringstream cls;
-    cls << myString;
-    std::wstring name = cls.str();
-
-    ambassador->SendLog(name, 0);
-
-    // create, must work
-    int ret = MyCreateFederationExecution(name);
-    if (ret == 1)
-    {
-        std::string s(LastErrorString.begin(), LastErrorString.end());
-        strcpy_s(myString, length, s.c_str());
-        return 1;
-    }
-    std::string s("ok");
-    strcpy_s(myString, length, s.c_str());
-    return 0;
-}
-
-//подключение нового федерата
-int JoinFederationExecution(char* myString, int length)
-{
-    std::wstringstream cls;
-    cls << myString;
-    std::wstring name = cls.str();
-
-    ambassador->SendLog(name,0);
-
-    // join must work
-    int ret = MyJoinFederationExecution(name);
-    if (ret == 1)
-    {
-        std::string s(LastErrorString.begin(), LastErrorString.end());
-        strcpy_s(myString, length, s.c_str());
-        return 1;
-    }
-    std::string s("ok");
-    strcpy_s(myString, length, s.c_str());
-    return 0;
-}
-
-
-
+//сервисные функции---------------------------------------------
 inline rti1516e::VariableLengthData toVariableLengthData(const char* s)
 {
     rti1516e::VariableLengthData variableLengthData;
@@ -348,15 +351,17 @@ inline rti1516e::VariableLengthData toVariableLengthData(const std::wstring& s)
     return variableLengthData;
 }
 
-//--------------------------------------------------------
+//------------------[Тест интеракций]--------------------------
 //Тест интеракций
 int MyTestInteraction()
 {
     LastErrorString = L"";
 
+    //хранение класса интеракции и ее параметров
     rti1516e::InteractionClassHandle InteractionClass0Handle;
     rti1516e::ParameterHandle class0Parameter0Handle;
 
+    //получение класса интеракции
     try
     {
         InteractionClass0Handle = ambassador->getInteractionClassHandle(L"HLAinteractionRoot.InteractionClass0");
@@ -374,6 +379,7 @@ int MyTestInteraction()
         return 1;
     }
 
+    //получение класса параметров интеракции
     try
     {
         class0Parameter0Handle = ambassador->getParameterHandle(InteractionClass0Handle, L"Parameter0");
@@ -391,8 +397,7 @@ int MyTestInteraction()
         return 1;
     }
 
-
-
+    //подписка на эту интеракцию
     try 
     {
         ambassador->subscribeInteractionClass(InteractionClass0Handle);
@@ -410,6 +415,7 @@ int MyTestInteraction()
         return 1;
     }
 
+    //публикация интеракции
     try 
     {
         ambassador->publishInteractionClass(InteractionClass0Handle);
@@ -427,14 +433,15 @@ int MyTestInteraction()
         return 1;
     }
 
-
-
+    //
     ambassador->evokeCallback(1.0);
 
+    //задать значения параметрам интеракции
     rti1516e::ParameterHandleValueMap parameterValues;
     parameterValues[class0Parameter0Handle] = toVariableLengthData("parameter0");
     //parameterValues[class1Parameter1Handle] = toVariableLengthData("parameter1");
 
+    //отправить интеракцию
     try 
     {
         ambassador->sendInteraction(InteractionClass0Handle, parameterValues, ambassador->getFederateHandle().encode());
@@ -452,10 +459,15 @@ int MyTestInteraction()
         return 1;
     }
 
+    /*
+   не реализованы:
+   * отписка от интеракции;
+   * отмена регистрации интеракции;
+   * информация есть в файле примеров interactions / OpenRTI
+   */
+
     return 0;
-
 }
-
 //Тест интеракций
 int TestInteraction(char* myString, int length)
 {
@@ -479,17 +491,19 @@ int TestInteraction(char* myString, int length)
 }
 //--------------------------------------------------------
 
-
-//--------------------------------------------------------
+//----------------[Тест объектов]----------------------------------------
 //Тест объектов
 int MyTestObjects()
 {
     LastErrorString = L"";
+
+    //хранение класса объекта и его аттрибутов
     rti1516e::ObjectClassHandle objectClassHandle;
     rti1516e::AttributeHandleSet attributes;
-
+    //хранение экземпляра класса объекта
     rti1516e::ObjectInstanceHandle objectInstanceHandle;
 
+    //получение класса объекта
     try 
     {
         objectClassHandle = ambassador->getObjectClassHandle(L"HLAobjectRoot.ObjectClass0");
@@ -507,6 +521,7 @@ int MyTestObjects()
         return 1;
     }
 
+    //публикация класса объекта и атрибутов объекта
     try 
     {
         attributes.insert(ambassador->getAttributeHandle(objectClassHandle, L"Attribute0"));
@@ -524,8 +539,7 @@ int MyTestObjects()
     }
     
 
-    
-    // All is published, now subscribe step by step and see what we receive
+    //подписка на получение событий этого класса объекта
     try 
     {
         ambassador->subscribeObjectClassAttributes(objectClassHandle, attributes);
@@ -543,7 +557,7 @@ int MyTestObjects()
         return 1;
     }
 
-
+    //создание и регистрация нового экземпляра объекта класса
     try 
     {
         objectInstanceHandle = ambassador->registerObjectInstance(objectClassHandle);
@@ -561,9 +575,10 @@ int MyTestObjects()
         return 1;
     }
 
+    //
     ambassador->evokeCallback(1.0);
 
-
+    //изменение значений атрибутов экземпляра
     try 
     {
         rti1516e::AttributeHandleValueMap attributeValues;
@@ -590,6 +605,7 @@ int MyTestObjects()
 
 
     /*
+    не реализованы:
     * ambassador.deleteObjectInstance(objectInstanceHandle, toVariableLengthData("tag"));
     * ambassador.unsubscribeObjectClass(subscribedObjectClass);    
     */
@@ -620,49 +636,3 @@ int TestObjects(char* myString, int length)
     return 0;
 }
 //--------------------------------------------------------
-
-
-/*
- 
-
-
-// and now resign must work
-      try {
-        ambassador->resignFederationExecution(rti1516e::CANCEL_THEN_DELETE_THEN_DIVEST);
-      } catch (const rti1516e::Exception& e) {
-        std::wcout << L"rti1516e::Exception: \"" << e.what() << L"\"" << std::endl;
-        return false;
-      } catch (...) {
-        std::wcout << L"Unknown Exception!" << std::endl;
-        return false;
-      }
-
-
-
-      // destroy, must work once
-    try {
-      ambassador->destroyFederationExecution(getFederationExecution());
-
-      if (!getFederationBarrier()->success())
-        return false;
-    } catch (const rti1516e::FederatesCurrentlyJoined&) {
-      // Can happen in this test
-      // Other threads just might have still joined.
-
-      if (!getFederationBarrier()->fail())
-        return false;
-    } catch (const rti1516e::FederationExecutionDoesNotExist&) {
-      // Can happen in this test
-      // Other threads might have been faster
-
-      if (!getFederationBarrier()->fail())
-        return false;
-    } catch (const rti1516e::Exception& e) {
-      std::wcout << L"rti1516e::Exception: \"" << e.what() << L"\"" << std::endl;
-      return false;
-    } catch (...) {
-      std::wcout << L"Unknown Exception!" << std::endl;
-      return false;
-    }
-
-*/
