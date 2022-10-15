@@ -1097,14 +1097,18 @@ namespace OpenRTI
         {
         }
 
-        virtual void objectInstanceNameReservationSucceeded(const std::wstring&)
+        virtual void objectInstanceNameReservationSucceeded(const std::wstring& name)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"objectInstanceNameReservationSucceeded 1", 0);
+            SendLog(name, 0);
         }
 
-        virtual void objectInstanceNameReservationFailed(const std::wstring&)
+        virtual void objectInstanceNameReservationFailed(const std::wstring& name)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"objectInstanceNameReservationFailed 1", 0);
+            SendLog(name, 0);
         }
 
         virtual void multipleObjectInstanceNameReservationSucceeded(const std::set<std::wstring>& theObjectInstanceNames)
@@ -1124,6 +1128,9 @@ namespace OpenRTI
         {
             
             SendLog(L"discoverObjectInstance 1", 0);
+            SendLog(objectClassHandle.toString(), 0);
+            SendLog(objectInstanceHandle.toString(), 0);
+            SendLog(objectInstanceName, 0);
 
             //Log(Assert, Error) << "discover "  << objectClassHandle.toString() << " " << objectInstanceHandle.toString() << std::endl;
             
@@ -1158,7 +1165,7 @@ namespace OpenRTI
             RTI_THROW((rti1516e::FederateInternalError))
         {
             SendLog(L"reflectAttributeValues 1", 0);
-
+            SendLog(objectInstanceHandle.toString(), 0);
             // _verifyReflectAttributeValues(objectInstanceHandle, attributeHandleValueMap);
         }
 
@@ -1215,7 +1222,7 @@ namespace OpenRTI
             // _verifyReflectAttributeValues(objectInstanceHandle, attributeHandleValueMap);
         }
 
-        virtual void receiveInteraction(rti1516e::InteractionClassHandle, const rti1516e::ParameterHandleValueMap&,
+        virtual void receiveInteraction(rti1516e::InteractionClassHandle interactionClassHandle, const rti1516e::ParameterHandleValueMap&,
             const rti1516e::VariableLengthData&, rti1516e::OrderType, rti1516e::TransportationType,
             rti1516e::SupplementalReceiveInfo theReceiveInfo)
             RTI_THROW((rti1516e::FederateInternalError))
@@ -1228,6 +1235,7 @@ namespace OpenRTI
             //if (getFederateHandle().encode() != tag)
 
             SendLog(L"receiveInteraction1", 0);
+            SendLog(interactionClassHandle.toString(), 0);
 
             //через callback вызываем функцию на стороне с#
             //std::string s(label.begin(), label.end());

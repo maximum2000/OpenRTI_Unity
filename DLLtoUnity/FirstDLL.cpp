@@ -103,7 +103,7 @@ int MyCreateFederationExecution(std::wstring name)
         //M:/GIT2/ieee1516/UnityTest/Assets/Plugins
         //C:/WORK/OpenRTI_Unity/UnityTest/Assets/Plugins
         
-        ambassador->createFederationExecution(FederationName, L"C:/WORK/OpenRTI_Unity/UnityTest/Assets/Plugins/fdd_test.xml");
+        ambassador->createFederationExecution(FederationName, L"M:/GIT2/ieee1516/UnityTest/Assets/Plugins/fdd_test.xml");
     }
     catch (const rti1516e::Exception& e)
     {
@@ -557,10 +557,36 @@ int MyTestObjects()
         return 1;
     }
 
+
+    //если хотим зарегистрировать имя, тогда ....
+    try 
+    {
+        ambassador->reserveObjectInstanceName(L"objectInstanceName1");
+    }
+    catch (const rti1516e::Exception& e) 
+    {
+        LastErrorString = e.what();
+        std::wcout << L"rti1516::Exception: \"" << e.what() << L"\"" << std::endl;
+        return 1;
+    }
+    catch (...) 
+    {
+        LastErrorString = L"Unknown Exception!";
+        std::wcout << L"Unknown Exception!" << std::endl;
+        return 1;
+    }
+
+    //
+    ambassador->evokeCallback(1.0);
+    //
+
     //создание и регистрация нового экземпляра объекта класса
     try 
     {
-        objectInstanceHandle = ambassador->registerObjectInstance(objectClassHandle);
+        //или регистрируем без имени... ambassador->registerObjectInstance(objectClassHandle)
+        //или с именем, но тогда 
+        std::wstring objectInstanceName = L"objectInstanceName1";
+        objectInstanceHandle = ambassador->registerObjectInstance(objectClassHandle, objectInstanceName);
     } 
     catch (const rti1516e::Exception& e) 
     {
