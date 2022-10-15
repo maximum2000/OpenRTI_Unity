@@ -1222,8 +1222,8 @@ namespace OpenRTI
             // _verifyReflectAttributeValues(objectInstanceHandle, attributeHandleValueMap);
         }
 
-        virtual void receiveInteraction(rti1516e::InteractionClassHandle interactionClassHandle, const rti1516e::ParameterHandleValueMap&,
-            const rti1516e::VariableLengthData&, rti1516e::OrderType, rti1516e::TransportationType,
+        virtual void receiveInteraction(rti1516e::InteractionClassHandle interactionClassHandle, const rti1516e::ParameterHandleValueMap& data1,
+            const rti1516e::VariableLengthData& data, rti1516e::OrderType, rti1516e::TransportationType,
             rti1516e::SupplementalReceiveInfo theReceiveInfo)
             RTI_THROW((rti1516e::FederateInternalError))
         {
@@ -1234,8 +1234,26 @@ namespace OpenRTI
 
             //if (getFederateHandle().encode() != tag)
 
-            SendLog(L"receiveInteraction1", 0);
+            SendLog(L"receiveInteraction1, interactionClassHandle=", 0);
             SendLog(interactionClassHandle.toString(), 0);
+
+            for (auto z : data1)
+            {
+                SendLog(L"parameter handle=", 0);
+                SendLog(z.first.toString(), 0);
+
+                size_t len = z.second.size();
+                const char* p = (char*)z.second.data();
+
+                std::wstringstream cls;
+                cls << p;
+                std::wstring value = cls.str();
+
+                SendLog(L"value", 0);
+                SendLog(value, 0);
+            }
+
+            //PyByteArray_FromStringAndSize(static_cast<const char*>(variableLengthData.data()), variableLengthData.size())
 
             //через callback вызываем функцию на стороне с#
             //std::string s(label.begin(), label.end());

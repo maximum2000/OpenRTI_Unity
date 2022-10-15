@@ -438,7 +438,7 @@ int MyTestInteraction()
 
     //задать значения параметрам интеракции
     rti1516e::ParameterHandleValueMap parameterValues;
-    parameterValues[class0Parameter0Handle] = toVariableLengthData("parameter0");
+    parameterValues[class0Parameter0Handle] = toVariableLengthData("parameter0text");
     //parameterValues[class1Parameter1Handle] = toVariableLengthData("parameter1");
 
     //отправить интеракцию
