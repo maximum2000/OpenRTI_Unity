@@ -1167,6 +1167,27 @@ namespace OpenRTI
             SendLog(L"reflectAttributeValues 1", 0);
             SendLog(objectInstanceHandle.toString(), 0);
             // _verifyReflectAttributeValues(objectInstanceHandle, attributeHandleValueMap);
+
+            //if (getFederateHandle().encode() != tag)
+
+            for (auto z : attributeHandleValueMap)
+            {
+                SendLog(L"attribute handle=", 0);
+                SendLog(z.first.toString(), 0);
+
+                size_t len = z.second.size();
+                const char* p = (char*)z.second.data();
+
+                std::wstringstream cls;
+                cls << p;
+                std::wstring value = cls.str();
+
+                SendLog(L"value", 0);
+                SendLog(value, 0);
+            }
+
+
+
         }
 
         virtual void reflectAttributeValues(rti1516e::ObjectInstanceHandle objectInstanceHandle,
