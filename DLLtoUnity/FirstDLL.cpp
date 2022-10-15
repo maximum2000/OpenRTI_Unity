@@ -611,7 +611,8 @@ int MyTestObjects()
         rti1516e::VariableLengthData tag = toVariableLengthData(OpenRTI::Clock::now());
         for (rti1516e::AttributeHandleSet::const_iterator k = attributes.begin(); k != attributes.end(); ++k)
         {
-            attributeValues[*k] = toVariableLengthData(ambassador->getAttributeName(objectClassHandle, *k));
+            //attributeValues[*k] = toVariableLengthData(ambassador->getAttributeName(objectClassHandle, *k));
+            attributeValues[*k] = toVariableLengthData(L"abc1234");
         }
         ambassador->updateAttributeValues(objectInstanceHandle, attributeValues, tag);
     } 
