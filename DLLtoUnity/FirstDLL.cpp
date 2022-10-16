@@ -666,7 +666,7 @@ int TestObjects(char* myString, int length)
 
 
 /*
-
+https://www.nongnu.org/certi/PyHLA/manual/node16.html
 https://www.cs.cmu.edu/afs/cs/academic/class/15413-s99/www/hla/doc/rti_synopsis/09-Ownership_Management/Ownership_Management.html
 
 
