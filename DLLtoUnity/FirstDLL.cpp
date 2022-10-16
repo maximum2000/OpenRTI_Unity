@@ -670,7 +670,7 @@ https://www.nongnu.org/certi/PyHLA/manual/node16.html
 https://www.cs.cmu.edu/afs/cs/academic/class/15413-s99/www/hla/doc/rti_synopsis/09-Ownership_Management/Ownership_Management.html
 
 
-
+//сообщаем о желании безусловной отдачи владения другому федерату (толкаем права)
 void
 RTIambassadorImplementation::unconditionalAttributeOwnershipDivestiture(rti1516e::ObjectInstanceHandle rti1516ObjectInstanceHandle,
                                                                         rti1516e::AttributeHandleSet const & rti1516AttributeHandleSet)
@@ -708,6 +708,7 @@ RTIambassadorImplementation::unconditionalAttributeOwnershipDivestiture(rti1516e
   }
 }
 
+//сообщаем о желании согласованной отдачи владения другому федерату (толкаем права)
 void
 RTIambassadorImplementation::negotiatedAttributeOwnershipDivestiture(rti1516e::ObjectInstanceHandle rti1516ObjectInstanceHandle,
                                                                      rti1516e::AttributeHandleSet const & rti1516AttributeHandleSet,
@@ -750,6 +751,7 @@ RTIambassadorImplementation::negotiatedAttributeOwnershipDivestiture(rti1516e::O
   }
 }
 
+//подтверждаем отдачу владения (толкаем права)
 void
 RTIambassadorImplementation::confirmDivestiture(rti1516e::ObjectInstanceHandle rti1516ObjectInstanceHandle,
                                                 rti1516e::AttributeHandleSet const& rti1516AttributeHandleSet,
@@ -795,6 +797,7 @@ RTIambassadorImplementation::confirmDivestiture(rti1516e::ObjectInstanceHandle r
   }
 }
 
+//Навязчиво просим отдать права нам (тянем права)
 void
 RTIambassadorImplementation::attributeOwnershipAcquisition(rti1516e::ObjectInstanceHandle rti1516ObjectInstanceHandle,
                                                            rti1516e::AttributeHandleSet const & rti1516AttributeHandleSet,
@@ -838,6 +841,7 @@ RTIambassadorImplementation::attributeOwnershipAcquisition(rti1516e::ObjectInsta
   }
 }
 
+//Пытаемся спросить отдать права нам, если сейчас они никому не пренадлежат, если комуто принадлежат надо навязчиво требовать (тянем права)
 void
 RTIambassadorImplementation::attributeOwnershipAcquisitionIfAvailable(rti1516e::ObjectInstanceHandle rti1516ObjectInstanceHandle,
                                                                       rti1516e::AttributeHandleSet const & rti1516AttributeHandleSet)
@@ -884,6 +888,7 @@ RTIambassadorImplementation::attributeOwnershipAcquisitionIfAvailable(rti1516e::
   }
 }
 
+//отказать в передаче владения, даже если нас навязчиво попросили
 void
 RTIambassadorImplementation::attributeOwnershipReleaseDenied(rti1516e::ObjectInstanceHandle rti1516ObjectInstanceHandle,
                                                              rti1516e::AttributeHandleSet const & rti1516AttributeHandleSet)
@@ -921,6 +926,7 @@ RTIambassadorImplementation::attributeOwnershipReleaseDenied(rti1516e::ObjectIns
   }
 }
 
+//разрешить передачу владения
 void
 RTIambassadorImplementation::attributeOwnershipDivestitureIfWanted(rti1516e::ObjectInstanceHandle rti1516ObjectInstanceHandle,
                                                                    rti1516e::AttributeHandleSet const & rti1516AttributeHandleSet,
@@ -963,6 +969,7 @@ RTIambassadorImplementation::attributeOwnershipDivestitureIfWanted(rti1516e::Obj
   }
 }
 
+//? прекратить согласование передачи прав
 void
 RTIambassadorImplementation::cancelNegotiatedAttributeOwnershipDivestiture(rti1516e::ObjectInstanceHandle rti1516ObjectInstanceHandle,
                                                                            rti1516e::AttributeHandleSet const & rti1516AttributeHandleSet)
@@ -1003,6 +1010,7 @@ RTIambassadorImplementation::cancelNegotiatedAttributeOwnershipDivestiture(rti15
   }
 }
 
+//?
 void
 RTIambassadorImplementation::cancelAttributeOwnershipAcquisition(rti1516e::ObjectInstanceHandle rti1516ObjectInstanceHandle,
                                                                  rti1516e::AttributeHandleSet const & rti1516AttributeHandleSet)
@@ -1043,6 +1051,7 @@ RTIambassadorImplementation::cancelAttributeOwnershipAcquisition(rti1516e::Objec
   }
 }
 
+//видимо узнать кому сейчас паринадлежат права
 void
 RTIambassadorImplementation::queryAttributeOwnership(rti1516e::ObjectInstanceHandle rti1516ObjectInstanceHandle,
                                                      rti1516e::AttributeHandle rti1516AttributeHandle)
@@ -1077,6 +1086,7 @@ RTIambassadorImplementation::queryAttributeOwnership(rti1516e::ObjectInstanceHan
   }
 }
 
+//видимо узнать, нам сейчас сейчас паринадлежат права или нет
 bool
 RTIambassadorImplementation::isAttributeOwnedByFederate(rti1516e::ObjectInstanceHandle rti1516ObjectInstanceHandle,
                                                         rti1516e::AttributeHandle rti1516AttributeHandle)
