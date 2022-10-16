@@ -670,7 +670,7 @@ https://www.nongnu.org/certi/PyHLA/manual/node16.html
 https://www.cs.cmu.edu/afs/cs/academic/class/15413-s99/www/hla/doc/rti_synopsis/09-Ownership_Management/Ownership_Management.html
 
 
-//сообщаем о желании безусловной отдачи владения другому федерату (толкаем права)
+//сообщаем о желании безусловной отдачи владения другому федерату (толкаем-отдаем права)
 void
 RTIambassadorImplementation::unconditionalAttributeOwnershipDivestiture(rti1516e::ObjectInstanceHandle rti1516ObjectInstanceHandle,
                                                                         rti1516e::AttributeHandleSet const & rti1516AttributeHandleSet)
@@ -708,7 +708,7 @@ RTIambassadorImplementation::unconditionalAttributeOwnershipDivestiture(rti1516e
   }
 }
 
-//сообщаем о желании согласованной отдачи владения другому федерату (толкаем права)
+//сообщаем о желании согласованной отдачи владения другому федерату (толкаем-отдаем права)
 void
 RTIambassadorImplementation::negotiatedAttributeOwnershipDivestiture(rti1516e::ObjectInstanceHandle rti1516ObjectInstanceHandle,
                                                                      rti1516e::AttributeHandleSet const & rti1516AttributeHandleSet,
@@ -751,7 +751,7 @@ RTIambassadorImplementation::negotiatedAttributeOwnershipDivestiture(rti1516e::O
   }
 }
 
-//подтверждаем отдачу владения (толкаем права)
+//подтверждаем отдачу владения (толкаем-отдаем права)
 void
 RTIambassadorImplementation::confirmDivestiture(rti1516e::ObjectInstanceHandle rti1516ObjectInstanceHandle,
                                                 rti1516e::AttributeHandleSet const& rti1516AttributeHandleSet,
@@ -797,7 +797,7 @@ RTIambassadorImplementation::confirmDivestiture(rti1516e::ObjectInstanceHandle r
   }
 }
 
-//Навязчиво просим отдать права нам (тянем права)
+//Навязчиво просим отдать права нам (тянем-требуем права)
 void
 RTIambassadorImplementation::attributeOwnershipAcquisition(rti1516e::ObjectInstanceHandle rti1516ObjectInstanceHandle,
                                                            rti1516e::AttributeHandleSet const & rti1516AttributeHandleSet,
