@@ -25,7 +25,7 @@ public class TestDLL : MonoBehaviour
     [DllImport("DLLtoUnity")]
     public static extern int Connect(StringBuilder myString, int length);
     [DllImport("DLLtoUnity")]
-    public static extern int CreateFederationExecution(StringBuilder myString, int length);
+    public static extern int CreateFederationExecution(StringBuilder myString1, int length, StringBuilder myString2);
     [DllImport("DLLtoUnity")]
     public static extern int JoinFederationExecution(StringBuilder myString, int length);
 
@@ -212,7 +212,10 @@ public class TestDLL : MonoBehaviour
     public void  Step1b()
     {
         StringBuilder str2 = new StringBuilder(FedarationName.text, 100);
-        CreateFederationExecution(str2, str2.Capacity);
+        string filename = Application.streamingAssetsPath + "/fdd_test.xml";
+        StringBuilder str3 = new StringBuilder(filename, 100);
+
+        CreateFederationExecution(str2, str2.Capacity, str3);
         string myString2 = str2.ToString();
         Debug.Log("CreateFederationExecution: " + myString2);
 

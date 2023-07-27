@@ -20,7 +20,7 @@
 extern "C"
 {
     DLLExport int Connect(char* myString, int length);
-    DLLExport int CreateFederationExecution(char* myString, int length);
+    DLLExport int CreateFederationExecution(char* myString1, int length1, char* myString2);
     DLLExport int JoinFederationExecution(char* myString, int length);
 
     DLLExport int RegisterFederationSynchronizationPoint(char* myString, int length);

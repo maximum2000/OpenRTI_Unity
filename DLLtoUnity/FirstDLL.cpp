@@ -93,7 +93,7 @@ int Connect(char* myString, int length)
 }
 
 //создать федерат
-int MyCreateFederationExecution(std::wstring name)
+int MyCreateFederationExecution(std::wstring name, std::wstring filename)
 {
     LastErrorString = L"";
     FederationName = name;
@@ -103,7 +103,7 @@ int MyCreateFederationExecution(std::wstring name)
         //M:/GIT2/ieee1516/UnityTest/Assets/Plugins
         //C:/WORK/OpenRTI_Unity/UnityTest/Assets/Plugins
         
-        ambassador->createFederationExecution(FederationName, L"M:/GIT2/ieee1516/UnityTest/Assets/Plugins/fdd_test.xml");
+        ambassador->createFederationExecution(FederationName, filename); // L"M:/GIT2/ieee1516/UnityTest/Assets/Plugins/fdd_test.xml"
     }
     catch (const rti1516e::Exception& e)
     {
@@ -120,24 +120,28 @@ int MyCreateFederationExecution(std::wstring name)
     return 0;
 }
 //создание федерации
-int CreateFederationExecution(char* myString, int length)
+int CreateFederationExecution(char* myString1, int length1, char* myString2)
 {
-    std::wstringstream cls;
-    cls << myString;
-    std::wstring name = cls.str();
+    std::wstringstream cls1;
+    cls1 << myString1;
+    std::wstring name = cls1.str();
+
+    std::wstringstream cls2;
+    cls2 << myString2;
+    std::wstring file = cls2.str();
 
     ambassador->SendLog(name, 0);
 
     // create, must work
-    int ret = MyCreateFederationExecution(name);
+    int ret = MyCreateFederationExecution(name, file);
     if (ret == 1)
     {
         std::string s(LastErrorString.begin(), LastErrorString.end());
-        strcpy_s(myString, length, s.c_str());
+        strcpy_s(myString1, length1, s.c_str());
         return 1;
     }
     std::string s("ok");
-    strcpy_s(myString, length, s.c_str());
+    strcpy_s(myString1, length1, s.c_str());
     return 0;
 }
 
