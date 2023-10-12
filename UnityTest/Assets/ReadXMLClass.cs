@@ -38,54 +38,51 @@ public class ReadXMLClass : MonoBehaviour
 		customCulture.NumberFormat.NumberDecimalSeparator = ".";
 		System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
 
-		//string allxml = File.ReadAllText(Application.streamingAssetsPath + "/fdd_test.xml");
-		//allxml = allxml.Replace("xmlns = \"http://standards.ieee.org/IEEE1516-2010\"" , "");
-		//allxml = allxml.Replace("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
-		//allxml = allxml.Replace("xsi:schemaLocation=\"http://standards.ieee.org/IEEE1516-2010 http://standards.ieee.org/downloads/1516/1516.2-2010/IEEE1516-DIF-2010.xsd\"", "");
-
+		string allxml = "";
 		try
 		{
-			//xmlDoc = XDocument.Load(new StringReader(allxml));
-			xmlDoc = XDocument.Load(Application.streamingAssetsPath + "/fdd_test.xml");
+			allxml = File.ReadAllText(Application.streamingAssetsPath + "/fdd_test.xml");
 		}
 		catch (FileNotFoundException)
 		{
-			// The underlying file of the path cannot be found
-			Debug.Log("XDocument.Load failed!");
+			Debug.Log("fdd_test.xml  FileNotFoundException !");
 			return;
 		}
 
-		//элементы матмодели
-		XElement _rootElements = xmlDoc.Root; //.Element("objectModel");//.Element("objects").Element("objectClass"); //HLAobjectRoot
-		foreach (XElement element_of_objects in _rootElements.Elements())
-        {
-			Debug.Log("read new with name = " + element_of_objects.Name); //ToString()
-			Debug.Log("read new with name = " + element_of_objects.Value); //ToString()
-		}
+		allxml = allxml.Replace("http://standards.ieee.org/IEEE1516-2010", "");
+		//Debug.Log(allxml);
 
-		return;
-		foreach (XElement el in _rootElements.Elements())
+		
+		xmlDoc = XDocument.Load(new StringReader(allxml));
+		//xmlDoc = XDocument.Load(Application.streamingAssetsPath + "/fdd_test.xml");
+		
+
+		XElement _rootObjects = xmlDoc.Root.Element("objects").Element("objectClass");
+		foreach (XElement object_in_XML in _rootObjects.Elements("objectClass"))
 		{
-			if (el.Name == "objectClass")
+			string s1 = object_in_XML.Element("name").Value.ToString();
+			Debug.Log("new object = " + s1);
+			foreach (XElement attribute_in_object in object_in_XML.Elements("attribute"))
 			{
-				string objectname = el.Element("name").Value;
-				Debug.Log("read new objectClass with name = " + objectname);
-
-				foreach (XElement attr in el.Elements())
-				{
-					if (attr.Name == "attribute")
-					{
-						string attribute_name = attr.Element("name").Value;
-						Debug.Log("read new attribute = " + "(O)"+objectname  + "." + "(O)"+ attribute_name);
-					}
-				}
-
-				Debug.Log("end read new objectClass with name = " + name);
+				string s2 = attribute_in_object.Element("name").Value;
+				Debug.Log("new attribute = " + s1 + "." + s2);
 			}
 		}
-		//end for
+
+		XElement _rootInteractions = xmlDoc.Root.Element("interactions").Element("interactionClass");
+		foreach (XElement interaction_in_XML in _rootInteractions.Elements("interactionClass"))
+		{
+			string s1 = interaction_in_XML.Element("name").Value.ToString();
+			Debug.Log("new interaction = " + s1);
+			foreach (XElement parameter_in_object in interaction_in_XML.Elements("parameter"))
+			{
+				string s2 = parameter_in_object.Element("name").Value;
+				Debug.Log("new parameter = " + s1 + "." + s2);
+			}
+		}
+
 	}
-	//
+		//
 
 }
 
