@@ -11,46 +11,140 @@ using TMPro;
 
 public class TestDLL : MonoBehaviour
 {
-    [DllImport("DLLtoUnity")]
-    public static extern int evokeCallback(double dT);
-
-    [DllImport("DLLtoUnity")]
-    public static extern int TestInteraction(StringBuilder myString, int length);
-    [DllImport("DLLtoUnity")]
-    public static extern int TestObjects(StringBuilder myString, int length);
-
-    [DllImport("DLLtoUnity")]
-    public static extern int ListFederationExecutions(StringBuilder myString, int length);
-
-    [DllImport("DLLtoUnity")]
-    public static extern int Connect(StringBuilder myString, int length);
-    [DllImport("DLLtoUnity")]
-    public static extern int CreateFederationExecution(StringBuilder myString1, int length, StringBuilder myString2);
-    [DllImport("DLLtoUnity")]
-    public static extern int JoinFederationExecution(StringBuilder myString, int length);
-
-    [DllImport("DLLtoUnity")]
-    public static extern int RegisterFederationSynchronizationPoint(StringBuilder myString, int length);
-
-    [DllImport("DLLtoUnity")]
-    public static extern int SynchronizationPointAchieved(StringBuilder myString, int length);
-
+    //Все callback'и расположены в файле...
+    //ieee1516\DLLtoUnity\RTI1516EAmbassadorLContent.h
 
     public TextMeshProUGUI text1;
     public TMP_InputField FedarationName;
     public TMP_InputField FedarateName;
 
-    //!!!
-    //Debug
+    //вызов обновления федерата, все сообщения будут возвращены поздже в соответствующих callback'ах
+    [DllImport("DLLtoUnity")]
+    public static extern int evokeCallback(double dT);
+
+    //вызов тестовой функции тетстирования интеракции
+    [DllImport("DLLtoUnity")]
+    public static extern int TestInteraction(StringBuilder myString, int length);
+
+    //вызов тестовой функции тетстирования объекта и аттрибута
+    [DllImport("DLLtoUnity")]
+    public static extern int TestObjects(StringBuilder myString, int length);
+
+    //вызов функции запроса состава федерации, все сообщения будут возвращены поздже в соответствующих callback'ах
+    [DllImport("DLLtoUnity")]
+    public static extern int ListFederationExecutions(StringBuilder myString, int length);
+
+    //вызов функции подключения к федерации
+    [DllImport("DLLtoUnity")]
+    public static extern int Connect(StringBuilder myString, int length);
+
+    //вызов функции создания федерата (этого)
+    [DllImport("DLLtoUnity")]
+    public static extern int CreateFederationExecution(StringBuilder myString1, int length, StringBuilder myString2);
+
+    //вызов функции присоединения созданного федерата к федерации
+    [DllImport("DLLtoUnity")]
+    public static extern int JoinFederationExecution(StringBuilder myString, int length);
+
+    //вызов функции регистрации точки синхронизации, все сообщения будут возвращены поздже в соответствующих callback'ах
+    [DllImport("DLLtoUnity")]
+    public static extern int RegisterFederationSynchronizationPoint(StringBuilder myString, int length);
+
+    //вызов функции синхронизации, все сообщения будут возвращены поздже в соответствующих callback'ах
+    [DllImport("DLLtoUnity")]
+    public static extern int SynchronizationPointAchieved(StringBuilder myString, int length);
+
+    //callback для Debug'а
     private delegate void DebugCallback(IntPtr message, int color, int size);
     [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
     private static extern void RegisterDebugCallback(DebugCallback callback);
-   
+    //вывод сообщения из debug'а DLL'ки
     private static void DebugLog(IntPtr message, int color, int size)
     {
         string debugString = Marshal.PtrToStringAnsi(message, size);
         Debug.Log(debugString);
     }
+    //end callback для Debug'а
+
+    //callback для сообщений о потери соединения (connectionLost)
+    private delegate void ConnectionLostCallback(IntPtr message, int size);
+    [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
+    private static extern void RegisterConnectionLostCallback(ConnectionLostCallback callback);
+    //Обработчик события потери соединения
+    private static void ConnectionLost(IntPtr message, int size)
+    {
+        string debugString = Marshal.PtrToStringAnsi(message, size);
+        Debug.Log(debugString);
+    }
+    //end callback для сообщений о потери соединения (connectionLost)
+
+
+    //callback для сообщений информации о выполнении федерации (reportFederationExecutions)
+    private delegate void reportFederationExecutionsCallback(IntPtr message1, IntPtr message2, int size1, int size2);
+    [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
+    private static extern void RegisterReportFederationExecutionsCallback(reportFederationExecutionsCallback callback);
+    //обработчик 
+    private static void ReportFederationExecutions(IntPtr message1, IntPtr message2, int size1, int size2)
+    {
+        string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
+        string debugString2 = Marshal.PtrToStringAnsi(message2, size2);
+        Debug.Log(debugString1);
+        Debug.Log(debugString2);
+    }
+    //end callback для сообщений информации о выполнении федерации (reportFederationExecutions)
+
+    //callback для сообщений информации о успешности регистрации точки синхронизации (synchronizationPointRegistrationSucceeded)
+    private delegate void synchronizationPointRegistrationSucceededCallback(IntPtr message1,  int size1);
+    [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
+    private static extern void RegisterSynchronizationPointRegistrationSucceededCallback(synchronizationPointRegistrationSucceededCallback callback);
+    //Обработчик
+    private static void SynchronizationPointRegistrationSucceeded(IntPtr message1,  int size1)
+    {
+        string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
+        Debug.Log(debugString1);
+    }
+    //end callback для сообщений информации о успешности регистрации точки синхронизации (synchronizationPointRegistrationSucceeded)
+
+
+    //callback для сообщений информации о провале регистрации точки синхронизации (synchronizationPointRegistrationFailedCallback)
+    private delegate void synchronizationPointRegistrationFailedCallback(IntPtr message1, IntPtr message2, int size1, int size2);
+    [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
+    private static extern void RegisterSynchronizationPointRegistrationFailedCallback(synchronizationPointRegistrationFailedCallback callback);
+    //Обработчик
+    private static void SynchronizationPointRegistrationFailed(IntPtr message1, IntPtr message2, int size1, int size2)
+    {
+        string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
+        string debugString2 = Marshal.PtrToStringAnsi(message2, size2);
+        Debug.Log(debugString1);
+        Debug.Log(debugString2);
+    }
+    //end callback для сообщений информации о провале регистрации точки синхронизации (synchronizationPointRegistrationFailedCallback)
+
+    //callback для сообщений информации о установке синхронизации (announceSynchronizationPointCallback)
+    private delegate void announceSynchronizationPointCallback(IntPtr message1, int size1);
+    [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
+    private static extern void RegisterAnnounceSynchronizationPointCallback(announceSynchronizationPointCallback callback);
+    //Обработчик
+    private static void AnnounceSynchronizationPoint(IntPtr message1, int size1)
+    {
+        string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
+        Debug.Log(debugString1);
+    }
+    //end callback для сообщений информации о установке синхронизации (announceSynchronizationPointCallback)
+
+    //callback для сообщений о факте того, что вся федерация синхронизирована (federationSynchronized)
+    private delegate void federationSynchronizedCallback(IntPtr message1, int size1);
+    [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
+    private static extern void RegisterFederationSynchronizedCallback(federationSynchronizedCallback callback);
+    //Обработчик
+    private static void FederationSynchronized(IntPtr message1, int size1)
+    {
+        string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
+        Debug.Log(debugString1);
+    }
+    //end callback для сообщений о факте того, что вся федерация синхронизирована (federationSynchronized)
+
+
 
     void OnDestroy()
     {
@@ -62,92 +156,6 @@ public class TestDLL : MonoBehaviour
         RegisterAnnounceSynchronizationPointCallback(null);
         RegisterFederationSynchronizedCallback(null);
     }
-    //!!!
-
-
-    //!!!
-    //connectionLost
-    private delegate void ConnectionLostCallback(IntPtr message, int size);
-    [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
-    private static extern void RegisterConnectionLostCallback(ConnectionLostCallback callback);
-
-    private static void ConnectionLost(IntPtr message, int size)
-    {
-        string debugString = Marshal.PtrToStringAnsi(message, size);
-        Debug.Log(debugString);
-    }
-    //!!!
-
-
-    //!!!
-    //reportFederationExecutions
-    private delegate void reportFederationExecutionsCallback(IntPtr message1, IntPtr message2, int size1, int size2);
-    [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
-    private static extern void RegisterReportFederationExecutionsCallback(reportFederationExecutionsCallback callback);
-
-    private static void ReportFederationExecutions(IntPtr message1, IntPtr message2, int size1, int size2)
-    {
-        string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
-        string debugString2 = Marshal.PtrToStringAnsi(message2, size2);
-        Debug.Log(debugString1);
-        Debug.Log(debugString2);
-    }
-    //!!!
-
-    //!!!
-    //synchronizationPointRegistrationSucceeded
-    private delegate void synchronizationPointRegistrationSucceededCallback(IntPtr message1,  int size1);
-    [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
-    private static extern void RegisterSynchronizationPointRegistrationSucceededCallback(synchronizationPointRegistrationSucceededCallback callback);
-
-    private static void SynchronizationPointRegistrationSucceeded(IntPtr message1,  int size1)
-    {
-        string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
-        Debug.Log(debugString1);
-    }
-    //!!!
-
-
-    //!!!
-    //synchronizationPointRegistrationFailed
-    private delegate void synchronizationPointRegistrationFailedCallback(IntPtr message1, IntPtr message2, int size1, int size2);
-    [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
-    private static extern void RegisterSynchronizationPointRegistrationFailedCallback(synchronizationPointRegistrationFailedCallback callback);
-
-    private static void SynchronizationPointRegistrationFailed(IntPtr message1, IntPtr message2, int size1, int size2)
-    {
-        string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
-        string debugString2 = Marshal.PtrToStringAnsi(message2, size2);
-        Debug.Log(debugString1);
-        Debug.Log(debugString2);
-    }
-    //!!!
-
-    //!!!
-    //announceSynchronizationPoint
-    private delegate void announceSynchronizationPointCallback(IntPtr message1, int size1);
-    [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
-    private static extern void RegisterAnnounceSynchronizationPointCallback(announceSynchronizationPointCallback callback);
-
-    private static void AnnounceSynchronizationPoint(IntPtr message1, int size1)
-    {
-        string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
-        Debug.Log(debugString1);
-    }
-    //!!!
-
-    //!!!
-    //federationSynchronized
-    private delegate void federationSynchronizedCallback(IntPtr message1, int size1);
-    [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
-    private static extern void RegisterFederationSynchronizedCallback(federationSynchronizedCallback callback);
-
-    private static void FederationSynchronized(IntPtr message1, int size1)
-    {
-        string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
-        Debug.Log(debugString1);
-    }
-    //!!!
 
 
     public void Step6()
@@ -189,7 +197,7 @@ public class TestDLL : MonoBehaviour
 
     public void  Step1a()
     {
-        //
+        //регистрация всех callbeck функций (привязка)
         {
             RegisterDebugCallback(DebugLog);
             RegisterConnectionLostCallback(ConnectionLost);
