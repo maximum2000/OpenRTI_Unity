@@ -40,15 +40,16 @@ BOOL APIENTRY DllMain(HINSTANCE hModule, DWORD  reason, LPVOID lpReserved)
 //------------------------[    ПОДКЛЮЧЕНИЕ    ]----------------------------------------------------------
 
 //подключиться к серверу федерации
-int MyConnect()
+int MyConnect(std::wstring IP)
 {
+    IP = L"";
     LastErrorString = L"";
     FederationName = L"";
     FederateName = L"";
 
     try
     {
-        ambassador->connect(L"rti://127.0.0.1"); //thread://
+        ambassador->connect(L"rti://127.0.0.1"); //thread:// L"rti://127.0.0.1"
     }
     catch (const rti1516e::Exception& e)
     {
@@ -67,6 +68,10 @@ int MyConnect()
 //первичное подключение к серверу (RTInode)
 int Connect(char* myString, int length)
 {
+    std::wstringstream cls1;
+    cls1 << myString;
+    IP  = cls1.str();
+
     //OpenRTI::RTI1516ESimpleAmbassador ambassador;
     ambassador = new OpenRTI::RTI1516EAmbassadorLContent();
     ambassador->setUseDataUrlObjectModels(false);
@@ -78,7 +83,7 @@ int Connect(char* myString, int length)
     Maybe  turn off IPV6_V6ONLY ?
     */
 
-    int ret = MyConnect();
+    int ret = MyConnect(IP);
     if (ret == 1)
     {
         std::string s(LastErrorString.begin(), LastErrorString.end());
@@ -130,7 +135,8 @@ int CreateFederationExecution(char* myString1, int length1, char* myString2)
     cls2 << myString2;
     std::wstring file = cls2.str();
 
-    ambassador->SendLog(name, 0);
+    ambassador->SendLog(L"DEBUG: CreateFederationExecution:IP=" + IP, 0);
+    ambassador->SendLog(L"DEBUG: CreateFederationExecution:name=" + name, 0);
 
     // create, must work
     int ret = MyCreateFederationExecution(name, file);
@@ -177,7 +183,7 @@ int JoinFederationExecution(char* myString, int length)
     cls << myString;
     std::wstring name = cls.str();
 
-    ambassador->SendLog(name, 0);
+    ambassador->SendLog(L"DEBUG: JoinFederationExecution:name=" + name, 0);
 
     // join must work
     int ret = MyJoinFederationExecution(name);
@@ -220,6 +226,9 @@ int ListFederationExecutions(char* myString, int length)
 {
     ambassador->evokeCallback(1.0);
     int ret = MyListFederationExecutions();
+
+    ambassador->SendLog(L"DEBUG: ListFederationExecutions call", 0);
+
     if (ret == 1)
     {
         std::string s(LastErrorString.begin(), LastErrorString.end());
@@ -266,6 +275,8 @@ int MyRegisterFederationSynchronizationPoint()
 int RegisterFederationSynchronizationPoint(char* myString, int length)
 {
     int ret = MyRegisterFederationSynchronizationPoint();
+    ambassador->SendLog(L"DEBUG: RegisterFederationSynchronizationPoint call", 0);
+
     if (ret == 1)
     {
         std::string s(LastErrorString.begin(), LastErrorString.end());
@@ -285,6 +296,7 @@ int MySynchronizationPointAchieved()
     try
     {
         ambassador->synchronizationPointAchieved(L"PPP");
+        ambassador->SendLog(L"DEBUG: synchronizationPointAchieved call", 0);
     }
     catch (const rti1516e::Exception& e)
     {
@@ -326,6 +338,7 @@ int SynchronizationPointAchieved(char* myString, int length)
 int evokeCallback(double dT)
 {
     ambassador->evokeCallback(dT);
+    ambassador->SendLog(L"DEBUG: evokeCallback call", 0);
     return 0;
 }
 
@@ -480,6 +493,7 @@ int TestInteraction(char* myString, int length)
     //std::wstring name = cls.str();
 
     //ambassador->SendLog(name, 0);
+    ambassador->SendLog(L"DEBUG: TestInteraction call", 0);
 
     // join must work
     int ret = MyTestInteraction();
@@ -497,7 +511,7 @@ int TestInteraction(char* myString, int length)
 
 //----------------[Тест объектов]----------------------------------------
 //Тест объектов
-int MyTestObjects()
+int MyTestObjects(std::wstring className, std::wstring attributeName, std::wstring objectInstanceName)
 {
     LastErrorString = L"";
 
@@ -510,7 +524,7 @@ int MyTestObjects()
     //получение класса объекта
     try 
     {
-        objectClassHandle = ambassador->getObjectClassHandle(L"HLAobjectRoot.ObjectClass0");
+        objectClassHandle = ambassador->getObjectClassHandle(className); //L"HLAobjectRoot.ObjectClass0"
     } 
     catch (const rti1516e::Exception& e) 
     {
@@ -525,10 +539,16 @@ int MyTestObjects()
         return 1;
     }
 
+
+
+
+
+
+
     //публикация класса объекта и атрибутов объекта
     try 
     {
-        attributes.insert(ambassador->getAttributeHandle(objectClassHandle, L"Attribute0"));
+        attributes.insert(ambassador->getAttributeHandle(objectClassHandle, attributeName)); // L"Attribute0"
         ambassador->publishObjectClassAttributes(objectClassHandle, attributes);
     } 
     catch (const rti1516e::Exception& e) 
@@ -565,7 +585,7 @@ int MyTestObjects()
     //если хотим зарегистрировать имя, тогда ....
     try 
     {
-        ambassador->reserveObjectInstanceName(L"objectInstanceName1");
+        ambassador->reserveObjectInstanceName(objectInstanceName); //L"objectInstanceName1"
     }
     catch (const rti1516e::Exception& e) 
     {
@@ -589,7 +609,7 @@ int MyTestObjects()
     {
         //или регистрируем без имени... ambassador->registerObjectInstance(objectClassHandle)
         //или с именем, но тогда 
-        std::wstring objectInstanceName = L"objectInstanceName1";
+        //std::wstring objectInstanceName = L"objectInstanceName1";
         objectInstanceHandle = ambassador->registerObjectInstance(objectClassHandle, objectInstanceName);
     } 
     catch (const rti1516e::Exception& e) 
@@ -616,7 +636,7 @@ int MyTestObjects()
         for (rti1516e::AttributeHandleSet::const_iterator k = attributes.begin(); k != attributes.end(); ++k)
         {
             //attributeValues[*k] = toVariableLengthData(ambassador->getAttributeName(objectClassHandle, *k));
-            attributeValues[*k] = toVariableLengthData(L"abc1234");
+            attributeValues[*k] = toVariableLengthData(L"Xbc1234");
         }
         ambassador->updateAttributeValues(objectInstanceHandle, attributeValues, tag);
     } 
@@ -646,16 +666,31 @@ int MyTestObjects()
 }
 
 //Тест объектов
-int TestObjects(char* myString, int length)
+int TestObjects(char* myString, int length, char* _className, char* _attributeName, char* _objectInstanceName)
 {
-    //std::wstringstream cls;
-    //cls << myString;
-    //std::wstring name = cls.str();
+    //имя класса из XML .. L"HLAobjectRoot.ObjectClass0"
+    std::wstringstream cls1;
+    cls1 << _className;
+    std::wstring className = cls1.str();
+    //имя аттрибута из XML .. L"Attribute0"
+    std::wstringstream cls2;
+    cls2 << _attributeName;
+    std::wstring attributeName = cls2.str();
+    //имя экземпляра класса (объекта) .. L"objectInstanceName1"
+    std::wstringstream cls3;
+    cls3 << _objectInstanceName;
+    std::wstring objectInstanceName = cls3.str();
+
+
 
     //ambassador->SendLog(name, 0);
+    ambassador->SendLog(L"DEBUG: TestObjects call", 0);
+    ambassador->SendLog(L"DEBUG: TestObjects:className=" + className, 0);
+    ambassador->SendLog(L"DEBUG: TestObjects:attributeName=" + attributeName, 0);
+    ambassador->SendLog(L"DEBUG: TestObjects:objectInstanceName=" + objectInstanceName, 0);
 
     // join must work
-    int ret = MyTestObjects();
+    int ret = MyTestObjects(className, attributeName, objectInstanceName);
     if (ret == 1)
     {
         std::string s(LastErrorString.begin(), LastErrorString.end());

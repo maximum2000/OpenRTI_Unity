@@ -31,12 +31,13 @@ extern "C"
     //Тест интеракций
     DLLExport int TestInteraction(char* myString, int length); 
     //Тест объектов
-    DLLExport int TestObjects(char* myString, int length);
+    DLLExport int TestObjects(char* myString, int length, char* _className, char* _attributeName, char* _objectInstanceName);
 }
 
 
 OpenRTI::RTI1516EAmbassadorLContent *ambassador;
 
+std::wstring IP;
 std::wstring LastErrorString;
 std::wstring FederationName;
 std::wstring FederateName;

@@ -14,9 +14,20 @@ public class TestDLL : MonoBehaviour
     //Все callback'и расположены в файле...
     //ieee1516\DLLtoUnity\RTI1516EAmbassadorLContent.h
 
+    //имя класса для создаваемого объекта
+    public TMP_InputField IP;
+
     public TextMeshProUGUI text1;
     public TMP_InputField FedarationName;
     public TMP_InputField FedarateName;
+
+    //имя класса для создаваемого объекта
+    public TMP_InputField ObjectClassName;
+    //имя атрибута в классе
+    public TMP_InputField ObjectAttributeName;
+    //имя создаваемого экземпляра класса
+    public TMP_InputField ObjectInstanceName;
+   
 
     //вызов обновления федерата, все сообщения будут возвращены поздже в соответствующих callback'ах
     [DllImport("DLLtoUnity")]
@@ -28,7 +39,7 @@ public class TestDLL : MonoBehaviour
 
     //вызов тестовой функции тетстирования объекта и аттрибута
     [DllImport("DLLtoUnity")]
-    public static extern int TestObjects(StringBuilder myString, int length);
+    public static extern int TestObjects(StringBuilder myString, int length, StringBuilder className, StringBuilder attributeName, StringBuilder objectInstanceName); 
 
     //вызов функции запроса состава федерации, все сообщения будут возвращены поздже в соответствующих callback'ах
     [DllImport("DLLtoUnity")]
@@ -209,7 +220,8 @@ public class TestDLL : MonoBehaviour
         }
 
 
-        StringBuilder str2 = new StringBuilder(100);
+        //StringBuilder str2 = new StringBuilder(100);
+        StringBuilder str2 = new StringBuilder(IP.text, 100);
         Connect(str2, str2.Capacity);
         string myString2 = str2.ToString();
         Debug.Log("Connect: " + myString2);
@@ -252,7 +264,13 @@ public class TestDLL : MonoBehaviour
     public void  StepTestObjects()
     {
         StringBuilder str2 = new StringBuilder( 100);
-        TestObjects(str2, str2.Capacity);
+
+        StringBuilder className = new StringBuilder(ObjectClassName.text, 100);
+        StringBuilder attributeName = new StringBuilder(ObjectAttributeName.text, 100);
+        StringBuilder objectInstanceName = new StringBuilder(ObjectInstanceName.text, 100);
+
+
+        TestObjects(str2, str2.Capacity, className, attributeName, objectInstanceName);
         string myString2 = str2.ToString();
         Debug.Log("TestObjects: " + myString2);
         text1.text = myString2;
