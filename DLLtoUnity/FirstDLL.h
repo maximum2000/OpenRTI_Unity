@@ -32,6 +32,8 @@ extern "C"
     DLLExport int TestInteraction(char* myString, int length); 
     //Тест объектов
     DLLExport int TestObjects(char* myString, int length, char* _className, char* _attributeName, char* _objectInstanceName);
+    //Изменение значения
+    DLLExport int SetValueAttributeObject(char* myString, int length, char* _objectInstanceName, char* _attributeName, char* _attributeValue);
 }
 
 

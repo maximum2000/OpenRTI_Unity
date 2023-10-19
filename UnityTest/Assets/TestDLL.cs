@@ -27,7 +27,10 @@ public class TestDLL : MonoBehaviour
     public TMP_InputField ObjectAttributeName;
     //им€ создаваемого экземпл€ра класса
     public TMP_InputField ObjectInstanceName;
-   
+    //новое значение атрибута
+    public TMP_InputField ObjectAttributeValue;
+    
+
 
     //вызов обновлени€ федерата, все сообщени€ будут возвращены поздже в соответствующих callback'ах
     [DllImport("DLLtoUnity")]
@@ -39,7 +42,13 @@ public class TestDLL : MonoBehaviour
 
     //вызов тестовой функции тетстировани€ объекта и аттрибута
     [DllImport("DLLtoUnity")]
-    public static extern int TestObjects(StringBuilder myString, int length, StringBuilder className, StringBuilder attributeName, StringBuilder objectInstanceName); 
+    public static extern int TestObjects(StringBuilder myString, int length, StringBuilder className, StringBuilder attributeName, StringBuilder objectInstanceName);
+
+    //вызов тестовой функции тетстировани€ объекта и аттрибута
+    [DllImport("DLLtoUnity")]
+    public static extern int SetValueAttributeObject(StringBuilder myString, int length, StringBuilder objectInstanceName, StringBuilder attributeName, StringBuilder attributeValue);
+
+
 
     //вызов функции запроса состава федерации, все сообщени€ будут возвращены поздже в соответствующих callback'ах
     [DllImport("DLLtoUnity")]
@@ -271,6 +280,22 @@ public class TestDLL : MonoBehaviour
 
 
         TestObjects(str2, str2.Capacity, className, attributeName, objectInstanceName);
+        string myString2 = str2.ToString();
+        Debug.Log("TestObjects: " + myString2);
+        text1.text = myString2;
+    }
+
+
+    public void StepSetValue ()
+    {
+
+        StringBuilder str2 = new StringBuilder(100);
+
+        StringBuilder objectInstanceName = new StringBuilder(ObjectClassName.text, 100);
+        StringBuilder attributeName = new StringBuilder(ObjectAttributeName.text, 100);
+        StringBuilder attributeValue = new StringBuilder(ObjectAttributeValue.text, 100);
+
+        SetValueAttributeObject(str2, str2.Capacity, objectInstanceName, attributeName, attributeValue);
         string myString2 = str2.ToString();
         Debug.Log("TestObjects: " + myString2);
         text1.text = myString2;

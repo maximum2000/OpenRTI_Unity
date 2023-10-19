@@ -509,17 +509,25 @@ int TestInteraction(char* myString, int length)
 }
 //--------------------------------------------------------
 
+//хранение дискриптора класса объекта и его аттрибутов
+rti1516e::ObjectClassHandle objectClassHandle;
+//хранение дискриптора аттрибутов
+rti1516e::AttributeHandleSet attributes;
+//хранение дискриптора экземпляра класса объекта
+rti1516e::ObjectInstanceHandle objectInstanceHandle;
+
 //----------------[Тест объектов]----------------------------------------
 //Тест объектов
 int MyTestObjects(std::wstring className, std::wstring attributeName, std::wstring objectInstanceName)
 {
     LastErrorString = L"";
 
-    //хранение класса объекта и его аттрибутов
-    rti1516e::ObjectClassHandle objectClassHandle;
-    rti1516e::AttributeHandleSet attributes;
-    //хранение экземпляра класса объекта
-    rti1516e::ObjectInstanceHandle objectInstanceHandle;
+    //хранение дискриптора класса объекта и его аттрибутов
+    //rti1516e::ObjectClassHandle objectClassHandle;
+    //хранение дискриптора аттрибутов
+    //rti1516e::AttributeHandleSet attributes;
+    //хранение дискриптора экземпляра класса объекта
+    //rti1516e::ObjectInstanceHandle objectInstanceHandle;
 
     //получение класса объекта
     try 
@@ -701,6 +709,83 @@ int TestObjects(char* myString, int length, char* _className, char* _attributeNa
     strcpy_s(myString, length, s.c_str());
     return 0;
 }
+
+
+//-------------------------------------------------------
+//Изменение значений атриубута 
+int MySetValueAttributeObject(std::wstring objectInstanceName, std::wstring attributeName, std::wstring attributeValue)
+{
+    ambassador->evokeCallback(1.0);
+
+    //изменение значений атрибутов экземпляра
+    try
+    {
+        rti1516e::AttributeHandleValueMap attributeValues;
+        rti1516e::VariableLengthData tag = toVariableLengthData(OpenRTI::Clock::now());
+        for (rti1516e::AttributeHandleSet::const_iterator k = attributes.begin(); k != attributes.end(); ++k)
+        {
+            //attributeValues[*k] = toVariableLengthData(ambassador->getAttributeName(objectClassHandle, *k));
+            attributeValues[*k] = toVariableLengthData(attributeValue);
+        }
+        ambassador->updateAttributeValues(objectInstanceHandle, attributeValues, tag);
+    }
+    catch (const rti1516e::Exception& e)
+    {
+        LastErrorString = e.what();
+        std::wcout << L"rti1516e::Exception: \"" << e.what() << L"\"" << std::endl;
+        return 1;
+    }
+    catch (...)
+    {
+        LastErrorString = L"Unknown Exception!";
+        std::wcout << L"Unknown Exception!" << std::endl;
+        return 1;
+    }
+
+    return 0;
+}
+
+int SetValueAttributeObject(char* myString, int length, char* _objectInstanceName , char* _attributeName, char* _attributeValue)
+{
+    
+    //имя экземпляра класса (объекта) .. L"objectInstanceName1"
+    std::wstringstream cls3;
+    cls3 << _objectInstanceName;
+    std::wstring objectInstanceName = cls3.str();
+    //имя аттрибута из XML .. L"Attribute0"
+    std::wstringstream cls2;
+    cls2 << _attributeName;
+    std::wstring attributeName = cls2.str();
+    //изначение
+    std::wstringstream cls4;
+    cls4 << _attributeValue;
+    std::wstring attributeValue = cls4.str();
+    
+    //ambassador->SendLog(name, 0);
+    ambassador->SendLog(L"DEBUG: SetValueAttributeObject call", 0);
+    ambassador->SendLog(L"DEBUG: SetValueAttributeObject:objectInstanceName=" + objectInstanceName, 0);
+    ambassador->SendLog(L"DEBUG: SetValueAttributeObject:attributeName=" + attributeName, 0);
+    ambassador->SendLog(L"DEBUG: SetValueAttributeObject:attributeValue=" + attributeValue, 0);
+
+
+    // join must work
+    int ret = MySetValueAttributeObject(objectInstanceName, attributeName, attributeValue);
+    if (ret == 1)
+    {
+        std::string s(LastErrorString.begin(), LastErrorString.end());
+        strcpy_s(myString, length, s.c_str());
+        return 1;
+    }
+    std::string s("ok");
+    strcpy_s(myString, length, s.c_str());
+    return 0;
+}
+
+
+
+
+
+
 //--------------------------------------------------------
 
 
