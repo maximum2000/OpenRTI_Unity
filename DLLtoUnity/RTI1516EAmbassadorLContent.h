@@ -1290,14 +1290,27 @@ namespace OpenRTI
                 SendLog(z.first.toString(), 0);
 
                 size_t len = z.second.size();
-                const char* p = (char*)z.second.data();
+                //const char* p = (char*)z.second.data();
 
-                std::wstringstream cls;
-                cls << p;
-                std::wstring value = cls.str();
+                //Длинна в байтах
+                std::wostringstream myStringStream;
+                myStringStream << len;
+                std::wstring concatenatedStr = myStringStream.str();
+                SendLog(L"len in bytes", 0);
+                SendLog(concatenatedStr, 0);
+                
+                //преобразование void* в wstring вариант №1
+                std::wstring string_Data1;
+                string_Data1.resize(len);
+                std::memcpy(&string_Data1[0], z.second.data(), len);
+                SendLog(L"value1", 0);
+                SendLog(string_Data1, 0);
 
-                SendLog(L"value", 0);
-                SendLog(value, 0);
+                //преобразование void* в wstring вариант №2
+                std::wstring string_Data2;
+                string_Data2.assign(reinterpret_cast<const wchar_t*>(z.second.data()), len/2);
+                SendLog(L"value2", 0);
+                SendLog(string_Data2, 0);
             }
 
             //PyByteArray_FromStringAndSize(static_cast<const char*>(variableLengthData.data()), variableLengthData.size())
