@@ -11,6 +11,25 @@ email                : MaxGammer@gmail.com
 //https://stackoverflow.com/questions/49793560/build-c-plugin-for-unity
 //https://github.com/onox/OpenRTI.git
 
+//короче так.... читаем XML
+//на каждый объект мы знаем rti1516e::ObjectClassHandle objectClassHandle = ambassador->getObjectClassHandle(className); //L"HLAobjectRoot.ObjectClass0"
+//таким образом мы запоминаем соответствие имени из XML ("HLAobjectRoot.ObjectClass0") с полученыным дискриптором
+//аналогично мы при публикации класса и подписывании на изменения значений атрибутов инстансов.... ambassador->getAttributeHandle(objectClassHandle, attributeName)); // L"Attribute0"
+//мы заполняем соответствие имени атирибута из XML ("Attribute0") с полученным дискриптором
+//теперь мы знаем соответствие
+//а)Имени класса с дискриптором
+//б)Имени аттрибута класса с дискриптором
+//....далее в callback'е   discoverObjectInstance(rti1516e::ObjectInstanceHandle objectInstanceHandle,rti1516e::ObjectClassHandle objectClassHandle,const std::wstring& objectInstanceName)
+//    мы получаем дискриптор инстанса (objectInstanceHandle), имя созданного экземпляра объекта, дискриптор класса (objectClassHandle) и запоминаем связь
+//теперь мы знаем соответствие
+//д) Имени созданного объекта (экземпляра класса) с дискриптором объекта и дискриптором класса
+//....далее в callback'е reflectAttributeValues(rti1516e::ObjectInstanceHandle objectInstanceHandle, const rti1516e::AttributeHandleValueMap& attributeHandleValueMap ...)
+//мы получаем значение изменившейся переменной и можем точно ее ассоциировать с дискриптором объекта (ObjectInstanceHandle) и дискриптором атрибута (AttributeHandleValueMap)
+//+/- еще знаем какой федерат обновил ее (info.hasProducingFederate)
+
+//+ разобратся с void unconditionalAttributeOwnershipDivestiture(const rti1516e::ObjectInstanceHandle& objectInstanceHandle,const rti1516e::AttributeHandleSet& attributeHandleSet) надо ее или так можем писать?
+
+
 #include "FirstDLL.h"
 
 #ifdef __cplusplus

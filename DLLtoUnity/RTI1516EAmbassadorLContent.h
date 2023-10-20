@@ -459,7 +459,8 @@ namespace OpenRTI
             _ambassador->requestAttributeValueUpdate(objectClassHandle, attributeHandleSet, tag);
         }
 
-        void unconditionalAttributeOwnershipDivestiture(const rti1516e::ObjectInstanceHandle& objectInstanceHandle,
+//!!!!!!!!!!!!!!!!
+    void unconditionalAttributeOwnershipDivestiture(const rti1516e::ObjectInstanceHandle& objectInstanceHandle,
             const rti1516e::AttributeHandleSet& attributeHandleSet)
         {
             _ambassador->unconditionalAttributeOwnershipDivestiture(objectInstanceHandle, attributeHandleSet);
@@ -915,6 +916,8 @@ namespace OpenRTI
         virtual void connectionLost(const std::wstring& faultDescription)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:connectionLost", 0);
+
             //через callback вызываем функцию на стороне с#
             std::string s(faultDescription.begin(), faultDescription.end());
             const char* tmsg = s.c_str();
@@ -929,6 +932,7 @@ namespace OpenRTI
         virtual void reportFederationExecutions(const rti1516e::FederationExecutionInformationVector& theFederationExecutionInformationList)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:reportFederationExecutions", 0);
 
             for (auto e : theFederationExecutionInformationList)
             {
@@ -949,6 +953,8 @@ namespace OpenRTI
         virtual void synchronizationPointRegistrationSucceeded(const std::wstring& label)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:synchronizationPointRegistrationSucceeded", 0);
+
             //через callback вызываем функцию на стороне с#
             std::string s(label.begin(), label.end());
             const char* tmsg = s.c_str();
@@ -963,6 +969,8 @@ namespace OpenRTI
         virtual void synchronizationPointRegistrationFailed(const std::wstring& label, rti1516e::SynchronizationPointFailureReason reason)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:synchronizationPointRegistrationFailed", 0);
+
             std::wstring synchronizationPointFlag=L"";
             if (reason == rti1516e::SynchronizationPointFailureReason::SYNCHRONIZATION_POINT_LABEL_NOT_UNIQUE)
             {
@@ -988,6 +996,8 @@ namespace OpenRTI
         virtual void announceSynchronizationPoint(const std::wstring& label, const rti1516e::VariableLengthData& tag)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:announceSynchronizationPoint", 0);
+
             //через callback вызываем функцию на стороне с#
             std::string s(label.begin(), label.end());
             const char* tmsg = s.c_str();
@@ -1002,6 +1012,7 @@ namespace OpenRTI
         virtual void federationSynchronized(const std::wstring& label, const rti1516e::FederateHandleSet& failedToSyncSet)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:federationSynchronized", 0);
             //
             std::wstring federationSynchronizedFlag = L"federationSynchronized";
             SendLog(L"federationSynchronized",0);
@@ -1020,105 +1031,121 @@ namespace OpenRTI
         virtual void initiateFederateSave(const std::wstring& label)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:initiateFederateSave", 0);
         }
 
         virtual void initiateFederateSave(const std::wstring& label, const rti1516e::LogicalTime& logicalTime)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:initiateFederateSave", 0);
         }
 
         virtual void federationSaved()
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:federationSaved", 0);
         }
 
         virtual void federationNotSaved(rti1516e::SaveFailureReason theSaveFailureReason)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:federationNotSaved", 0);
         }
 
         virtual void federationSaveStatusResponse(const rti1516e::FederateHandleSaveStatusPairVector& federateStatusVector)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:federationSaveStatusResponse", 0);
         }
 
         virtual void requestFederationRestoreSucceeded(const std::wstring& label)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:requestFederationRestoreSucceeded", 0);
         }
 
         virtual void requestFederationRestoreFailed(const std::wstring& label)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:requestFederationRestoreFailed", 0);
         }
 
         virtual void federationRestoreBegun()
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:federationRestoreBegun", 0);
         }
 
         virtual void initiateFederateRestore(const std::wstring& label, const std::wstring& federateName, rti1516e::FederateHandle handle)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:initiateFederateRestore", 0);
         }
 
         virtual void federationRestored()
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:federationRestored", 0);
         }
 
         virtual void federationNotRestored(rti1516e::RestoreFailureReason restoreFailureReason)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:federationNotRestored", 0);
         }
 
         virtual void federationRestoreStatusResponse(const rti1516e::FederateRestoreStatusVector& federateStatusVector)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:federationRestoreStatusResponse", 0);
         }
 
         virtual void startRegistrationForObjectClass(rti1516e::ObjectClassHandle)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:startRegistrationForObjectClass", 0);
         }
 
         virtual void stopRegistrationForObjectClass(rti1516e::ObjectClassHandle)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:stopRegistrationForObjectClass", 0);
         }
 
         virtual void turnInteractionsOn(rti1516e::InteractionClassHandle)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:turnInteractionsOn", 0);
         }
 
         virtual void turnInteractionsOff(rti1516e::InteractionClassHandle)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:turnInteractionsOff", 0);
         }
 
         virtual void objectInstanceNameReservationSucceeded(const std::wstring& name)
             RTI_THROW((rti1516e::FederateInternalError))
         {
-            SendLog(L"objectInstanceNameReservationSucceeded 1", 0);
-            SendLog(name, 0);
+            SendLog(L"objectInstanceNameReservationSucceeded, name =" + name, 0);
         }
 
         virtual void objectInstanceNameReservationFailed(const std::wstring& name)
             RTI_THROW((rti1516e::FederateInternalError))
         {
-            SendLog(L"objectInstanceNameReservationFailed 1", 0);
-            SendLog(name, 0);
+            SendLog(L"objectInstanceNameReservationFailed, name =" + name, 0);
         }
 
         virtual void multipleObjectInstanceNameReservationSucceeded(const std::set<std::wstring>& theObjectInstanceNames)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:multipleObjectInstanceNameReservationSucceeded", 0);
         }
 
         virtual void multipleObjectInstanceNameReservationFailed(const std::set<std::wstring>& theObjectInstanceNames)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:multipleObjectInstanceNameReservationFailed", 0);
         }
 
         virtual void discoverObjectInstance(rti1516e::ObjectInstanceHandle objectInstanceHandle,
@@ -1127,10 +1154,10 @@ namespace OpenRTI
             RTI_THROW((rti1516e::FederateInternalError))
         {
             
-            SendLog(L"discoverObjectInstance 1", 0);
-            SendLog(objectClassHandle.toString(), 0);
-            SendLog(objectInstanceHandle.toString(), 0);
-            SendLog(objectInstanceName, 0);
+            SendLog(L"DEBUG:discoverObjectInstance", 0);
+            SendLog(L"DEBUG:objectClassHandle =" + objectClassHandle.toString(), 0);
+            SendLog(L"DEBUG:objectInstanceHandle =" + objectInstanceHandle.toString(), 0);
+            SendLog(L"DEBUG:objectInstanceName =" + objectInstanceName, 0);
 
             //Log(Assert, Error) << "discover "  << objectClassHandle.toString() << " " << objectInstanceHandle.toString() << std::endl;
             
@@ -1155,17 +1182,17 @@ namespace OpenRTI
             rti1516e::FederateHandle producingFederate)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:discoverObjectInstance 2", 0);
             discoverObjectInstance(objectInstanceHandle, objectClassHandle, objectInstanceName);
         }
 
         virtual void reflectAttributeValues(rti1516e::ObjectInstanceHandle objectInstanceHandle,
             const rti1516e::AttributeHandleValueMap& attributeHandleValueMap,
             const rti1516e::VariableLengthData& tag, rti1516e::OrderType, rti1516e::TransportationType,
-            rti1516e::SupplementalReflectInfo)
+            rti1516e::SupplementalReflectInfo info)
             RTI_THROW((rti1516e::FederateInternalError))
         {
-            SendLog(L"reflectAttributeValues 1", 0);
-            SendLog(objectInstanceHandle.toString(), 0);
+            SendLog(L"DEBUG:reflectAttributeValues, objectInstanceHandle =" + objectInstanceHandle.toString(), 0);
             // _verifyReflectAttributeValues(objectInstanceHandle, attributeHandleValueMap);
 
             //if (getFederateHandle().encode() != tag)
@@ -1173,10 +1200,9 @@ namespace OpenRTI
             // for (auto it = attributeHandleValueMap.begin(); it != attributeHandleValueMap.end(); ++it)
             for (auto z : attributeHandleValueMap)
             {
-                SendLog(L"attribute handle=", 0);
+                SendLog(L"DEBUG:attribute handle =" + z.first.toString(), 0);
                 //if (it->first == DataHandle) //дискриптор атрибута
-                SendLog(z.first.toString(), 0);
-
+ 
                 size_t len = z.second.size();
                 
                 //const char* p = (char*)z.second.data();
@@ -1193,23 +1219,31 @@ namespace OpenRTI
                 std::wostringstream myStringStream;
                 myStringStream << len;
                 std::wstring concatenatedStr = myStringStream.str();
-                SendLog(L"len in bytes", 0);
-                SendLog(concatenatedStr, 0);
+                SendLog(L"DEBUG:len in bytes = " + concatenatedStr, 0);
                 
                 //преобразование void* в wstring вариант №1
                 std::wstring string_Data1;
                 string_Data1.resize(len);
                 std::memcpy(&string_Data1[0], z.second.data(), len);
-                SendLog(L"value1", 0);
-                SendLog(string_Data1, 0);
+                SendLog(L"DEBUG:value1 =" + string_Data1, 0);
 
                 //преобразование void* в wstring вариант №2
                 std::wstring string_Data2;
                 string_Data2.assign(reinterpret_cast<const wchar_t*>(z.second.data()), len/2);
-                SendLog(L"value2", 0);
-                SendLog(string_Data2, 0);
+                SendLog(L"DEBUG:value2 =" + string_Data2, 0);
 
+                //tag
+                //size_t taglen = tag.size();
+                //// std::wstring string_tag1;
+                //string_tag1.resize(taglen);
+                //std::memcpy(&string_tag1[0], tag.data(), len);
+                //SendLog(L"DEBUG:tag =" + string_tag1, 0);
 
+                if (info.hasProducingFederate == true)
+                {
+                    SendLog(L"DEBUG:info.producingFederate =" + info.producingFederate.toString(),0);
+                }
+                
             }
 
 
@@ -1222,7 +1256,7 @@ namespace OpenRTI
             const rti1516e::RegionHandleSet&, rti1516e::SupplementalReflectInfo)
             RTI_THROW((rti1516e::FederateInternalError))
         {
-            SendLog(L"reflectAttributeValues 2", 0);
+            SendLog(L"DEBUG:reflectAttributeValues 2", 0);
             // _verifyReflectAttributeValues(objectInstanceHandle, attributeHandleValueMap);
         }
 
@@ -1232,7 +1266,7 @@ namespace OpenRTI
             const rti1516e::LogicalTime&, rti1516e::OrderType, rti1516e::SupplementalReflectInfo)
             RTI_THROW((rti1516e::FederateInternalError))
         {
-            SendLog(L"reflectAttributeValues 3", 0);
+            SendLog(L"DEBUG:reflectAttributeValues 3", 0);
             // _verifyReflectAttributeValues(objectInstanceHandle, attributeHandleValueMap);
         }
 
@@ -1243,7 +1277,7 @@ namespace OpenRTI
             rti1516e::SupplementalReflectInfo)
             RTI_THROW((rti1516e::FederateInternalError))
         {
-            SendLog(L"reflectAttributeValues 4", 0);
+            SendLog(L"DEBUG:reflectAttributeValues 4", 0);
             // _verifyReflectAttributeValues(objectInstanceHandle, attributeHandleValueMap);
         }
 
@@ -1254,7 +1288,7 @@ namespace OpenRTI
             rti1516e::SupplementalReflectInfo)
             RTI_THROW((rti1516e::FederateInternalError))
         {
-            SendLog(L"reflectAttributeValues 5", 0);
+            SendLog(L"DEBUG:reflectAttributeValues 5", 0);
             // _verifyReflectAttributeValues(objectInstanceHandle, attributeHandleValueMap);
         }
 
@@ -1265,7 +1299,7 @@ namespace OpenRTI
             const rti1516e::RegionHandleSet&, rti1516e::SupplementalReflectInfo)
             RTI_THROW((rti1516e::FederateInternalError))
         {
-            SendLog(L"reflectAttributeValues 6", 0);
+            SendLog(L"DEBUG:reflectAttributeValues 6", 0);
             // _verifyReflectAttributeValues(objectInstanceHandle, attributeHandleValueMap);
         }
 
@@ -1281,12 +1315,11 @@ namespace OpenRTI
 
             //if (getFederateHandle().encode() != tag)
 
-            SendLog(L"receiveInteraction1, interactionClassHandle=", 0);
-            SendLog(interactionClassHandle.toString(), 0);
+            SendLog(L"DEBUG:receiveInteraction1, interactionClassHandle=" + interactionClassHandle.toString(), 0);
 
             for (auto z : data1)
             {
-                SendLog(L"parameter handle=", 0);
+                SendLog(L"DEBUG:parameter handle=", 0);
                 SendLog(z.first.toString(), 0);
 
                 size_t len = z.second.size();
@@ -1296,21 +1329,18 @@ namespace OpenRTI
                 std::wostringstream myStringStream;
                 myStringStream << len;
                 std::wstring concatenatedStr = myStringStream.str();
-                SendLog(L"len in bytes", 0);
-                SendLog(concatenatedStr, 0);
+                SendLog(L"DEBUG:len in bytes =" + concatenatedStr, 0);
                 
                 //преобразование void* в wstring вариант №1
                 std::wstring string_Data1;
                 string_Data1.resize(len);
                 std::memcpy(&string_Data1[0], z.second.data(), len);
-                SendLog(L"value1", 0);
-                SendLog(string_Data1, 0);
+                SendLog(L"DEBUG:value1 =" + string_Data1, 0);
 
                 //преобразование void* в wstring вариант №2
                 std::wstring string_Data2;
                 string_Data2.assign(reinterpret_cast<const wchar_t*>(z.second.data()), len/2);
-                SendLog(L"value2", 0);
-                SendLog(string_Data2, 0);
+                SendLog(L"DEBUG:value2 =" + string_Data2, 0);
             }
 
             //PyByteArray_FromStringAndSize(static_cast<const char*>(variableLengthData.data()), variableLengthData.size())
@@ -1331,7 +1361,7 @@ namespace OpenRTI
             const rti1516e::RegionHandleSet&, rti1516e::SupplementalReceiveInfo theReceiveInfo)
             RTI_THROW((rti1516e::FederateInternalError))
         {
-            SendLog(L"receiveInteraction2", 0);
+            SendLog(L"DEBUG:receiveInteraction2", 0);
         }
 
         virtual void receiveInteraction(rti1516e::InteractionClassHandle interaction,
@@ -1344,7 +1374,7 @@ namespace OpenRTI
             rti1516e::SupplementalReceiveInfo theReceiveInfo)
             RTI_THROW((rti1516e::FederateInternalError))
         {
-            SendLog(L"receiveInteraction3", 0);
+            SendLog(L"DEBUG:receiveInteraction3", 0);
         }
 
         virtual void receiveInteraction(rti1516e::InteractionClassHandle interaction,
@@ -1358,7 +1388,7 @@ namespace OpenRTI
             rti1516e::SupplementalReceiveInfo theReceiveInfo)
             RTI_THROW((rti1516e::FederateInternalError))
         {
-            SendLog(L"receiveInteraction4", 0);
+            SendLog(L"DEBUG:receiveInteraction4", 0);
         }
 
         virtual void receiveInteraction(rti1516e::InteractionClassHandle interaction,
@@ -1372,7 +1402,7 @@ namespace OpenRTI
             rti1516e::SupplementalReceiveInfo theReceiveInfo)
             RTI_THROW((rti1516e::FederateInternalError))
         {
-            SendLog(L"receiveInteraction5", 0);
+            SendLog(L"DEBUG:receiveInteraction5", 0);
         }
 
         virtual void receiveInteraction(rti1516e::InteractionClassHandle interaction,
@@ -1387,7 +1417,7 @@ namespace OpenRTI
             rti1516e::SupplementalReceiveInfo theReceiveInfo)
             RTI_THROW((rti1516e::FederateInternalError))
         {
-            SendLog(L"receiveInteraction6", 0);
+            SendLog(L"DEBUG:receiveInteraction6", 0);
         }
 
         virtual void removeObjectInstance(rti1516e::ObjectInstanceHandle objectInstanceHandle,
@@ -1396,7 +1426,7 @@ namespace OpenRTI
             rti1516e::SupplementalRemoveInfo theRemoveInfo)
             RTI_THROW((rti1516e::FederateInternalError))
         {
-            SendLog(L"removeObjectInstance 1", 0);
+            SendLog(L"DEBUG:removeObjectInstance, objectInstanceHandle=" + objectInstanceHandle.toString(), 0);
             // _verifyRemoveObjectInstance(objectInstanceHandle);
         }
 
@@ -1408,7 +1438,7 @@ namespace OpenRTI
             rti1516e::SupplementalRemoveInfo theRemoveInfo)
             RTI_THROW((rti1516e::FederateInternalError))
         {
-            SendLog(L"removeObjectInstance 2", 0);
+            SendLog(L"DEBUG:removeObjectInstance 2", 0);
             // _verifyRemoveObjectInstance(objectInstanceHandle);
         }
 
@@ -1421,7 +1451,7 @@ namespace OpenRTI
             rti1516e::SupplementalRemoveInfo theRemoveInfo)
             RTI_THROW((rti1516e::FederateInternalError))
         {
-            SendLog(L"removeObjectInstance 3", 0);
+            SendLog(L"DEBUG:removeObjectInstance 3", 0);
             // _verifyRemoveObjectInstance(objectInstanceHandle);
         }
 
@@ -1429,12 +1459,14 @@ namespace OpenRTI
             rti1516e::AttributeHandleSet const& attributes)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:attributesInScope", 0);
         }
 
         virtual void attributesOutOfScope(rti1516e::ObjectInstanceHandle objectInstanceHandle,
             rti1516e::AttributeHandleSet const& attributes)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:attributesOutOfScope", 0);
         }
 
         virtual void provideAttributeValueUpdate(rti1516e::ObjectInstanceHandle objectInstanceHandle,
@@ -1442,12 +1474,14 @@ namespace OpenRTI
             rti1516e::VariableLengthData const& tag)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:provideAttributeValueUpdate", 0);
         }
 
         virtual void turnUpdatesOnForObjectInstance(rti1516e::ObjectInstanceHandle objectInstanceHandle,
             rti1516e::AttributeHandleSet const& attributes)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:turnUpdatesOnForObjectInstance", 0);
         }
 
         virtual void turnUpdatesOnForObjectInstance(rti1516e::ObjectInstanceHandle objectInstanceHandle,
@@ -1455,12 +1489,14 @@ namespace OpenRTI
             const std::wstring& updateRateDesignator)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:turnUpdatesOnForObjectInstance", 0);
         }
 
         virtual void turnUpdatesOffForObjectInstance(rti1516e::ObjectInstanceHandle objectInstanceHandle,
             rti1516e::AttributeHandleSet const& attributes)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:turnUpdatesOffForObjectInstance", 0);
         }
 
         virtual void confirmAttributeTransportationTypeChange(rti1516e::ObjectInstanceHandle theObject,
@@ -1468,6 +1504,7 @@ namespace OpenRTI
             rti1516e::TransportationType theTransportation)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:confirmAttributeTransportationTypeChange", 0);
         }
 
         virtual void reportAttributeTransportationType(rti1516e::ObjectInstanceHandle theObject,
@@ -1475,12 +1512,14 @@ namespace OpenRTI
             rti1516e::TransportationType theTransportation)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:reportAttributeTransportationType", 0);
         }
 
         virtual void confirmInteractionTransportationTypeChange(rti1516e::InteractionClassHandle theInteraction,
             rti1516e::TransportationType theTransportation)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:confirmInteractionTransportationTypeChange", 0);
         }
 
         virtual void reportInteractionTransportationType(rti1516e::FederateHandle federateHandle,
@@ -1488,6 +1527,7 @@ namespace OpenRTI
             rti1516e::TransportationType theTransportation)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:reportInteractionTransportationType", 0);
         }
 
         virtual void requestAttributeOwnershipAssumption(rti1516e::ObjectInstanceHandle objectInstanceHandle,
@@ -1495,12 +1535,14 @@ namespace OpenRTI
             rti1516e::VariableLengthData const& tag)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:requestAttributeOwnershipAssumption", 0);
         }
 
         virtual void requestDivestitureConfirmation(rti1516e::ObjectInstanceHandle objectInstanceHandle,
             rti1516e::AttributeHandleSet const& releasedAttributes)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:requestDivestitureConfirmation", 0);
         }
 
         virtual void attributeOwnershipAcquisitionNotification(rti1516e::ObjectInstanceHandle objectInstanceHandle,
@@ -1508,6 +1550,7 @@ namespace OpenRTI
             rti1516e::VariableLengthData const& tag)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:attributeOwnershipAcquisitionNotification", 0);
         }
 
         virtual void attributeOwnershipUnavailable(rti1516e::ObjectInstanceHandle objectInstanceHandle,
@@ -1521,12 +1564,14 @@ namespace OpenRTI
             rti1516e::VariableLengthData const& tag)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:requestAttributeOwnershipRelease", 0);
         }
 
         virtual void confirmAttributeOwnershipAcquisitionCancellation(rti1516e::ObjectInstanceHandle objectInstanceHandle,
             rti1516e::AttributeHandleSet const& attributes)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:confirmAttributeOwnershipAcquisitionCancellation", 0);
         }
 
         virtual void informAttributeOwnership(rti1516e::ObjectInstanceHandle objectInstanceHandle,
@@ -1534,18 +1579,21 @@ namespace OpenRTI
             rti1516e::FederateHandle owner)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:informAttributeOwnership", 0);
         }
 
         virtual void attributeIsNotOwned(rti1516e::ObjectInstanceHandle objectInstanceHandle,
             rti1516e::AttributeHandle attribute)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:attributeIsNotOwned", 0);
         }
 
         virtual void attributeIsOwnedByRTI(rti1516e::ObjectInstanceHandle objectInstanceHandle,
             rti1516e::AttributeHandle attribute)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:attributeIsOwnedByRTI", 0);
         }
 
         virtual void timeRegulationEnabled(const rti1516e::LogicalTime& logicalTime)
@@ -1553,6 +1601,7 @@ namespace OpenRTI
         {
             _timeRegulationEnabled = true;
             *_grantedLogicalTime = logicalTime;
+            SendLog(L"DEBUG:timeRegulationEnabled", 0);
         }
 
         virtual void timeConstrainedEnabled(const rti1516e::LogicalTime& logicalTime)
@@ -1560,6 +1609,7 @@ namespace OpenRTI
         {
             _timeConstrainedEnabled = true;
             *_grantedLogicalTime = logicalTime;
+            SendLog(L"DEBUG:timeConstrainedEnabled", 0);
         }
 
         virtual void timeAdvanceGrant(const rti1516e::LogicalTime& logicalTime)
@@ -1567,11 +1617,13 @@ namespace OpenRTI
         {
             _timeAdvancePending = false;
             *_grantedLogicalTime = logicalTime;
+            SendLog(L"DEBUG:timeAdvanceGrant", 0);
         }
 
         virtual void requestRetraction(rti1516e::MessageRetractionHandle theHandle)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:requestRetraction", 0);
         }
 
         // void fail()
