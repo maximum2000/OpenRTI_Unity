@@ -30,6 +30,40 @@ email                : MaxGammer@gmail.com
 //+ разобратся с void unconditionalAttributeOwnershipDivestiture(const rti1516e::ObjectInstanceHandle& objectInstanceHandle,const rti1516e::AttributeHandleSet& attributeHandleSet) надо ее или так можем писать?
 
 
+/*
+class AttributeHandleInfoClass
+{
+  //дискриптор
+  rti1516e::AttributeHandle handle;
+  //дискриптор федерата, который создал/изменил атрибут
+  rti1516e::FederateHandle producingFederate;
+}
+
+
+
+class objectInstanceInfoClass
+{
+  //Дескриптор класса объекта
+  rti1516e::ObjectClassHandle objectClassHandle;
+
+  //Дескриптор экземпляра класса (объекта)
+  rti1516e::ObjectInstanceHandle objectInstanceHandle;
+
+  //имя-данные о аттрибате
+  std::map [std::string attributeName, AttributeHandleInfoClass] attributes;
+}
+
+//имя-данные об объекте
+std::map [std::string objectInstanceName, objectInstanceInfoClass] allObjectsInstances;
+
+
+тогда имеем доступ так  На вскидку.....
+
+allObjectsInstances["ObjectRoot.Valve1"].attributes["position"].Set("Open");
+std::string z = allObjectsInstances["ObjectRoot.Valve1"].attributes["position"].Get();
+*/
+
+
 #include "FirstDLL.h"
 
 #ifdef __cplusplus
