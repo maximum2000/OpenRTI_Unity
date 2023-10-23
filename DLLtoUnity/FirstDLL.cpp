@@ -37,6 +37,8 @@ class AttributeHandleInfoClass
   rti1516e::AttributeHandle handle;
   //дискриптор федерата, который создал/изменил атрибут
   rti1516e::FederateHandle producingFederate;
+  //
+  std::string value;
 }
 
 
@@ -45,6 +47,7 @@ class objectInstanceInfoClass
 {
   //Дескриптор класса объекта
   rti1516e::ObjectClassHandle objectClassHandle;
+  string ClassName;
 
   //Дескриптор экземпляра класса (объекта)
   rti1516e::ObjectInstanceHandle objectInstanceHandle;
