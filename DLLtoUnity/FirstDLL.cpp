@@ -40,42 +40,6 @@ email                : MaxGammer@gmail.com
 #include "FirstDLL.h"
 
 
-//-------------храним данные обо всем в этой структуре------------------------------
-class AttributeHandleInfoClass
-{
-public:
-    //дискриптор
-    rti1516e::AttributeHandle handle;
-    //дискриптор федерата, который создал/изменил атрибут
-    rti1516e::FederateHandle producingFederate;
-    //значение
-    std::string value;
-};
-
-class objectInstanceInfoClass
-{
-public:
-    //Дескриптор класса объекта
-    rti1516e::ObjectClassHandle objectClassHandle;
-    //имя класса
-    std::wstring ObjectClassName;
-
-    //Дескриптор экземпляра класса (объекта)
-    rti1516e::ObjectInstanceHandle objectInstanceHandle;
-
-    //имя-данные о аттрибате = attributeName, AttributeHandleInfoClass
-    std::map <std::wstring, AttributeHandleInfoClass> attributes;
-};
-
-//имя-данные об объекте objectInstanceName - objectInstanceInfoClass
-std::map <std::wstring, objectInstanceInfoClass> allObjectsInstances;
-
-/*
-тогда имеем доступ так  На вскидку.....
-allObjectsInstances["ObjectRoot.Valve1"].attributes["position"].Set("Open");
-std::string z = allObjectsInstances["ObjectRoot.Valve1"].attributes["position"].Get();
-*/
-
 //---------------------------------------------------------------
 
 
@@ -108,9 +72,6 @@ BOOL APIENTRY DllMain(HINSTANCE hModule, DWORD  reason, LPVOID lpReserved)
 //подключиться к серверу федерации
 int MyConnect(std::wstring IP)
 {
-    //очистка всех сохраненных данных
-    allObjectsInstances.clear();
-
     IP = L"";
     LastErrorString = L"";
     FederationName = L"";
@@ -598,18 +559,14 @@ int MyTestObjects(std::wstring className, std::wstring attributeName, std::wstri
     //хранение дискриптора экземпляра класса объекта
     //rti1516e::ObjectInstanceHandle objectInstanceHandle;
 
-    //временный объект для запоминания всего про созданный объект
-    objectInstanceInfoClass temp;
-
     //получение класса объекта
     try 
     {
         objectClassHandle = ambassador->getObjectClassHandle(className); //L"HLAobjectRoot.ObjectClass0"
-            //запоминаем дескриптор класса объекта
-            temp.objectClassHandle = objectClassHandle;
-            //запоминаем имя класса
-            temp.ObjectClassName = className;
-            //
+        //запоминаем дескриптор класса объекта
+        //objectClassHandle;
+        //запоминаем имя класса
+        //className;
     } 
     catch (const rti1516e::Exception& e) 
     {
@@ -630,10 +587,7 @@ int MyTestObjects(std::wstring className, std::wstring attributeName, std::wstri
         rti1516e::AttributeHandle newattribute = ambassador->getAttributeHandle(objectClassHandle, attributeName); // L"Attribute0"
         attributes.insert(newattribute); 
             //запоминаем имя-данные о атрибуте
-            AttributeHandleInfoClass tempattribute;
-            tempattribute.handle = newattribute;
-            temp.attributes[attributeName] = tempattribute;
-            //
+            //attribute.handle = newattribute;
         ambassador->publishObjectClassAttributes(objectClassHandle, attributes);
     } 
     catch (const rti1516e::Exception& e) 
@@ -697,7 +651,7 @@ int MyTestObjects(std::wstring className, std::wstring attributeName, std::wstri
         //std::wstring objectInstanceName = L"objectInstanceName1";
         objectInstanceHandle = ambassador->registerObjectInstance(objectClassHandle, objectInstanceName);
             //запоминаем дескриптор экземпляра класса (объекта)
-            temp.objectInstanceHandle = objectInstanceHandle;
+            //temp.objectInstanceHandle = objectInstanceHandle;
             //
     } 
     catch (const rti1516e::Exception& e) 
@@ -740,9 +694,6 @@ int MyTestObjects(std::wstring className, std::wstring attributeName, std::wstri
         std::wcout << L"Unknown Exception!" << std::endl;
         return 1;
     }
-
-    //запоминаем все это дело
-    allObjectsInstances[objectInstanceName] = temp;
    
     return 0;
 

@@ -164,6 +164,100 @@ public class TestDLL : MonoBehaviour
     }
     //end callback для сообщений о факте того, что вся федерация синхронизирована (federationSynchronized)
 
+    ///////////////////////////////////////
+
+
+
+
+    //callback для сообщений информации о резервировании имени объекта (objectInstanceNameReservationSucceeded)
+    private delegate void objectInstanceNameReservationSucceededCallback(IntPtr message1, int size1);
+    [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
+    private static extern void RegisterObjectInstanceNameReservationSucceededCallback(objectInstanceNameReservationSucceededCallback callback);
+    //Обработчик
+    private static void ObjectInstanceNameReservationSucceeded(IntPtr message1, int size1)
+    {
+        string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
+        Debug.Log(debugString1);
+    }
+    //callback для сообщений информации о резервировании имени объекта (objectInstanceNameReservationSucceeded)
+
+    //callback для сообщений информации о резервировании имени объекта (objectInstanceNameReservationFailed)
+    private delegate void objectInstanceNameReservationFailedCallback(IntPtr message1, int size1);
+    [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
+    private static extern void RegisterObjectInstanceNameReservationFailed(objectInstanceNameReservationFailedCallback callback);
+    //Обработчик
+    private static void ObjectInstanceNameReservationFailed(IntPtr message1, int size1)
+    {
+        string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
+        Debug.Log(debugString1);
+    }
+    //callback для сообщений информации о резервировании имени объекта (objectInstanceNameReservationFailed)
+
+
+    //callback для сообщений о создании нового объекта (discoverObjectInstance)
+    private delegate void discoverObjectInstanceCallback(IntPtr message1, int size1, IntPtr message2, int size2, IntPtr message3, int size3);
+    [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
+    private static extern void RegisterDiscoverObjectInstance(discoverObjectInstanceCallback callback);
+    //Обработчик
+    private static void DiscoverObjectInstance(IntPtr message1, int size1, IntPtr message2, int size2, IntPtr message3, int size3)
+    {
+        string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
+        string debugString2 = Marshal.PtrToStringAnsi(message2, size2);
+        string debugString3 = Marshal.PtrToStringAnsi(message3, size3);
+        Debug.Log(debugString1);
+        Debug.Log(debugString2);
+        Debug.Log(debugString3);
+    }
+    //callback для сообщений о создании нового объекта (discoverObjectInstance)
+
+    //callback для сообщений о изменении атрибута (reflectAttributeValues)
+    private delegate void reflectAttributeValuesCallback(IntPtr message1, int size1, IntPtr message2, int size2, IntPtr message3, int size3);
+    [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
+    private static extern void RegisterReflectAttributeValues(reflectAttributeValuesCallback callback);
+    //Обработчик
+    private static void ReflectAttributeValues(IntPtr message1, int size1, IntPtr message2, int size2, IntPtr message3, int size3)
+    {
+        string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
+        string debugString2 = Marshal.PtrToStringAnsi(message2, size2);
+        string debugString3 = Marshal.PtrToStringAnsi(message3, size3);
+        Debug.Log(debugString1);
+        Debug.Log(debugString2);
+        Debug.Log(debugString3);
+    }
+    //callback для сообщений о изменении атрибута (reflectAttributeValues)
+
+    //callback для сообщений о получении интеракции (receiveInteraction)
+    private delegate void receiveInteractionCallback(IntPtr message1, int size1, IntPtr message2, int size2, IntPtr message3, int size3);
+    [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
+    private static extern void RegisterReceiveInteractionCallback(receiveInteractionCallback callback);
+    //Обработчик
+    private static void ReceiveInteraction(IntPtr message1, int size1, IntPtr message2, int size2, IntPtr message3, int size3)
+    {
+        string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
+        string debugString2 = Marshal.PtrToStringAnsi(message2, size2);
+        string debugString3 = Marshal.PtrToStringAnsi(message3, size3);
+        Debug.Log(debugString1);
+        Debug.Log(debugString2);
+        Debug.Log(debugString3);
+    }
+    //callback для сообщений о получении интеракции (receiveInteraction)
+
+
+    //callback для сообщений о удалении объекта (removeObjectInstance)
+    private delegate void removeObjectInstanceCallback(IntPtr message1, int size1);
+    [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
+    private static extern void RegisterRemoveObjectInstanceCallback(removeObjectInstanceCallback callback);
+    //Обработчик
+    private static void RemoveObjectInstance(IntPtr message1, int size1)
+    {
+        string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
+        Debug.Log(debugString1);
+    }
+    //callback для сообщений о удалении объекта (removeObjectInstance)
+
+
+
+
 
 
     void OnDestroy()
@@ -175,6 +269,13 @@ public class TestDLL : MonoBehaviour
         RegisterSynchronizationPointRegistrationFailedCallback(null);
         RegisterAnnounceSynchronizationPointCallback(null);
         RegisterFederationSynchronizedCallback(null);
+
+        RegisterObjectInstanceNameReservationSucceededCallback(null);
+        RegisterObjectInstanceNameReservationFailed(null);
+        RegisterDiscoverObjectInstance(null);
+        RegisterReflectAttributeValues(null);
+        RegisterReceiveInteractionCallback(null);
+        RegisterRemoveObjectInstanceCallback(null);
     }
 
 
@@ -226,6 +327,14 @@ public class TestDLL : MonoBehaviour
             RegisterSynchronizationPointRegistrationFailedCallback(SynchronizationPointRegistrationFailed);
             RegisterAnnounceSynchronizationPointCallback(AnnounceSynchronizationPoint);
             RegisterFederationSynchronizedCallback(FederationSynchronized);
+
+
+            RegisterObjectInstanceNameReservationSucceededCallback(ObjectInstanceNameReservationSucceeded);
+            RegisterObjectInstanceNameReservationFailed(ObjectInstanceNameReservationFailed);
+            RegisterDiscoverObjectInstance(DiscoverObjectInstance);
+            RegisterReflectAttributeValues(ReflectAttributeValues);
+            RegisterReceiveInteractionCallback(ReceiveInteraction);
+            RegisterRemoveObjectInstanceCallback(RemoveObjectInstance);
         }
 
 

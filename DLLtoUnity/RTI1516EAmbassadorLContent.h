@@ -79,6 +79,66 @@ extern "C"
     __declspec(dllexport) void RegisterFederationSynchronizedCallback(federationSynchronizedCallback callback);
 }
 
+//--------------------------------не проверены---------------------------------------------------------------------
+
+extern "C"
+{
+    typedef void(*objectInstanceNameReservationSucceededCallback)(const char* message1, int size1);
+    static objectInstanceNameReservationSucceededCallback objectInstanceNameReservationSucceededCallbackFunction = nullptr;
+    __declspec(dllexport) void RegisterObjectInstanceNameReservationSucceededCallback(objectInstanceNameReservationSucceededCallback callback);
+}
+
+extern "C"
+{
+    typedef void(*objectInstanceNameReservationFailedCallback)(const char* message1, int size1);
+    static objectInstanceNameReservationFailedCallback objectInstanceNameReservationFailedFunction = nullptr;
+    __declspec(dllexport) void RegisterObjectInstanceNameReservationFailed(objectInstanceNameReservationFailedCallback callback);
+}
+
+extern "C"
+{
+    typedef void(*discoverObjectInstanceCallback)(const char* message1, int size1, const char* message2, int size2, const char* message3, int size3);
+    static discoverObjectInstanceCallback discoverObjectInstanceFunction = nullptr;
+    __declspec(dllexport) void RegisterDiscoverObjectInstance(discoverObjectInstanceCallback callback);
+}
+
+extern "C"
+{
+    typedef void(*reflectAttributeValuesCallback)(const char* message1, int size1, const char* message2, int size2, const char* message3, int size3);
+    static reflectAttributeValuesCallback reflectAttributeValuesFunction = nullptr;
+    __declspec(dllexport) void RegisterReflectAttributeValues(reflectAttributeValuesCallback callback);
+}
+
+extern "C"
+{
+    typedef void(*receiveInteractionCallback)(const char* message1, int size1, const char* message2, int size2, const char* message3, int size3);
+    static receiveInteractionCallback receiveInteractionCallbackFunction = nullptr;
+    __declspec(dllexport) void RegisterReceiveInteractionCallback(receiveInteractionCallback callback);
+}
+
+extern "C"
+{
+    typedef void(*removeObjectInstanceCallback)(const char* message1, int size1);
+    static removeObjectInstanceCallback removeObjectInstanceCallbackFunction = nullptr;
+    __declspec(dllexport) void RegisterRemoveObjectInstanceCallback(removeObjectInstanceCallback callback);
+}
+
+
+//virtual void requestAttributeOwnershipAssumption(rti1516e::ObjectInstanceHandle objectInstanceHandle,    rti1516e::AttributeHandleSet const& offeredAttributes,    rti1516e::VariableLengthData const& tag)
+//virtual void requestDivestitureConfirmation(rti1516e::ObjectInstanceHandle objectInstanceHandle,    rti1516e::AttributeHandleSet const& releasedAttributes)
+//virtual void attributeOwnershipAcquisitionNotification(rti1516e::ObjectInstanceHandle objectInstanceHandle,    rti1516e::AttributeHandleSet const& securedAttributes,    rti1516e::VariableLengthData const& tag)
+//virtual void attributeOwnershipUnavailable(rti1516e::ObjectInstanceHandle objectInstanceHandle,    rti1516e::AttributeHandleSet const& attributes)
+//virtual void requestAttributeOwnershipRelease(rti1516e::ObjectInstanceHandle objectInstanceHandle,    rti1516e::AttributeHandleSet const& candidateAttributes,    rti1516e::VariableLengthData const& tag)
+//virtual void confirmAttributeOwnershipAcquisitionCancellation(rti1516e::ObjectInstanceHandle objectInstanceHandle,    rti1516e::AttributeHandleSet const& attributes)
+//virtual void informAttributeOwnership(rti1516e::ObjectInstanceHandle objectInstanceHandle,    rti1516e::AttributeHandle attribute,    rti1516e::FederateHandle owner)
+//virtual void attributeIsNotOwned(rti1516e::ObjectInstanceHandle objectInstanceHandle, rti1516e::AttributeHandle attribute)
+//virtual void attributeIsOwnedByRTI(rti1516e::ObjectInstanceHandle objectInstanceHandle,    rti1516e::AttributeHandle attribute)
+
+//--------------------------------не проверены---------------------------------------------------------------------
+
+
+
+
 
 
 
@@ -110,6 +170,34 @@ void RegisterFederationSynchronizedCallback(federationSynchronizedCallback callb
 {
     federationSynchronizedFunction = callback;
 }
+
+//--------------------------------не проверены---------------------------------------------------------------------
+void RegisterObjectInstanceNameReservationSucceededCallback(objectInstanceNameReservationSucceededCallback callback)
+{
+    objectInstanceNameReservationSucceededCallbackFunction = callback;
+}
+void RegisterObjectInstanceNameReservationFailed(objectInstanceNameReservationFailedCallback callback)
+{
+    objectInstanceNameReservationFailedFunction = callback;
+}
+void RegisterDiscoverObjectInstance(discoverObjectInstanceCallback callback)
+{
+    discoverObjectInstanceFunction = callback;
+}
+void RegisterReflectAttributeValues(reflectAttributeValuesCallback callback)
+{
+    reflectAttributeValuesFunction = callback;
+}
+void RegisterReceiveInteractionCallback(receiveInteractionCallback callback)
+{
+    receiveInteractionCallbackFunction = callback;
+}
+void RegisterRemoveObjectInstanceCallback(removeObjectInstanceCallback callback)
+{
+    removeObjectInstanceCallbackFunction = callback;
+}
+
+
 //!!!
 
 
@@ -1124,16 +1212,37 @@ namespace OpenRTI
             SendLog(L"DEBUG:turnInteractionsOff", 0);
         }
 
+
+        // ->
         virtual void objectInstanceNameReservationSucceeded(const std::wstring& name)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            
             SendLog(L"objectInstanceNameReservationSucceeded, name =" + name, 0);
+
+            //через callback вызываем функцию на стороне с#
+            std::string s(name.begin(), name.end());
+            const char* tmsg = s.c_str();
+            if (objectInstanceNameReservationSucceededCallbackFunction != nullptr)
+            {
+                objectInstanceNameReservationSucceededCallbackFunction(tmsg, (int)strlen(tmsg));
+            }
+
         }
 
         virtual void objectInstanceNameReservationFailed(const std::wstring& name)
             RTI_THROW((rti1516e::FederateInternalError))
         {
             SendLog(L"objectInstanceNameReservationFailed, name =" + name, 0);
+
+            //через callback вызываем функцию на стороне с#
+            std::string s(name.begin(), name.end());
+            const char* tmsg = s.c_str();
+            if (objectInstanceNameReservationFailedFunction != nullptr)
+            {
+                objectInstanceNameReservationFailedFunction(tmsg, (int)strlen(tmsg));
+            }
+            
         }
 
         virtual void multipleObjectInstanceNameReservationSucceeded(const std::set<std::wstring>& theObjectInstanceNames)
@@ -1158,6 +1267,27 @@ namespace OpenRTI
             SendLog(L"DEBUG:objectClassHandle =" + objectClassHandle.toString(), 0);
             SendLog(L"DEBUG:objectInstanceHandle =" + objectInstanceHandle.toString(), 0);
             SendLog(L"DEBUG:objectInstanceName =" + objectInstanceName, 0);
+
+
+            std::wstring objectClassHandle_string = objectClassHandle.toString();
+            std::string s1(objectClassHandle_string.begin(), objectClassHandle_string.end());
+            const char* tmsg1 = s1.c_str();
+
+            std::wstring objectInstanceHandle_string = objectInstanceHandle.toString();
+            std::string s2(objectInstanceHandle_string.begin(), objectInstanceHandle_string.end());
+            const char* tmsg2 = s2.c_str();
+
+            std::string s3(objectInstanceName.begin(), objectInstanceName.end());
+            const char* tmsg3 = s3.c_str();
+
+            //через callback вызываем функцию на стороне с#
+            if (discoverObjectInstanceFunction != nullptr)
+            {
+                discoverObjectInstanceFunction(tmsg1, (int)strlen(tmsg1) , tmsg2, (int)strlen(tmsg2), tmsg3, (int)strlen(tmsg3));
+            }
+
+
+
 
             //Log(Assert, Error) << "discover "  << objectClassHandle.toString() << " " << objectInstanceHandle.toString() << std::endl;
             
@@ -1194,7 +1324,6 @@ namespace OpenRTI
         {
             SendLog(L"DEBUG:reflectAttributeValues, objectInstanceHandle =" + objectInstanceHandle.toString(), 0);
             // _verifyReflectAttributeValues(objectInstanceHandle, attributeHandleValueMap);
-
             //if (getFederateHandle().encode() != tag)
 
             // for (auto it = attributeHandleValueMap.begin(); it != attributeHandleValueMap.end(); ++it)
@@ -1242,6 +1371,28 @@ namespace OpenRTI
                 if (info.hasProducingFederate == true)
                 {
                     SendLog(L"DEBUG:info.producingFederate =" + info.producingFederate.toString(),0);
+                }
+
+                //через callback вызываем функцию на стороне с#
+                {
+                    //objectInstanceHandle
+                    std::wstring objectInstanceHandle_string = objectInstanceHandle.toString();
+                    std::string s1(objectInstanceHandle_string.begin(), objectInstanceHandle_string.end());
+                    const char* tmsg1 = s1.c_str();
+
+                    //attribute handle
+                    std::wstring attributeHandle_string = z.first.toString();
+                    std::string s2(attributeHandle_string.begin(), attributeHandle_string.end());
+                    const char* tmsg2 = s2.c_str();
+
+                    //value
+                    std::string s3(string_Data1.begin(), string_Data1.end());
+                    const char* tmsg3 = s3.c_str();
+
+                    if (reflectAttributeValuesFunction != nullptr)
+                    {
+                        reflectAttributeValuesFunction(tmsg1, (int)strlen(tmsg1), tmsg2, (int)strlen(tmsg2), tmsg3, (int)strlen(tmsg3));
+                    }
                 }
                 
             }
@@ -1341,6 +1492,29 @@ namespace OpenRTI
                 std::wstring string_Data2;
                 string_Data2.assign(reinterpret_cast<const wchar_t*>(z.second.data()), len/2);
                 SendLog(L"DEBUG:value2 =" + string_Data2, 0);
+
+                //через callback вызываем функцию на стороне с#
+                {
+                    //objectInstanceHandle
+                    std::wstring interactionClassHandle_string = interactionClassHandle.toString();
+                    std::string s1(interactionClassHandle_string.begin(), interactionClassHandle_string.end());
+                    const char* tmsg1 = s1.c_str();
+
+                    //parameter handle
+                    std::wstring parameterHandle_string = z.first.toString();
+                    std::string s2(parameterHandle_string.begin(), parameterHandle_string.end());
+                    const char* tmsg2 = s2.c_str();
+
+                    //value
+                    std::string s3(string_Data1.begin(), string_Data1.end());
+                    const char* tmsg3 = s3.c_str();
+
+                    if (receiveInteractionCallbackFunction != nullptr)
+                    {
+                        receiveInteractionCallbackFunction(tmsg1, (int)strlen(tmsg1), tmsg2, (int)strlen(tmsg2), tmsg3, (int)strlen(tmsg3));
+                    }
+                }
+
             }
 
             //PyByteArray_FromStringAndSize(static_cast<const char*>(variableLengthData.data()), variableLengthData.size())
@@ -1428,6 +1602,18 @@ namespace OpenRTI
         {
             SendLog(L"DEBUG:removeObjectInstance, objectInstanceHandle=" + objectInstanceHandle.toString(), 0);
             // _verifyRemoveObjectInstance(objectInstanceHandle);
+
+             //через callback вызываем функцию на стороне с#
+            {
+                //objectInstanceHandle
+                std::wstring objectInstanceHandle_string = objectInstanceHandle.toString();
+                std::string s1(objectInstanceHandle_string.begin(), objectInstanceHandle_string.end());
+                const char* tmsg1 = s1.c_str();
+                if (removeObjectInstanceCallbackFunction != nullptr)
+                {
+                    removeObjectInstanceCallbackFunction(tmsg1, (int)strlen(tmsg1));
+                }
+            }
         }
 
         virtual void removeObjectInstance(rti1516e::ObjectInstanceHandle objectInstanceHandle,
