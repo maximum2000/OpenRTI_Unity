@@ -28,46 +28,56 @@ email                : MaxGammer@gmail.com
 //+/- еще знаем какой федерат обновил ее (info.hasProducingFederate)
 
 //+ разобратся с void unconditionalAttributeOwnershipDivestiture(const rti1516e::ObjectInstanceHandle& objectInstanceHandle,const rti1516e::AttributeHandleSet& attributeHandleSet) надо ее или так можем писать?
-
-
 /*
+    не реализованы:
+    * ambassador.deleteObjectInstance(objectInstanceHandle, toVariableLengthData("tag"));
+    * ambassador.unsubscribeObjectClass(subscribedObjectClass);
+*/
+
+
+
+
+#include "FirstDLL.h"
+
+
+//-------------храним данные обо всем в этой структуре------------------------------
 class AttributeHandleInfoClass
 {
-  //дискриптор
-  rti1516e::AttributeHandle handle;
-  //дискриптор федерата, который создал/изменил атрибут
-  rti1516e::FederateHandle producingFederate;
-  //
-  std::string value;
-}
-
-
+public:
+    //дискриптор
+    rti1516e::AttributeHandle handle;
+    //дискриптор федерата, который создал/изменил атрибут
+    rti1516e::FederateHandle producingFederate;
+    //значение
+    std::string value;
+};
 
 class objectInstanceInfoClass
 {
-  //Дескриптор класса объекта
-  rti1516e::ObjectClassHandle objectClassHandle;
-  string ClassName;
+public:
+    //Дескриптор класса объекта
+    rti1516e::ObjectClassHandle objectClassHandle;
+    //имя класса
+    std::wstring ObjectClassName;
 
-  //Дескриптор экземпляра класса (объекта)
-  rti1516e::ObjectInstanceHandle objectInstanceHandle;
+    //Дескриптор экземпляра класса (объекта)
+    rti1516e::ObjectInstanceHandle objectInstanceHandle;
 
-  //имя-данные о аттрибате
-  std::map [std::string attributeName, AttributeHandleInfoClass] attributes;
-}
+    //имя-данные о аттрибате = attributeName, AttributeHandleInfoClass
+    std::map <std::wstring, AttributeHandleInfoClass> attributes;
+};
 
-//имя-данные об объекте
-std::map [std::string objectInstanceName, objectInstanceInfoClass] allObjectsInstances;
+//имя-данные об объекте objectInstanceName - objectInstanceInfoClass
+std::map <std::wstring, objectInstanceInfoClass> allObjectsInstances;
 
-
+/*
 тогда имеем доступ так  На вскидку.....
-
 allObjectsInstances["ObjectRoot.Valve1"].attributes["position"].Set("Open");
 std::string z = allObjectsInstances["ObjectRoot.Valve1"].attributes["position"].Get();
 */
 
+//---------------------------------------------------------------
 
-#include "FirstDLL.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -98,6 +108,9 @@ BOOL APIENTRY DllMain(HINSTANCE hModule, DWORD  reason, LPVOID lpReserved)
 //подключиться к серверу федерации
 int MyConnect(std::wstring IP)
 {
+    //очистка всех сохраненных данных
+    allObjectsInstances.clear();
+
     IP = L"";
     LastErrorString = L"";
     FederationName = L"";
@@ -585,10 +598,18 @@ int MyTestObjects(std::wstring className, std::wstring attributeName, std::wstri
     //хранение дискриптора экземпляра класса объекта
     //rti1516e::ObjectInstanceHandle objectInstanceHandle;
 
+    //временный объект для запоминания всего про созданный объект
+    objectInstanceInfoClass temp;
+
     //получение класса объекта
     try 
     {
         objectClassHandle = ambassador->getObjectClassHandle(className); //L"HLAobjectRoot.ObjectClass0"
+            //запоминаем дескриптор класса объекта
+            temp.objectClassHandle = objectClassHandle;
+            //запоминаем имя класса
+            temp.ObjectClassName = className;
+            //
     } 
     catch (const rti1516e::Exception& e) 
     {
@@ -603,16 +624,16 @@ int MyTestObjects(std::wstring className, std::wstring attributeName, std::wstri
         return 1;
     }
 
-
-
-
-
-
-
     //публикация класса объекта и атрибутов объекта
     try 
     {
-        attributes.insert(ambassador->getAttributeHandle(objectClassHandle, attributeName)); // L"Attribute0"
+        rti1516e::AttributeHandle newattribute = ambassador->getAttributeHandle(objectClassHandle, attributeName); // L"Attribute0"
+        attributes.insert(newattribute); 
+            //запоминаем имя-данные о атрибуте
+            AttributeHandleInfoClass tempattribute;
+            tempattribute.handle = newattribute;
+            temp.attributes[attributeName] = tempattribute;
+            //
         ambassador->publishObjectClassAttributes(objectClassHandle, attributes);
     } 
     catch (const rti1516e::Exception& e) 
@@ -675,6 +696,9 @@ int MyTestObjects(std::wstring className, std::wstring attributeName, std::wstri
         //или с именем, но тогда 
         //std::wstring objectInstanceName = L"objectInstanceName1";
         objectInstanceHandle = ambassador->registerObjectInstance(objectClassHandle, objectInstanceName);
+            //запоминаем дескриптор экземпляра класса (объекта)
+            temp.objectInstanceHandle = objectInstanceHandle;
+            //
     } 
     catch (const rti1516e::Exception& e) 
     {
@@ -717,13 +741,8 @@ int MyTestObjects(std::wstring className, std::wstring attributeName, std::wstri
         return 1;
     }
 
-
-
-    /*
-    не реализованы:
-    * ambassador.deleteObjectInstance(objectInstanceHandle, toVariableLengthData("tag"));
-    * ambassador.unsubscribeObjectClass(subscribedObjectClass);    
-    */
+    //запоминаем все это дело
+    allObjectsInstances[objectInstanceName] = temp;
    
     return 0;
 
