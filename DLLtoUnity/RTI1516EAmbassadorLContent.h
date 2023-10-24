@@ -79,8 +79,6 @@ extern "C"
     __declspec(dllexport) void RegisterFederationSynchronizedCallback(federationSynchronizedCallback callback);
 }
 
-//--------------------------------не проверены---------------------------------------------------------------------
-
 extern "C"
 {
     typedef void(*objectInstanceNameReservationSucceededCallback)(const char* message1, int size1);
@@ -134,9 +132,6 @@ extern "C"
 //virtual void attributeIsNotOwned(rti1516e::ObjectInstanceHandle objectInstanceHandle, rti1516e::AttributeHandle attribute)
 //virtual void attributeIsOwnedByRTI(rti1516e::ObjectInstanceHandle objectInstanceHandle,    rti1516e::AttributeHandle attribute)
 
-//--------------------------------не проверены---------------------------------------------------------------------
-
-
 
 
 
@@ -170,8 +165,6 @@ void RegisterFederationSynchronizedCallback(federationSynchronizedCallback callb
 {
     federationSynchronizedFunction = callback;
 }
-
-//--------------------------------не проверены---------------------------------------------------------------------
 void RegisterObjectInstanceNameReservationSucceededCallback(objectInstanceNameReservationSucceededCallback callback)
 {
     objectInstanceNameReservationSucceededCallbackFunction = callback;
@@ -552,6 +545,7 @@ namespace OpenRTI
             const rti1516e::AttributeHandleSet& attributeHandleSet)
         {
             _ambassador->unconditionalAttributeOwnershipDivestiture(objectInstanceHandle, attributeHandleSet);
+            //_ambassador->attributeOwnershipAcquisition()
         }
 
         // // 7.3

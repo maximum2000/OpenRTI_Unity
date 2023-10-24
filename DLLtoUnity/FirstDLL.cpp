@@ -34,7 +34,8 @@ email                : MaxGammer@gmail.com
     * ambassador.unsubscribeObjectClass(subscribedObjectClass);
 */
 
-
+//M:/GIT2/ieee1516/UnityTest/Assets/Plugins
+//C:/WORK/OpenRTI_Unity/UnityTest/Assets/Plugins
 
 
 #include "FirstDLL.h"
@@ -135,9 +136,6 @@ int MyCreateFederationExecution(std::wstring name, std::wstring filename)
 
     try
     {
-        //M:/GIT2/ieee1516/UnityTest/Assets/Plugins
-        //C:/WORK/OpenRTI_Unity/UnityTest/Assets/Plugins
-        
         ambassador->createFederationExecution(FederationName, filename); // L"M:/GIT2/ieee1516/UnityTest/Assets/Plugins/fdd_test.xml"
     }
     catch (const rti1516e::Exception& e)
