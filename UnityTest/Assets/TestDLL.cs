@@ -1,4 +1,4 @@
-using System.Collections;
+п»їusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using AOT; // MonopInvokeCallback
@@ -11,99 +11,143 @@ using TMPro;
 
 public class TestDLL : MonoBehaviour
 {
-    //Все callback'и расположены в файле...
+    //Р’СЃРµ callback'Рё СЂР°СЃРїРѕР»РѕР¶РµРЅС‹ РІ С„Р°Р№Р»Рµ...
     //ieee1516\DLLtoUnity\RTI1516EAmbassadorLContent.h
 
-    //имя класса для создаваемого объекта
+    //РёРјСЏ РєР»Р°СЃСЃР° РґР»СЏ СЃРѕР·РґР°РІР°РµРјРѕРіРѕ РѕР±СЉРµРєС‚Р°
     public TMP_InputField IP;
 
     public TextMeshProUGUI text1;
     public TMP_InputField FedarationName;
     public TMP_InputField FedarateName;
 
-    //имя класса для создаваемого объекта
+    //РёРјСЏ РєР»Р°СЃСЃР° РґР»СЏ СЃРѕР·РґР°РІР°РµРјРѕРіРѕ РѕР±СЉРµРєС‚Р°
     public TMP_InputField ObjectClassName;
-    //имя атрибута в классе
+    //РёРјСЏ Р°С‚СЂРёР±СѓС‚Р° РІ РєР»Р°СЃСЃРµ
     public TMP_InputField ObjectAttributeName;
-    //имя создаваемого экземпляра класса
+    //РёРјСЏ СЃРѕР·РґР°РІР°РµРјРѕРіРѕ СЌРєР·РµРјРїР»СЏСЂР° РєР»Р°СЃСЃР°
     public TMP_InputField ObjectInstanceName;
-    //новое значение атрибута
+    //РЅРѕРІРѕРµ Р·РЅР°С‡РµРЅРёРµ Р°С‚СЂРёР±СѓС‚Р°
     public TMP_InputField ObjectAttributeValue;
-    
 
 
-    //вызов обновления федерата, все сообщения будут возвращены поздже в соответствующих callback'ах
+
+
+
+
+    //РџРѕР»СѓС‡РёС‚СЊ С…РµРЅРґР» РєР»Р°СЃСЃР° РїРѕ РёРјРµРЅРё (ambassador->getObjectClassHandle(L"HLAobjectRoot.ObjectClass0"))
+    [DllImport("DLLtoUnity")]
+    public static extern int GetObjectClassHandle(StringBuilder className, int length);
+
+    //РџРѕР»СѓС‡РёС‚СЊ С…РµРЅРґР» Р°С‚СЂРёР±СѓС‚Р° РїРѕ РёРјРµРЅРё (ambassador->getAttributeHandle(objectClassHandle, L"Attribute0"))
+    [DllImport("DLLtoUnity")]
+    public static extern int GetAttributeHandle(StringBuilder className, int length, StringBuilder attributeName);
+
+    //РџРѕР»СѓС‡РёС‚СЊ С…РµРЅРґР» СЌРєР·РµРјРїР»СЏСЂР° РѕР±СЉРµРєС‚Р° РїРѕ РёРјРµРЅРё  getObjectInstanceHandle
+    [DllImport("DLLtoUnity")]
+    public static extern int GetObjectInstanceHandle(StringBuilder ObjectInstanceName, int length);
+
+    //РѕРїСѓР±Р»РёРєРѕРІР°С‚СЊ РѕР±СЉРµРєС‚ Рё Р°С‚СЂРёР±СѓС‚С‹ (С‡РµСЂРµР· Р·Р°РїСЏС‚СѓСЋ) (ambassador->publishObjectClassAttributes (...)
+    [DllImport("DLLtoUnity")]
+    public static extern int PublishObjectClassAttributes(StringBuilder className, int length, StringBuilder attributeName);
+
+    //РїРѕРґРїРёСЃРєР° РЅР° РїРѕР»СѓС‡РµРЅРёРµ СЃРѕР±С‹С‚РёР№ СЌС‚РѕРіРѕ РєР»Р°СЃСЃР° РѕР±СЉРµРєС‚Р° ( ambassador->subscribeObjectClassAttributes(objectClassHandle, attributes))
+    [DllImport("DLLtoUnity")]
+    public static extern int SubscribeObjectClassAttributes(StringBuilder className, int length, StringBuilder attributeName);
+
+    //Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°С‚СЊ РёРјСЏ  (ambassador->reserveObjectInstanceName(L"objectInstanceName1"))
+    [DllImport("DLLtoUnity")]
+    public static extern int ReserveObjectInstanceName(StringBuilder objectInstanceName, int length);
+
+    //СЃРѕР·РґР°РЅРёРµ Рё СЂРµРіРёСЃС‚СЂР°С†РёСЏ РЅРѕРІРѕРіРѕ СЌРєР·РµРјРїР»СЏСЂР° РѕР±СЉРµРєС‚Р° РєР»Р°СЃСЃР° (objectInstanceHandle = ambassador->registerObjectInstance(objectClassHandle, L"objectInstanceName1")) +-РІРѕР·РІСЂР°С‚ С…РµРЅРґР»Р°?
+    [DllImport("DLLtoUnity")]
+    public static extern int RegisterObjectInstance(StringBuilder objectClassName, int length, StringBuilder objectInstanceName);
+
+    //РёР·РјРµРЅРµРЅРёРµ Р·РЅР°С‡РµРЅРёР№ Р°С‚СЂРёР±СѓС‚РѕРІ СЌРєР·РµРјРїР»СЏСЂР° РѕР±СЉРµРєС‚Р° (ambassador->updateAttributeValues(objectInstanceHandle, attributeValues, tag))
+    [DllImport("DLLtoUnity")]
+    public static extern int UpdateAttributeValues(StringBuilder objectClassName, int length, StringBuilder ObjectInstanceName, StringBuilder attributeName, StringBuilder value);
+
+
+
+
+
+
+
+
+
+
+    //РІС‹Р·РѕРІ РѕР±РЅРѕРІР»РµРЅРёСЏ С„РµРґРµСЂР°С‚Р°, РІСЃРµ СЃРѕРѕР±С‰РµРЅРёСЏ Р±СѓРґСѓС‚ РІРѕР·РІСЂР°С‰РµРЅС‹ РїРѕР·РґР¶Рµ РІ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёС… callback'Р°С…
     [DllImport("DLLtoUnity")]
     public static extern int evokeCallback(double dT);
 
-    //вызов тестовой функции тетстирования интеракции
+    //РІС‹Р·РѕРІ С‚РµСЃС‚РѕРІРѕР№ С„СѓРЅРєС†РёРё С‚РµС‚СЃС‚РёСЂРѕРІР°РЅРёСЏ РёРЅС‚РµСЂР°РєС†РёРё
     [DllImport("DLLtoUnity")]
     public static extern int TestInteraction(StringBuilder myString, int length);
 
-    //вызов тестовой функции тетстирования объекта и аттрибута
+    //РІС‹Р·РѕРІ С‚РµСЃС‚РѕРІРѕР№ С„СѓРЅРєС†РёРё С‚РµС‚СЃС‚РёСЂРѕРІР°РЅРёСЏ РѕР±СЉРµРєС‚Р° Рё Р°С‚С‚СЂРёР±СѓС‚Р°
     [DllImport("DLLtoUnity")]
     public static extern int TestObjects(StringBuilder myString, int length, StringBuilder className, StringBuilder attributeName, StringBuilder objectInstanceName);
 
-    //вызов тестовой функции тетстирования объекта и аттрибута
+    //РІС‹Р·РѕРІ С‚РµСЃС‚РѕРІРѕР№ С„СѓРЅРєС†РёРё С‚РµС‚СЃС‚РёСЂРѕРІР°РЅРёСЏ РѕР±СЉРµРєС‚Р° Рё Р°С‚С‚СЂРёР±СѓС‚Р°
     [DllImport("DLLtoUnity")]
     public static extern int SetValueAttributeObject(StringBuilder myString, int length, StringBuilder objectInstanceName, StringBuilder attributeName, StringBuilder attributeValue);
 
 
 
-    //вызов функции запроса состава федерации, все сообщения будут возвращены поздже в соответствующих callback'ах
+    //РІС‹Р·РѕРІ С„СѓРЅРєС†РёРё Р·Р°РїСЂРѕСЃР° СЃРѕСЃС‚Р°РІР° С„РµРґРµСЂР°С†РёРё, РІСЃРµ СЃРѕРѕР±С‰РµРЅРёСЏ Р±СѓРґСѓС‚ РІРѕР·РІСЂР°С‰РµРЅС‹ РїРѕР·РґР¶Рµ РІ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёС… callback'Р°С…
     [DllImport("DLLtoUnity")]
     public static extern int ListFederationExecutions(StringBuilder myString, int length);
 
-    //вызов функции подключения к федерации
+    //РІС‹Р·РѕРІ С„СѓРЅРєС†РёРё РїРѕРґРєР»СЋС‡РµРЅРёСЏ Рє С„РµРґРµСЂР°С†РёРё
     [DllImport("DLLtoUnity")]
     public static extern int Connect(StringBuilder myString, int length);
 
-    //вызов функции создания федерата (этого)
+    //РІС‹Р·РѕРІ С„СѓРЅРєС†РёРё СЃРѕР·РґР°РЅРёСЏ С„РµРґРµСЂР°С‚Р° (СЌС‚РѕРіРѕ)
     [DllImport("DLLtoUnity")]
     public static extern int CreateFederationExecution(StringBuilder myString1, int length, StringBuilder myString2);
 
-    //вызов функции присоединения созданного федерата к федерации
+    //РІС‹Р·РѕРІ С„СѓРЅРєС†РёРё РїСЂРёСЃРѕРµРґРёРЅРµРЅРёСЏ СЃРѕР·РґР°РЅРЅРѕРіРѕ С„РµРґРµСЂР°С‚Р° Рє С„РµРґРµСЂР°С†РёРё
     [DllImport("DLLtoUnity")]
     public static extern int JoinFederationExecution(StringBuilder myString, int length);
 
-    //вызов функции регистрации точки синхронизации, все сообщения будут возвращены поздже в соответствующих callback'ах
+    //РІС‹Р·РѕРІ С„СѓРЅРєС†РёРё СЂРµРіРёСЃС‚СЂР°С†РёРё С‚РѕС‡РєРё СЃРёРЅС…СЂРѕРЅРёР·Р°С†РёРё, РІСЃРµ СЃРѕРѕР±С‰РµРЅРёСЏ Р±СѓРґСѓС‚ РІРѕР·РІСЂР°С‰РµРЅС‹ РїРѕР·РґР¶Рµ РІ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёС… callback'Р°С…
     [DllImport("DLLtoUnity")]
     public static extern int RegisterFederationSynchronizationPoint(StringBuilder myString, int length);
 
-    //вызов функции синхронизации, все сообщения будут возвращены поздже в соответствующих callback'ах
+    //РІС‹Р·РѕРІ С„СѓРЅРєС†РёРё СЃРёРЅС…СЂРѕРЅРёР·Р°С†РёРё, РІСЃРµ СЃРѕРѕР±С‰РµРЅРёСЏ Р±СѓРґСѓС‚ РІРѕР·РІСЂР°С‰РµРЅС‹ РїРѕР·РґР¶Рµ РІ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёС… callback'Р°С…
     [DllImport("DLLtoUnity")]
     public static extern int SynchronizationPointAchieved(StringBuilder myString, int length);
 
-    //callback для Debug'а
+    //callback РґР»СЏ Debug'Р°
     private delegate void DebugCallback(IntPtr message, int color, int size);
     [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
     private static extern void RegisterDebugCallback(DebugCallback callback);
-    //вывод сообщения из debug'а DLL'ки
+    //РІС‹РІРѕРґ СЃРѕРѕР±С‰РµРЅРёСЏ РёР· debug'Р° DLL'РєРё
     private static void DebugLog(IntPtr message, int color, int size)
     {
         string debugString = Marshal.PtrToStringAnsi(message, size);
         Debug.Log(debugString);
     }
-    //end callback для Debug'а
+    //end callback РґР»СЏ Debug'Р°
 
-    //callback для сообщений о потери соединения (connectionLost)
+    //callback РґР»СЏ СЃРѕРѕР±С‰РµРЅРёР№ Рѕ РїРѕС‚РµСЂРё СЃРѕРµРґРёРЅРµРЅРёСЏ (connectionLost)
     private delegate void ConnectionLostCallback(IntPtr message, int size);
     [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
     private static extern void RegisterConnectionLostCallback(ConnectionLostCallback callback);
-    //Обработчик события потери соединения
+    //РћР±СЂР°Р±РѕС‚С‡РёРє СЃРѕР±С‹С‚РёСЏ РїРѕС‚РµСЂРё СЃРѕРµРґРёРЅРµРЅРёСЏ
     private static void ConnectionLost(IntPtr message, int size)
     {
         string debugString = Marshal.PtrToStringAnsi(message, size);
         Debug.Log(debugString);
     }
-    //end callback для сообщений о потери соединения (connectionLost)
+    //end callback РґР»СЏ СЃРѕРѕР±С‰РµРЅРёР№ Рѕ РїРѕС‚РµСЂРё СЃРѕРµРґРёРЅРµРЅРёСЏ (connectionLost)
 
 
-    //callback для сообщений информации о выполнении федерации (reportFederationExecutions)
+    //callback РґР»СЏ СЃРѕРѕР±С‰РµРЅРёР№ РёРЅС„РѕСЂРјР°С†РёРё Рѕ РІС‹РїРѕР»РЅРµРЅРёРё С„РµРґРµСЂР°С†РёРё (reportFederationExecutions)
     private delegate void reportFederationExecutionsCallback(IntPtr message1, IntPtr message2, int size1, int size2);
     [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
     private static extern void RegisterReportFederationExecutionsCallback(reportFederationExecutionsCallback callback);
-    //обработчик 
+    //РѕР±СЂР°Р±РѕС‚С‡РёРє 
     private static void ReportFederationExecutions(IntPtr message1, IntPtr message2, int size1, int size2)
     {
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
@@ -111,26 +155,26 @@ public class TestDLL : MonoBehaviour
         Debug.Log(debugString1);
         Debug.Log(debugString2);
     }
-    //end callback для сообщений информации о выполнении федерации (reportFederationExecutions)
+    //end callback РґР»СЏ СЃРѕРѕР±С‰РµРЅРёР№ РёРЅС„РѕСЂРјР°С†РёРё Рѕ РІС‹РїРѕР»РЅРµРЅРёРё С„РµРґРµСЂР°С†РёРё (reportFederationExecutions)
 
-    //callback для сообщений информации о успешности регистрации точки синхронизации (synchronizationPointRegistrationSucceeded)
+    //callback РґР»СЏ СЃРѕРѕР±С‰РµРЅРёР№ РёРЅС„РѕСЂРјР°С†РёРё Рѕ СѓСЃРїРµС€РЅРѕСЃС‚Рё СЂРµРіРёСЃС‚СЂР°С†РёРё С‚РѕС‡РєРё СЃРёРЅС…СЂРѕРЅРёР·Р°С†РёРё (synchronizationPointRegistrationSucceeded)
     private delegate void synchronizationPointRegistrationSucceededCallback(IntPtr message1,  int size1);
     [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
     private static extern void RegisterSynchronizationPointRegistrationSucceededCallback(synchronizationPointRegistrationSucceededCallback callback);
-    //Обработчик
+    //РћР±СЂР°Р±РѕС‚С‡РёРє
     private static void SynchronizationPointRegistrationSucceeded(IntPtr message1,  int size1)
     {
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
         Debug.Log(debugString1);
     }
-    //end callback для сообщений информации о успешности регистрации точки синхронизации (synchronizationPointRegistrationSucceeded)
+    //end callback РґР»СЏ СЃРѕРѕР±С‰РµРЅРёР№ РёРЅС„РѕСЂРјР°С†РёРё Рѕ СѓСЃРїРµС€РЅРѕСЃС‚Рё СЂРµРіРёСЃС‚СЂР°С†РёРё С‚РѕС‡РєРё СЃРёРЅС…СЂРѕРЅРёР·Р°С†РёРё (synchronizationPointRegistrationSucceeded)
 
 
-    //callback для сообщений информации о провале регистрации точки синхронизации (synchronizationPointRegistrationFailedCallback)
+    //callback РґР»СЏ СЃРѕРѕР±С‰РµРЅРёР№ РёРЅС„РѕСЂРјР°С†РёРё Рѕ РїСЂРѕРІР°Р»Рµ СЂРµРіРёСЃС‚СЂР°С†РёРё С‚РѕС‡РєРё СЃРёРЅС…СЂРѕРЅРёР·Р°С†РёРё (synchronizationPointRegistrationFailedCallback)
     private delegate void synchronizationPointRegistrationFailedCallback(IntPtr message1, IntPtr message2, int size1, int size2);
     [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
     private static extern void RegisterSynchronizationPointRegistrationFailedCallback(synchronizationPointRegistrationFailedCallback callback);
-    //Обработчик
+    //РћР±СЂР°Р±РѕС‚С‡РёРє
     private static void SynchronizationPointRegistrationFailed(IntPtr message1, IntPtr message2, int size1, int size2)
     {
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
@@ -138,67 +182,67 @@ public class TestDLL : MonoBehaviour
         Debug.Log(debugString1);
         Debug.Log(debugString2);
     }
-    //end callback для сообщений информации о провале регистрации точки синхронизации (synchronizationPointRegistrationFailedCallback)
+    //end callback РґР»СЏ СЃРѕРѕР±С‰РµРЅРёР№ РёРЅС„РѕСЂРјР°С†РёРё Рѕ РїСЂРѕРІР°Р»Рµ СЂРµРіРёСЃС‚СЂР°С†РёРё С‚РѕС‡РєРё СЃРёРЅС…СЂРѕРЅРёР·Р°С†РёРё (synchronizationPointRegistrationFailedCallback)
 
-    //callback для сообщений информации о установке синхронизации (announceSynchronizationPointCallback)
+    //callback РґР»СЏ СЃРѕРѕР±С‰РµРЅРёР№ РёРЅС„РѕСЂРјР°С†РёРё Рѕ СѓСЃС‚Р°РЅРѕРІРєРµ СЃРёРЅС…СЂРѕРЅРёР·Р°С†РёРё (announceSynchronizationPointCallback)
     private delegate void announceSynchronizationPointCallback(IntPtr message1, int size1);
     [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
     private static extern void RegisterAnnounceSynchronizationPointCallback(announceSynchronizationPointCallback callback);
-    //Обработчик
+    //РћР±СЂР°Р±РѕС‚С‡РёРє
     private static void AnnounceSynchronizationPoint(IntPtr message1, int size1)
     {
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
         Debug.Log(debugString1);
     }
-    //end callback для сообщений информации о установке синхронизации (announceSynchronizationPointCallback)
+    //end callback РґР»СЏ СЃРѕРѕР±С‰РµРЅРёР№ РёРЅС„РѕСЂРјР°С†РёРё Рѕ СѓСЃС‚Р°РЅРѕРІРєРµ СЃРёРЅС…СЂРѕРЅРёР·Р°С†РёРё (announceSynchronizationPointCallback)
 
-    //callback для сообщений о факте того, что вся федерация синхронизирована (federationSynchronized)
+    //callback РґР»СЏ СЃРѕРѕР±С‰РµРЅРёР№ Рѕ С„Р°РєС‚Рµ С‚РѕРіРѕ, С‡С‚Рѕ РІСЃСЏ С„РµРґРµСЂР°С†РёСЏ СЃРёРЅС…СЂРѕРЅРёР·РёСЂРѕРІР°РЅР° (federationSynchronized)
     private delegate void federationSynchronizedCallback(IntPtr message1, int size1);
     [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
     private static extern void RegisterFederationSynchronizedCallback(federationSynchronizedCallback callback);
-    //Обработчик
+    //РћР±СЂР°Р±РѕС‚С‡РёРє
     private static void FederationSynchronized(IntPtr message1, int size1)
     {
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
         Debug.Log(debugString1);
     }
-    //end callback для сообщений о факте того, что вся федерация синхронизирована (federationSynchronized)
+    //end callback РґР»СЏ СЃРѕРѕР±С‰РµРЅРёР№ Рѕ С„Р°РєС‚Рµ С‚РѕРіРѕ, С‡С‚Рѕ РІСЃСЏ С„РµРґРµСЂР°С†РёСЏ СЃРёРЅС…СЂРѕРЅРёР·РёСЂРѕРІР°РЅР° (federationSynchronized)
 
     ///////////////////////////////////////
 
 
 
 
-    //callback для сообщений информации о резервировании имени объекта (objectInstanceNameReservationSucceeded)
+    //callback РґР»СЏ СЃРѕРѕР±С‰РµРЅРёР№ РёРЅС„РѕСЂРјР°С†РёРё Рѕ СЂРµР·РµСЂРІРёСЂРѕРІР°РЅРёРё РёРјРµРЅРё РѕР±СЉРµРєС‚Р° (objectInstanceNameReservationSucceeded)
     private delegate void objectInstanceNameReservationSucceededCallback(IntPtr message1, int size1);
     [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
     private static extern void RegisterObjectInstanceNameReservationSucceededCallback(objectInstanceNameReservationSucceededCallback callback);
-    //Обработчик
+    //РћР±СЂР°Р±РѕС‚С‡РёРє
     private static void ObjectInstanceNameReservationSucceeded(IntPtr message1, int size1)
     {
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
         Debug.Log(debugString1);
     }
-    //callback для сообщений информации о резервировании имени объекта (objectInstanceNameReservationSucceeded)
+    //callback РґР»СЏ СЃРѕРѕР±С‰РµРЅРёР№ РёРЅС„РѕСЂРјР°С†РёРё Рѕ СЂРµР·РµСЂРІРёСЂРѕРІР°РЅРёРё РёРјРµРЅРё РѕР±СЉРµРєС‚Р° (objectInstanceNameReservationSucceeded)
 
-    //callback для сообщений информации о резервировании имени объекта (objectInstanceNameReservationFailed)
+    //callback РґР»СЏ СЃРѕРѕР±С‰РµРЅРёР№ РёРЅС„РѕСЂРјР°С†РёРё Рѕ СЂРµР·РµСЂРІРёСЂРѕРІР°РЅРёРё РёРјРµРЅРё РѕР±СЉРµРєС‚Р° (objectInstanceNameReservationFailed)
     private delegate void objectInstanceNameReservationFailedCallback(IntPtr message1, int size1);
     [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
     private static extern void RegisterObjectInstanceNameReservationFailed(objectInstanceNameReservationFailedCallback callback);
-    //Обработчик
+    //РћР±СЂР°Р±РѕС‚С‡РёРє
     private static void ObjectInstanceNameReservationFailed(IntPtr message1, int size1)
     {
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
         Debug.Log(debugString1);
     }
-    //callback для сообщений информации о резервировании имени объекта (objectInstanceNameReservationFailed)
+    //callback РґР»СЏ СЃРѕРѕР±С‰РµРЅРёР№ РёРЅС„РѕСЂРјР°С†РёРё Рѕ СЂРµР·РµСЂРІРёСЂРѕРІР°РЅРёРё РёРјРµРЅРё РѕР±СЉРµРєС‚Р° (objectInstanceNameReservationFailed)
 
 
-    //callback для сообщений о создании нового объекта (discoverObjectInstance)
+    //callback РґР»СЏ СЃРѕРѕР±С‰РµРЅРёР№ Рѕ СЃРѕР·РґР°РЅРёРё РЅРѕРІРѕРіРѕ РѕР±СЉРµРєС‚Р° (discoverObjectInstance)
     private delegate void discoverObjectInstanceCallback(IntPtr message1, int size1, IntPtr message2, int size2, IntPtr message3, int size3);
     [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
     private static extern void RegisterDiscoverObjectInstance(discoverObjectInstanceCallback callback);
-    //Обработчик
+    //РћР±СЂР°Р±РѕС‚С‡РёРє
     private static void DiscoverObjectInstance(IntPtr message1, int size1, IntPtr message2, int size2, IntPtr message3, int size3)
     {
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
@@ -208,13 +252,13 @@ public class TestDLL : MonoBehaviour
         Debug.Log(debugString2);
         Debug.Log(debugString3);
     }
-    //callback для сообщений о создании нового объекта (discoverObjectInstance)
+    //callback РґР»СЏ СЃРѕРѕР±С‰РµРЅРёР№ Рѕ СЃРѕР·РґР°РЅРёРё РЅРѕРІРѕРіРѕ РѕР±СЉРµРєС‚Р° (discoverObjectInstance)
 
-    //callback для сообщений о изменении атрибута (reflectAttributeValues)
+    //callback РґР»СЏ СЃРѕРѕР±С‰РµРЅРёР№ Рѕ РёР·РјРµРЅРµРЅРёРё Р°С‚СЂРёР±СѓС‚Р° (reflectAttributeValues)
     private delegate void reflectAttributeValuesCallback(IntPtr message1, int size1, IntPtr message2, int size2, IntPtr message3, int size3);
     [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
     private static extern void RegisterReflectAttributeValues(reflectAttributeValuesCallback callback);
-    //Обработчик
+    //РћР±СЂР°Р±РѕС‚С‡РёРє
     private static void ReflectAttributeValues(IntPtr message1, int size1, IntPtr message2, int size2, IntPtr message3, int size3)
     {
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
@@ -224,13 +268,13 @@ public class TestDLL : MonoBehaviour
         Debug.Log(debugString2);
         Debug.Log(debugString3);
     }
-    //callback для сообщений о изменении атрибута (reflectAttributeValues)
+    //callback РґР»СЏ СЃРѕРѕР±С‰РµРЅРёР№ Рѕ РёР·РјРµРЅРµРЅРёРё Р°С‚СЂРёР±СѓС‚Р° (reflectAttributeValues)
 
-    //callback для сообщений о получении интеракции (receiveInteraction)
+    //callback РґР»СЏ СЃРѕРѕР±С‰РµРЅРёР№ Рѕ РїРѕР»СѓС‡РµРЅРёРё РёРЅС‚РµСЂР°РєС†РёРё (receiveInteraction)
     private delegate void receiveInteractionCallback(IntPtr message1, int size1, IntPtr message2, int size2, IntPtr message3, int size3);
     [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
     private static extern void RegisterReceiveInteractionCallback(receiveInteractionCallback callback);
-    //Обработчик
+    //РћР±СЂР°Р±РѕС‚С‡РёРє
     private static void ReceiveInteraction(IntPtr message1, int size1, IntPtr message2, int size2, IntPtr message3, int size3)
     {
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
@@ -240,20 +284,20 @@ public class TestDLL : MonoBehaviour
         Debug.Log(debugString2);
         Debug.Log(debugString3);
     }
-    //callback для сообщений о получении интеракции (receiveInteraction)
+    //callback РґР»СЏ СЃРѕРѕР±С‰РµРЅРёР№ Рѕ РїРѕР»СѓС‡РµРЅРёРё РёРЅС‚РµСЂР°РєС†РёРё (receiveInteraction)
 
 
-    //callback для сообщений о удалении объекта (removeObjectInstance)
+    //callback РґР»СЏ СЃРѕРѕР±С‰РµРЅРёР№ Рѕ СѓРґР°Р»РµРЅРёРё РѕР±СЉРµРєС‚Р° (removeObjectInstance)
     private delegate void removeObjectInstanceCallback(IntPtr message1, int size1);
     [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
     private static extern void RegisterRemoveObjectInstanceCallback(removeObjectInstanceCallback callback);
-    //Обработчик
+    //РћР±СЂР°Р±РѕС‚С‡РёРє
     private static void RemoveObjectInstance(IntPtr message1, int size1)
     {
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
         Debug.Log(debugString1);
     }
-    //callback для сообщений о удалении объекта (removeObjectInstance)
+    //callback РґР»СЏ СЃРѕРѕР±С‰РµРЅРёР№ Рѕ СѓРґР°Р»РµРЅРёРё РѕР±СЉРµРєС‚Р° (removeObjectInstance)
 
 
 
@@ -277,6 +321,90 @@ public class TestDLL : MonoBehaviour
         RegisterReceiveInteractionCallback(null);
         RegisterRemoveObjectInstanceCallback(null);
     }
+
+
+
+    public void testV2()
+    {
+        {
+            StringBuilder className = new StringBuilder("HLAobjectRoot.ObjectClass0", 100);
+            GetObjectClassHandle(className, className.Capacity);
+            string myString = className.ToString();
+            Debug.Log("->GetObjectClassHandle: " + myString);
+            evokeCallback(0.1);
+        }
+
+        {
+            StringBuilder className = new StringBuilder("HLAobjectRoot.ObjectClass0", 100);
+            StringBuilder attributeName = new StringBuilder("Attribute0", 100);
+            GetAttributeHandle(className, className.Capacity, attributeName);
+            string myString = className.ToString();
+            Debug.Log("->GetAttributeHandle: " + myString);
+            evokeCallback(0.1);
+        }
+
+        {
+            StringBuilder ObjectInstanceName = new StringBuilder("Valve124вЂ‹", 100);
+            GetObjectInstanceHandle(ObjectInstanceName, ObjectInstanceName.Capacity);
+            string myString = ObjectInstanceName.ToString();
+            Debug.Log("->ObjectInstanceName: " + myString);
+            evokeCallback(0.1);
+        }
+
+        {
+            StringBuilder className = new StringBuilder("HLAobjectRoot.ObjectClass0вЂ‹", 100);
+            StringBuilder attributeName = new StringBuilder("Attribute0вЂ‹", 100);
+            PublishObjectClassAttributes(className, className.Capacity, attributeName);
+            string myString = className.ToString();
+            Debug.Log("->PublishObjectClassAttributes: " + myString);
+            evokeCallback(0.1);
+        }
+
+        {
+            StringBuilder className = new StringBuilder("HLAobjectRoot.ObjectClass0вЂ‹", 100);
+            StringBuilder attributeName = new StringBuilder("Attribute0вЂ‹", 100);
+            SubscribeObjectClassAttributes(className, className.Capacity, attributeName);
+            string myString = className.ToString();
+            Debug.Log("->SubscribeObjectClassAttributes: " + myString);
+            evokeCallback(0.1);
+        }
+
+        {
+            StringBuilder objectInstanceName = new StringBuilder("Valve444", 100);
+            ReserveObjectInstanceName(objectInstanceName, objectInstanceName.Capacity);
+            string myString = objectInstanceName.ToString();
+            Debug.Log("->ReserveObjectInstanceName: " + myString);
+            evokeCallback(0.1);
+        }
+
+        {
+            StringBuilder objectClassName = new StringBuilder("HLAobjectRoot.ObjectClass0", 100);
+            StringBuilder objectInstanceName = new StringBuilder("Valve444", 100);
+            RegisterObjectInstance(objectClassName, objectClassName.Capacity, objectInstanceName);
+            string myString = objectClassName.ToString();
+            Debug.Log("->RegisterObjectInstance: " + myString);
+            evokeCallback(0.1);
+        }
+
+        {
+            StringBuilder objectClassName = new StringBuilder("HLAobjectRoot.ObjectClass0", 100);
+            StringBuilder ObjectInstanceName = new StringBuilder("Valve444", 100);
+            StringBuilder attributeName = new StringBuilder("Attribute0", 100);
+            StringBuilder value = new StringBuilder("Max54321", 100);
+            UpdateAttributeValues(objectClassName, objectClassName.Capacity, ObjectInstanceName, attributeName, value);
+            string myString = objectClassName.ToString();
+            Debug.Log("->UpdateAttributeValues: " + myString);
+            evokeCallback(0.1);
+        }
+    }
+
+
+
+
+
+
+
+
 
 
     public void Step6()
@@ -318,7 +446,7 @@ public class TestDLL : MonoBehaviour
 
     public void  Step1a()
     {
-        //регистрация всех callbeck функций (привязка)
+        //СЂРµРіРёСЃС‚СЂР°С†РёСЏ РІСЃРµС… callbeck С„СѓРЅРєС†РёР№ (РїСЂРёРІСЏР·РєР°)
         {
             RegisterDebugCallback(DebugLog);
             RegisterConnectionLostCallback(ConnectionLost);

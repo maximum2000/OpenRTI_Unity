@@ -396,6 +396,530 @@ inline rti1516e::VariableLengthData toVariableLengthData(const std::wstring& s)
     return variableLengthData;
 }
 
+
+//------------------------------NEW------------------------------------------------
+
+
+//Получить хендл класса по имени (ambassador->getObjectClassHandle(L"HLAobjectRoot.ObjectClass0"))
+rti1516e::ObjectClassHandle TempObjectClassHandle;
+int MyGetObjectClassHandle(std::wstring className)
+{
+    LastErrorString = L"";
+    //получение класса объекта
+    try
+    {
+        TempObjectClassHandle = ambassador->getObjectClassHandle(className); //L"HLAobjectRoot.ObjectClass0"
+    }
+    catch (const rti1516e::Exception& e)
+    {
+        LastErrorString = e.what();
+        std::wcout << L"rti1516e::Exception: \"" << e.what() << L"\"" << std::endl;
+        return 1;
+    }
+    catch (...)
+    {
+        LastErrorString = L"Unknown Exception!";
+        std::wcout << L"Unknown Exception!" << std::endl;
+        return 1;
+    }
+    return 0;
+}
+int GetObjectClassHandle(char* myString, int length)
+{
+    std::wstringstream cls;
+    cls << myString;
+    std::wstring className = cls.str();
+    ambassador->SendLog(L"DEBUG: GetObjectClassHandle:name=" + className, 0);
+    int ret = MyGetObjectClassHandle(className);
+    if (ret == 1)
+    {
+        std::string s(LastErrorString.begin(), LastErrorString.end());
+        strcpy_s(myString, length, s.c_str());
+        return 1;
+    }
+    std::wstring classHandleW = TempObjectClassHandle.toString();
+    std::string s(classHandleW.begin(), classHandleW.end());
+    strcpy_s(myString, length, s.c_str());
+    return 0;
+}
+
+
+//Получить хендл атрибута по имени (ambassador->getAttributeHandle(objectClassHandle, L"Attribute0"))
+rti1516e::AttributeHandle TempAttribute;
+int MyGetAttributeHandle(std::wstring className, std::wstring attributeName)
+{
+    LastErrorString = L"";
+    //получение класса объекта
+    try
+    {
+        TempAttribute = ambassador->getAttributeHandle(ambassador->getObjectClassHandle(className), attributeName); // L"Attribute0"
+    }
+    catch (const rti1516e::Exception& e)
+    {
+        LastErrorString = e.what();
+        std::wcout << L"rti1516e::Exception: \"" << e.what() << L"\"" << std::endl;
+        return 1;
+    }
+    catch (...)
+    {
+        LastErrorString = L"Unknown Exception!";
+        std::wcout << L"Unknown Exception!" << std::endl;
+        return 1;
+    }
+    return 0;
+}
+int GetAttributeHandle(char* myString1, int length1, char* myString2)
+{
+    std::wstringstream cls1;
+    cls1 << myString1;
+    std::wstring className = cls1.str();
+    std::wstringstream cls2;
+    cls2 << myString2;
+    std::wstring attributeName = cls2.str();
+    ambassador->SendLog(L"DEBUG: GetAttributeHandle:className=" + className + L" attributeName:" + attributeName, 0);
+    int ret = MyGetAttributeHandle(className, attributeName);
+    if (ret == 1)
+    {
+        std::string s(LastErrorString.begin(), LastErrorString.end());
+        strcpy_s(myString1, length1, s.c_str());
+        return 1;
+    }
+    std::wstring attributeHandleW = TempAttribute.toString();
+    std::string s(attributeHandleW.begin(), attributeHandleW.end());
+    strcpy_s(myString1, length1, s.c_str());
+    return 0;
+}
+
+
+//Получить хендл экземпляра объекта по имени  getObjectInstanceHandle
+rti1516e::ObjectInstanceHandle TempObjectInstanceHandle;
+int MyGetObjectInstanceHandle(std::wstring ObjectInstanceName)
+{
+    LastErrorString = L"";
+    //получение класса объекта
+    try
+    {
+        TempObjectInstanceHandle = ambassador->getObjectInstanceHandle(ObjectInstanceName); // L"Valve12"
+    }
+    catch (const rti1516e::Exception& e)
+    {
+        LastErrorString = e.what();
+        std::wcout << L"rti1516e::Exception: \"" << e.what() << L"\"" << std::endl;
+        return 1;
+    }
+    catch (...)
+    {
+        LastErrorString = L"Unknown Exception!";
+        std::wcout << L"Unknown Exception!" << std::endl;
+        return 1;
+    }
+    return 0;
+}
+int GetObjectInstanceHandle(char* myString1, int length1)
+{
+    std::wstringstream cls1;
+    cls1 << myString1;
+    std::wstring objectInstanceName = cls1.str();
+    
+    ambassador->SendLog(L"DEBUG: GetObjectInstanceHandle:objectInstanceName=" + objectInstanceName, 0);
+    int ret = MyGetObjectInstanceHandle(objectInstanceName);
+    if (ret == 1)
+    {
+        std::string s(LastErrorString.begin(), LastErrorString.end());
+        strcpy_s(myString1, length1, s.c_str());
+        return 1;
+    }
+    std::wstring objectInstanceNameW = TempObjectInstanceHandle.toString();
+    std::string s(objectInstanceNameW.begin(), objectInstanceNameW.end());
+    strcpy_s(myString1, length1, s.c_str());
+    return 0;
+}
+
+
+//!!!!! Через запятую
+//опубликовать объект и атрибуты (через запятую) (ambassador->publishObjectClassAttributes (har* myString1, int length1, char* myString2, int length2))
+int MyPublishObjectClassAttributes(std::wstring className, std::wstring attributeName)
+{
+    LastErrorString = L"";
+    //хранение дискриптора аттрибутов
+    rti1516e::AttributeHandleSet _attributes;
+    //получение класса объекта
+    try
+    {
+        rti1516e::ObjectClassHandle _ObjectClassHandle = ambassador->getObjectClassHandle(className);
+        rti1516e::AttributeHandle newattribute = ambassador->getAttributeHandle(_ObjectClassHandle, attributeName); // L"Attribute0"
+        _attributes.insert(newattribute);
+        ambassador->publishObjectClassAttributes(_ObjectClassHandle, _attributes);
+    }
+    catch (const rti1516e::Exception& e)
+    {
+        LastErrorString = e.what();
+        std::wcout << L"rti1516e::Exception: \"" << e.what() << L"\"" << std::endl;
+        return 1;
+    }
+    catch (...)
+    {
+        LastErrorString = L"Unknown Exception!";
+        std::wcout << L"Unknown Exception!" << std::endl;
+        return 1;
+    }
+    return 0;
+}
+int PublishObjectClassAttributes(char* myString1, int length1, char* myString2)
+{
+    std::wstringstream cls1;
+    cls1 << myString1;
+    std::wstring className = cls1.str();
+    std::wstringstream cls2;
+    cls2 << myString2;
+    std::wstring attributeName = cls2.str();
+    ambassador->SendLog(L"DEBUG: PublishObjectClassAttributes:className=" + className + L" attributeName:" + attributeName, 0);
+    int ret = MyPublishObjectClassAttributes(className, attributeName);
+    if (ret == 1)
+    {
+        std::string s(LastErrorString.begin(), LastErrorString.end());
+        strcpy_s(myString1, length1, s.c_str());
+        return 1;
+    }
+    std::string s("ok");;
+    strcpy_s(myString1, length1, s.c_str());
+    return 0;
+}
+
+
+//!!!!! Через запятую
+//подписка на получение событий этого класса объекта ( ambassador->subscribeObjectClassAttributes(objectClassHandle, attributes))
+int MySubscribeObjectClassAttributes(std::wstring className, std::wstring attributeName)
+{
+    LastErrorString = L"";
+    //хранение дискриптора аттрибутов
+    rti1516e::AttributeHandleSet _attributes;
+    //получение класса объекта
+    try
+    {
+        rti1516e::ObjectClassHandle _ObjectClassHandle = ambassador->getObjectClassHandle(className);
+        rti1516e::AttributeHandle newattribute = ambassador->getAttributeHandle(_ObjectClassHandle, attributeName); // L"Attribute0"
+        _attributes.insert(newattribute);
+        ambassador->subscribeObjectClassAttributes(_ObjectClassHandle, _attributes);
+    }
+    catch (const rti1516e::Exception& e)
+    {
+        LastErrorString = e.what();
+        std::wcout << L"rti1516e::Exception: \"" << e.what() << L"\"" << std::endl;
+        return 1;
+    }
+    catch (...)
+    {
+        LastErrorString = L"Unknown Exception!";
+        std::wcout << L"Unknown Exception!" << std::endl;
+        return 1;
+    }
+    return 0;
+}
+int SubscribeObjectClassAttributes(char* myString1, int length1, char* myString2)
+{
+    std::wstringstream cls1;
+    cls1 << myString1;
+    std::wstring className = cls1.str();
+    std::wstringstream cls2;
+    cls2 << myString2;
+    std::wstring attributeName = cls2.str();
+    ambassador->SendLog(L"DEBUG: SubscribeObjectClassAttributes:className=" + className + L" attributeName:" + attributeName, 0);
+    int ret = MyPublishObjectClassAttributes(className, attributeName);
+    if (ret == 1)
+    {
+        std::string s(LastErrorString.begin(), LastErrorString.end());
+        strcpy_s(myString1, length1, s.c_str());
+        return 1;
+    }
+    std::string s("ok");;
+    strcpy_s(myString1, length1, s.c_str());
+    return 0;
+}
+
+
+//зарегистрировать имя  (ambassador->reserveObjectInstanceName(L"objectInstanceName1"))
+int MyReserveObjectInstanceName(std::wstring objectInstanceName)
+{
+    LastErrorString = L"";
+    try
+    {
+        ambassador->reserveObjectInstanceName(objectInstanceName);
+    }
+    catch (const rti1516e::Exception& e)
+    {
+        LastErrorString = e.what();
+        std::wcout << L"rti1516e::Exception: \"" << e.what() << L"\"" << std::endl;
+        return 1;
+    }
+    catch (...)
+    {
+        LastErrorString = L"Unknown Exception!";
+        std::wcout << L"Unknown Exception!" << std::endl;
+        return 1;
+    }
+    return 0;
+}
+int ReserveObjectInstanceName(char* myString1, int length1)
+{
+    std::wstringstream cls1;
+    cls1 << myString1;
+    std::wstring objectInstanceName = cls1.str();
+
+    ambassador->SendLog(L"DEBUG: ReserveObjectInstanceName:objectInstanceName=" + objectInstanceName, 0);
+    int ret = MyReserveObjectInstanceName(objectInstanceName);
+    if (ret == 1)
+    {
+        std::string s(LastErrorString.begin(), LastErrorString.end());
+        strcpy_s(myString1, length1, s.c_str());
+        return 1;
+    }
+    std::string s("ok");;
+    strcpy_s(myString1, length1, s.c_str());
+    return 0;
+}
+
+//создание и регистрация нового экземпляра объекта класса (objectInstanceHandle = ambassador->registerObjectInstance(objectClassHandle, L"objectInstanceName1")) +-возврат хендла?
+rti1516e::ObjectInstanceHandle ObjectInstanceHandleForMyRegisterObjectInstance;
+int MyRegisterObjectInstance(std::wstring objectClassName, std::wstring objectInstanceName)
+{
+    LastErrorString = L"";
+    //хранение дискриптора аттрибутов
+    rti1516e::AttributeHandleSet _attributes;
+    //получение класса объекта
+    try
+    {
+        rti1516e::ObjectClassHandle _ObjectClassHandle = ambassador->getObjectClassHandle(objectClassName);
+        ObjectInstanceHandleForMyRegisterObjectInstance = ambassador->registerObjectInstance(_ObjectClassHandle, objectInstanceName);
+    }
+    catch (const rti1516e::Exception& e)
+    {
+        LastErrorString = e.what();
+        std::wcout << L"rti1516e::Exception: \"" << e.what() << L"\"" << std::endl;
+        return 1;
+    }
+    catch (...)
+    {
+        LastErrorString = L"Unknown Exception!";
+        std::wcout << L"Unknown Exception!" << std::endl;
+        return 1;
+    }
+    return 0;
+}
+int RegisterObjectInstance(char* myString1, int length1, char* myString2)
+{
+    std::wstringstream cls1;
+    cls1 << myString1;
+    std::wstring className = cls1.str();
+    std::wstringstream cls2;
+    cls2 << myString2;
+    std::wstring objectInstanceName = cls2.str();
+    ambassador->SendLog(L"DEBUG: MyRegisterObjectInstance:className=" + className + L" objectInstanceName:" + objectInstanceName, 0);
+    int ret = MyRegisterObjectInstance(className, objectInstanceName);
+    if (ret == 1)
+    {
+        std::string s(LastErrorString.begin(), LastErrorString.end());
+        strcpy_s(myString1, length1, s.c_str());
+        return 1;
+    }
+    std::wstring objectInstanceW = ObjectInstanceHandleForMyRegisterObjectInstance.toString();
+    std::string s(objectInstanceW.begin(), objectInstanceW.end());
+    strcpy_s(myString1, length1, s.c_str());
+    return 0;
+}
+
+//изменение значений атрибутов экземпляра объекта (ambassador->updateAttributeValues(objectInstanceHandle, attributeValues, tag))
+int MyUpdateAttributeValues(std::wstring ClassName, std::wstring ObjectInstanceName, std::wstring attributeName, std::wstring value)
+{
+    LastErrorString = L"";
+    
+    try
+    {
+        rti1516e::ObjectClassHandle _objectClassHandle = ambassador->getObjectClassHandle(ClassName);
+        rti1516e::AttributeHandleSet _attributes;
+        rti1516e::AttributeHandle newattribute = ambassador->getAttributeHandle(_objectClassHandle, attributeName); // L"Attribute0"
+        _attributes.insert(newattribute);
+        rti1516e::AttributeHandleValueMap attributeValues;
+        rti1516e::VariableLengthData tag = toVariableLengthData(OpenRTI::Clock::now());
+        for (rti1516e::AttributeHandleSet::const_iterator k = _attributes.begin(); k != _attributes.end(); ++k)
+        {
+            //attributeValues[*k] = toVariableLengthData(ambassador->getAttributeName(_objectClassHandle, *k));
+            attributeValues[*k] = toVariableLengthData(value); //L"Xbc1234"
+        }
+        rti1516e::ObjectInstanceHandle _objectInstanceHandle = ambassador->getObjectInstanceHandle(ObjectInstanceName);
+        ambassador->updateAttributeValues(_objectInstanceHandle, attributeValues, tag);
+    }
+    catch (const rti1516e::Exception& e)
+    {
+        LastErrorString = e.what();
+        std::wcout << L"rti1516e::Exception: \"" << e.what() << L"\"" << std::endl;
+        return 1;
+    }
+    catch (...)
+    {
+        LastErrorString = L"Unknown Exception!";
+        std::wcout << L"Unknown Exception!" << std::endl;
+        return 1;
+    }
+    return 0;
+}
+int UpdateAttributeValues(char* myString1, int length1, char* myString2, char* myString3, char* myString4)
+{
+    std::wstringstream cls1;
+    cls1 << myString1;
+    std::wstring className = cls1.str();
+    std::wstringstream cls2;
+    cls2 << myString2;
+    std::wstring objectInstanceName = cls2.str();
+    std::wstringstream cls3;
+    cls3 << myString3;
+    std::wstring attributeName = cls3.str();
+    std::wstringstream cls4;
+    cls4 << myString4;
+    std::wstring attributeValue = cls4.str();
+
+    ambassador->SendLog(L"DEBUG: UpdateAttributeValues:" + className + L"." +  objectInstanceName + L"." + attributeName + L"=" + attributeValue, 0);
+    int ret = MyUpdateAttributeValues(className, objectInstanceName, attributeName, attributeValue);
+    if (ret == 1)
+    {
+        std::string s(LastErrorString.begin(), LastErrorString.end());
+        strcpy_s(myString1, length1, s.c_str());
+        return 1;
+    }
+    std::string s("ok");;
+    strcpy_s(myString1, length1, s.c_str());
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//получение класса интеракции (InteractionClass0Handle = ambassador->getInteractionClassHandle(L"HLAinteractionRoot.InteractionClass0"))
+int GetInteractionClassHandle(char* myString1, int length1)
+{
+    return 0;
+}
+
+//получение класса параметров интеракции (class0Parameter0Handle = ambassador->getParameterHandle(InteractionClass0Handle, L"Parameter0"))
+int GetParameterHandle(char* myString1, int length1, char* myString2, int length2)
+{
+    return 0;
+}
+
+//подписка на эту интеракцию (ambassador->subscribeInteractionClass(InteractionClass0Handle))
+int SubscribeInteractionClass(char* myString1, int length1)
+{
+    return 0;
+}
+
+//публикация интеракции (ambassador->publishInteractionClass(InteractionClass0Handle))
+int PublishInteractionClass(char* myString1, int length1)
+{
+    return 0;
+}
+
+//отправить интеракцию ( ambassador->sendInteraction(InteractionClass0Handle, parameterValues, ambassador->getFederateHandle().encode())
+int SendInteraction(char* myString1, int length1, char* myString2, int length2)
+{
+    return 0;
+}
+
+//выйти из федерации resignFederationExecution(rti1516e::ResignAction resignAction)
+int ResignFederationExecution(char* myString1, int length1)
+{
+    return 0;
+}
+
+//сообщаем о желании безусловной отдачи владения другому федерату (толкаем-отдаем права) - unconditionalAttributeOwnershipDivestiture
+int UnconditionalAttributeOwnershipDivestiture(char* myString1, int length1, char* myString2, int length2)
+{
+    return 0;
+}
+
+//сообщаем о желании согласованной отдачи владения другому федерату (толкаем-отдаем права) - negotiatedAttributeOwnershipDivestiture
+int NegotiatedAttributeOwnershipDivestiture(char* myString1, int length1, char* myString2, int length2)
+{
+    return 0;
+}
+
+//подтверждаем отдачу владения (толкаем-отдаем права) - confirmDivestiture
+int ConfirmDivestiture(char* myString1, int length1, char* myString2, int length2)
+{
+    return 0;
+}
+
+//Навязчиво просим отдать права нам (тянем-требуем права) - attributeOwnershipAcquisition
+int AttributeOwnershipAcquisition(char* myString1, int length1, char* myString2, int length2)
+{
+    return 0;
+}
+
+//Пытаемся спросить отдать права нам, если сейчас они никому не пренадлежат, если комуто принадлежат надо навязчиво требовать (тянем права) - attributeOwnershipAcquisitionIfAvailable
+int AttributeOwnershipAcquisitionIfAvailable(char* myString1, int length1, char* myString2, int length2)
+{
+    return 0;
+}
+
+//отказать в передаче владения, даже если нас навязчиво попросили - attributeOwnershipReleaseDenied
+DLLExport int AttributeOwnershipReleaseDenied(char* myString1, int length1, char* myString2, int length2)
+{
+    return 0;
+}
+
+//разрешить передачу владения - attributeOwnershipDivestitureIfWanted
+int AttributeOwnershipDivestitureIfWanted(char* myString1, int length1, char* myString2, int length2)
+{
+    return 0;
+}
+
+//прекратить согласование передачи прав - cancelNegotiatedAttributeOwnershipDivestiture
+int CancelNegotiatedAttributeOwnershipDivestiture(char* myString1, int length1, char* myString2, int length2)
+{
+    return 0;
+}
+
+//cancelAttributeOwnershipAcquisition
+int CancelAttributeOwnershipAcquisition(char* myString1, int length1, char* myString2, int length2)
+{
+    return 0;
+}
+
+//видимо узнать кому сейчас паринадлежат права - queryAttributeOwnership
+int queryAttributeOwnership(char* myString1, int length1, char* myString2, int length2)
+{
+    return 0;
+}
+
+//видимо узнать, нам сейчас сейчас паринадлежат права или нет - isAttributeOwnedByFederate
+int isAttributeOwnedByFederate(char* myString1, int length1, char* myString2, int length2)
+{
+    return 0;
+}
+
+
+
+
+
+//-----------------------------OLD----------------------------------------------
+
 //------------------[Тест интеракций]--------------------------
 //Тест интеракций
 int MyTestInteraction()
