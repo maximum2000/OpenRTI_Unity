@@ -546,10 +546,9 @@ int MyPublishObjectClassAttributes(std::wstring className, std::wstring attribut
     //получение класса объекта
     try
     {
-        rti1516e::ObjectClassHandle _ObjectClassHandle = ambassador->getObjectClassHandle(className);
-        rti1516e::AttributeHandle newattribute = ambassador->getAttributeHandle(_ObjectClassHandle, attributeName); // L"Attribute0"
+        rti1516e::AttributeHandle newattribute = ambassador->getAttributeHandle(ambassador->getObjectClassHandle(className), attributeName); // L"Attribute0"
         _attributes.insert(newattribute);
-        ambassador->publishObjectClassAttributes(_ObjectClassHandle, _attributes);
+        ambassador->publishObjectClassAttributes(ambassador->getObjectClassHandle(className), _attributes);
     }
     catch (const rti1516e::Exception& e)
     {
@@ -625,7 +624,7 @@ int SubscribeObjectClassAttributes(char* myString1, int length1, char* myString2
     cls2 << myString2;
     std::wstring attributeName = cls2.str();
     ambassador->SendLog(L"DEBUG: SubscribeObjectClassAttributes:className=" + className + L" attributeName:" + attributeName, 0);
-    int ret = MyPublishObjectClassAttributes(className, attributeName);
+    int ret = MySubscribeObjectClassAttributes(className, attributeName);
     if (ret == 1)
     {
         std::string s(LastErrorString.begin(), LastErrorString.end());

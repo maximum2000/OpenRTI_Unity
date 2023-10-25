@@ -352,8 +352,8 @@ public class TestDLL : MonoBehaviour
         }
 
         {
-            StringBuilder className = new StringBuilder("HLAobjectRoot.ObjectClass0​", 100);
-            StringBuilder attributeName = new StringBuilder("Attribute0​", 100);
+            StringBuilder className = new StringBuilder("HLAobjectRoot.ObjectClass0", 100);
+            StringBuilder attributeName = new StringBuilder("Attribute0", 100);
             PublishObjectClassAttributes(className, className.Capacity, attributeName);
             string myString = className.ToString();
             Debug.Log("->PublishObjectClassAttributes: " + myString);
@@ -361,8 +361,8 @@ public class TestDLL : MonoBehaviour
         }
 
         {
-            StringBuilder className = new StringBuilder("HLAobjectRoot.ObjectClass0​", 100);
-            StringBuilder attributeName = new StringBuilder("Attribute0​", 100);
+            StringBuilder className = new StringBuilder("HLAobjectRoot.ObjectClass0", 100);
+            StringBuilder attributeName = new StringBuilder("Attribute0", 100);
             SubscribeObjectClassAttributes(className, className.Capacity, attributeName);
             string myString = className.ToString();
             Debug.Log("->SubscribeObjectClassAttributes: " + myString);
