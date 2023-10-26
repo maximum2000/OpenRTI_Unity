@@ -44,9 +44,12 @@ public class TestDLL : MonoBehaviour
     public static extern int GetAttributeHandle(StringBuilder className, int length, StringBuilder attributeName);
 
     //Получить хендл экземпляра объекта по имени  getObjectInstanceHandle
-    [DllImport("DLLtoUnity")]
-    public static extern int GetObjectInstanceHandle(StringBuilder ObjectInstanceName, int length);
+    //[DllImport("DLLtoUnity")]
+    //public static extern int GetObjectInstanceHandle(StringBuilder ObjectInstanceName, int length);
 
+    [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
+    public static extern int GetObjectInstanceHandle(StringBuilder ObjectInstanceName, int length);
+    
     //опубликовать объект и атрибуты (через запятую) (ambassador->publishObjectClassAttributes (...)
     [DllImport("DLLtoUnity")]
     public static extern int PublishObjectClassAttributes(StringBuilder className, int length, StringBuilder attributeName);
@@ -344,7 +347,7 @@ public class TestDLL : MonoBehaviour
         }
 
         {
-            StringBuilder ObjectInstanceName = new StringBuilder("Valve124​", 100);
+            StringBuilder ObjectInstanceName = new StringBuilder("Valve124", 100);
             GetObjectInstanceHandle(ObjectInstanceName, ObjectInstanceName.Capacity);
             string myString = ObjectInstanceName.ToString();
             Debug.Log("->ObjectInstanceName: " + myString);

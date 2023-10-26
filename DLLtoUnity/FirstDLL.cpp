@@ -522,7 +522,7 @@ int MyGetObjectInstanceHandle(std::wstring ObjectInstanceName)
     }
     return 0;
 }
-int GetObjectInstanceHandle(char* myString1, int length1)
+int GetObjectInstanceHandle(wchar_t*  myString1, int length1)
 {
     std::wstringstream cls1;
     cls1 << myString1;
@@ -533,12 +533,14 @@ int GetObjectInstanceHandle(char* myString1, int length1)
     if (ret == 1)
     {
         std::string s(LastErrorString.begin(), LastErrorString.end());
-        strcpy_s(myString1, length1, s.c_str());
+       // strcpy_s(myString1, length1, s.c_str());
+        wcscpy_s(myString1, length1, LastErrorString.c_str());
         return 1;
     }
     std::wstring objectInstanceNameW = TempObjectInstanceHandle.toString();
-    std::string s(objectInstanceNameW.begin(), objectInstanceNameW.end());
-    strcpy_s(myString1, length1, s.c_str());
+    //std::string s(objectInstanceNameW.begin(), objectInstanceNameW.end());
+    //strcpy_s(myString1, length1, s.c_str());
+    wcscpy_s(myString1, length1, objectInstanceNameW.c_str());
     return 0;
 }
 

@@ -40,7 +40,7 @@ extern "C"
     //Получить хендл атрибута по имени (ambassador->getAttributeHandle(objectClassHandle, L"Attribute0"))
     DLLExport int GetAttributeHandle(char* myString1, int length1, char* myString2);
     //Получить хендл экземпляра объекта по имени  getObjectInstanceHandle
-    DLLExport int GetObjectInstanceHandle(char* myString, int length);
+    DLLExport int GetObjectInstanceHandle(wchar_t* myString, int length);
     //------------------------------------------------------------------------------------------------------------------
     //опубликовать объект и атрибуты (через запятую) (ambassador->publishObjectClassAttributes (...)
     DLLExport int PublishObjectClassAttributes(char* myString1, int length1, char* myString2);
