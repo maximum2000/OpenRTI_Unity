@@ -52,10 +52,6 @@ extern "C"
     DLLExport int RegisterObjectInstance(char* myString1, int length1, char* myString2);
     //изменение значений атрибутов экземпляра объекта (ambassador->updateAttributeValues(objectInstanceHandle, attributeValues, tag))
     DLLExport int UpdateAttributeValues(char* myString1, int length1, char* myString2, char* myString3, char* myString4);
-
-
-
-
     //------------------------------------------------------------------------------------------------------------------
     //получение класса интеракции (InteractionClass0Handle = ambassador->getInteractionClassHandle(L"HLAinteractionRoot.InteractionClass0"))
     DLLExport int GetInteractionClassHandle(char* myString1, int length1);
@@ -70,6 +66,11 @@ extern "C"
     //------------------------------------------------------------------------------------------------------------------
     //выйти из федерации resignFederationExecution(rti1516e::ResignAction resignAction)
     DLLExport int ResignFederationExecution(char* myString1, int length1);
+
+
+
+
+
     //------------------------------------------------------------------------------------------------------------------
     //сообщаем о желании безусловной отдачи владения другому федерату (толкаем-отдаем права) - unconditionalAttributeOwnershipDivestiture
     DLLExport int UnconditionalAttributeOwnershipDivestiture(char* myString1, int length1, char* myString2, int length2);

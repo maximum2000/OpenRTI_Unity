@@ -122,16 +122,80 @@ extern "C"
 }
 
 
-//virtual void requestAttributeOwnershipAssumption(rti1516e::ObjectInstanceHandle objectInstanceHandle,    rti1516e::AttributeHandleSet const& offeredAttributes,    rti1516e::VariableLengthData const& tag)
-//virtual void requestDivestitureConfirmation(rti1516e::ObjectInstanceHandle objectInstanceHandle,    rti1516e::AttributeHandleSet const& releasedAttributes)
-//virtual void attributeOwnershipAcquisitionNotification(rti1516e::ObjectInstanceHandle objectInstanceHandle,    rti1516e::AttributeHandleSet const& securedAttributes,    rti1516e::VariableLengthData const& tag)
-//virtual void attributeOwnershipUnavailable(rti1516e::ObjectInstanceHandle objectInstanceHandle,    rti1516e::AttributeHandleSet const& attributes)
-//virtual void requestAttributeOwnershipRelease(rti1516e::ObjectInstanceHandle objectInstanceHandle,    rti1516e::AttributeHandleSet const& candidateAttributes,    rti1516e::VariableLengthData const& tag)
-//virtual void confirmAttributeOwnershipAcquisitionCancellation(rti1516e::ObjectInstanceHandle objectInstanceHandle,    rti1516e::AttributeHandleSet const& attributes)
-//virtual void informAttributeOwnership(rti1516e::ObjectInstanceHandle objectInstanceHandle,    rti1516e::AttributeHandle attribute,    rti1516e::FederateHandle owner)
-//virtual void attributeIsNotOwned(rti1516e::ObjectInstanceHandle objectInstanceHandle, rti1516e::AttributeHandle attribute)
-//virtual void attributeIsOwnedByRTI(rti1516e::ObjectInstanceHandle objectInstanceHandle,    rti1516e::AttributeHandle attribute)
 
+
+
+//virtual void requestAttributeOwnershipAssumption(rti1516e::ObjectInstanceHandle objectInstanceHandle,    rti1516e::AttributeHandleSet const& offeredAttributes,    rti1516e::VariableLengthData const& tag)
+extern "C"
+{
+    typedef void(*requestAttributeOwnershipAssumptionCallback)(const char* message1, int size1);
+    static requestAttributeOwnershipAssumptionCallback requestAttributeOwnershipAssumptionCallbackFunction = nullptr;
+    __declspec(dllexport) void RegisterRequestAttributeOwnershipAssumptionCallback(requestAttributeOwnershipAssumptionCallback callback);
+}
+
+//virtual void requestDivestitureConfirmation(rti1516e::ObjectInstanceHandle objectInstanceHandle,    rti1516e::AttributeHandleSet const& releasedAttributes)
+extern "C"
+{
+    typedef void(*requestDivestitureConfirmationCallback)(const char* message1, int size1);
+    static requestDivestitureConfirmationCallback requestDivestitureConfirmationCallbackFunction = nullptr;
+    __declspec(dllexport) void RegisterRequestDivestitureConfirmationCallback(requestDivestitureConfirmationCallback callback);
+}
+
+//virtual void attributeOwnershipAcquisitionNotification(rti1516e::ObjectInstanceHandle objectInstanceHandle,    rti1516e::AttributeHandleSet const& securedAttributes,    rti1516e::VariableLengthData const& tag)
+extern "C"
+{
+    typedef void(*attributeOwnershipAcquisitionNotificationCallback)(const char* message1, int size1);
+    static attributeOwnershipAcquisitionNotificationCallback attributeOwnershipAcquisitionNotificationCallbackFunction = nullptr;
+    __declspec(dllexport) void RegisterAttributeOwnershipAcquisitionNotificationCallback(attributeOwnershipAcquisitionNotificationCallback callback);
+}
+
+//virtual void attributeOwnershipUnavailable(rti1516e::ObjectInstanceHandle objectInstanceHandle,    rti1516e::AttributeHandleSet const& attributes)
+extern "C"
+{
+    typedef void(*attributeOwnershipUnavailableCallback)(const char* message1, int size1);
+    static attributeOwnershipUnavailableCallback attributeOwnershipUnavailableCallbackFunction = nullptr;
+    __declspec(dllexport) void RegisterAttributeOwnershipUnavailableCallback(attributeOwnershipUnavailableCallback callback);
+}
+ 
+//virtual void requestAttributeOwnershipRelease(rti1516e::ObjectInstanceHandle objectInstanceHandle,    rti1516e::AttributeHandleSet const& candidateAttributes,    rti1516e::VariableLengthData const& tag)
+extern "C"
+{
+    typedef void(*requestAttributeOwnershipReleaseCallback)(const char* message1, int size1);
+    static requestAttributeOwnershipReleaseCallback requestAttributeOwnershipReleaseCallbackFunction = nullptr;
+    __declspec(dllexport) void RegisterRequestAttributeOwnershipReleaseCallback(requestAttributeOwnershipReleaseCallback callback);
+}
+
+//virtual void confirmAttributeOwnershipAcquisitionCancellation(rti1516e::ObjectInstanceHandle objectInstanceHandle,    rti1516e::AttributeHandleSet const& attributes)
+extern "C"
+{
+    typedef void(*confirmAttributeOwnershipAcquisitionCancellationCallback)(const char* message1, int size1);
+    static confirmAttributeOwnershipAcquisitionCancellationCallback confirmAttributeOwnershipAcquisitionCancellationCallbackFunction = nullptr;
+    __declspec(dllexport) void RegisterConfirmAttributeOwnershipAcquisitionCancellationCallback(confirmAttributeOwnershipAcquisitionCancellationCallback callback);
+}
+
+//virtual void informAttributeOwnership(rti1516e::ObjectInstanceHandle objectInstanceHandle,    rti1516e::AttributeHandle attribute,    rti1516e::FederateHandle owner)
+extern "C"
+{
+    typedef void(*informAttributeOwnershipCallback)(const char* message1, int size1);
+    static informAttributeOwnershipCallback informAttributeOwnershipCallbackFunction = nullptr;
+    __declspec(dllexport) void RegisterInformAttributeOwnershipCallback(informAttributeOwnershipCallback callback);
+}
+
+//virtual void attributeIsNotOwned(rti1516e::ObjectInstanceHandle objectInstanceHandle, rti1516e::AttributeHandle attribute)
+extern "C"
+{
+    typedef void(*attributeIsNotOwnedCallback)(const char* message1, int size1);
+    static attributeIsNotOwnedCallback attributeIsNotOwnedCallbackFunction = nullptr;
+    __declspec(dllexport) void RegisterAttributeIsNotOwnedCallback(attributeIsNotOwnedCallback callback);
+}
+
+//virtual void attributeIsOwnedByRTI(rti1516e::ObjectInstanceHandle objectInstanceHandle,    rti1516e::AttributeHandle attribute)
+extern "C"
+{
+    typedef void(*attributeIsOwnedByRTICallback)(const char* message1, int size1);
+    static attributeIsOwnedByRTICallback attributeIsOwnedByRTICallbackFunction = nullptr;
+    __declspec(dllexport) void RegisterAttributeIsOwnedByRTICallback(attributeIsOwnedByRTICallback callback);
+}
 
 
 
@@ -188,6 +252,44 @@ void RegisterReceiveInteractionCallback(receiveInteractionCallback callback)
 void RegisterRemoveObjectInstanceCallback(removeObjectInstanceCallback callback)
 {
     removeObjectInstanceCallbackFunction = callback;
+}
+
+//add2
+void RegisterRequestAttributeOwnershipAssumptionCallback(requestAttributeOwnershipAssumptionCallback callback)
+{
+    requestAttributeOwnershipAssumptionCallbackFunction = callback;
+}
+void RegisterRequestDivestitureConfirmationCallback(requestDivestitureConfirmationCallback callback)
+{
+    requestDivestitureConfirmationCallbackFunction = callback;
+}
+void RegisterAttributeOwnershipAcquisitionNotificationCallback(attributeOwnershipAcquisitionNotificationCallback callback)
+{
+    attributeOwnershipAcquisitionNotificationCallbackFunction = callback;
+}
+void RegisterAttributeOwnershipUnavailableCallback(attributeOwnershipUnavailableCallback callback)
+{
+    attributeOwnershipUnavailableCallbackFunction = callback;
+}
+void RegisterRequestAttributeOwnershipReleaseCallback(requestAttributeOwnershipReleaseCallback callback)
+{
+    requestAttributeOwnershipReleaseCallbackFunction = callback;
+}
+void RegisterConfirmAttributeOwnershipAcquisitionCancellationCallback(confirmAttributeOwnershipAcquisitionCancellationCallback callback)
+{
+    confirmAttributeOwnershipAcquisitionCancellationCallbackFunction = callback;
+}
+void RegisterInformAttributeOwnershipCallback(informAttributeOwnershipCallback callback)
+{
+    informAttributeOwnershipCallbackFunction = callback;
+}
+void RegisterAttributeIsNotOwnedCallback(attributeIsNotOwnedCallback callback)
+{
+    attributeIsNotOwnedCallbackFunction = callback;
+}
+void RegisterAttributeIsOwnedByRTICallback(attributeIsOwnedByRTICallback callback)
+{
+    attributeIsOwnedByRTICallbackFunction = callback;
 }
 
 
@@ -1716,6 +1818,14 @@ namespace OpenRTI
             RTI_THROW((rti1516e::FederateInternalError))
         {
             SendLog(L"DEBUG:requestAttributeOwnershipAssumption", 0);
+            //через callback вызываем функцию на стороне с#
+            {
+                const char* tmsg1 = "!";
+                if (requestAttributeOwnershipAssumptionCallbackFunction != nullptr)
+                {
+                    requestAttributeOwnershipAssumptionCallbackFunction(tmsg1, (int)strlen(tmsg1));
+                }
+            }
         }
 
         virtual void requestDivestitureConfirmation(rti1516e::ObjectInstanceHandle objectInstanceHandle,
@@ -1723,6 +1833,14 @@ namespace OpenRTI
             RTI_THROW((rti1516e::FederateInternalError))
         {
             SendLog(L"DEBUG:requestDivestitureConfirmation", 0);
+            //через callback вызываем функцию на стороне с#
+            {
+                const char* tmsg1 = "!";
+                if (requestDivestitureConfirmationCallbackFunction != nullptr)
+                {
+                    requestDivestitureConfirmationCallbackFunction(tmsg1, (int)strlen(tmsg1));
+                }
+            }
         }
 
         virtual void attributeOwnershipAcquisitionNotification(rti1516e::ObjectInstanceHandle objectInstanceHandle,
@@ -1731,12 +1849,29 @@ namespace OpenRTI
             RTI_THROW((rti1516e::FederateInternalError))
         {
             SendLog(L"DEBUG:attributeOwnershipAcquisitionNotification", 0);
+            //через callback вызываем функцию на стороне с#
+            {
+                const char* tmsg1 = "!";
+                if (attributeOwnershipAcquisitionNotificationCallbackFunction != nullptr)
+                {
+                    attributeOwnershipAcquisitionNotificationCallbackFunction(tmsg1, (int)strlen(tmsg1));
+                }
+            }
         }
 
         virtual void attributeOwnershipUnavailable(rti1516e::ObjectInstanceHandle objectInstanceHandle,
             rti1516e::AttributeHandleSet const& attributes)
             RTI_THROW((rti1516e::FederateInternalError))
         {
+            SendLog(L"DEBUG:attributeOwnershipUnavailable", 0);
+            //через callback вызываем функцию на стороне с#
+            {
+                const char* tmsg1 = "!";
+                if (attributeOwnershipUnavailableCallbackFunction != nullptr)
+                {
+                    attributeOwnershipUnavailableCallbackFunction(tmsg1, (int)strlen(tmsg1));
+                }
+            }
         }
 
         virtual void requestAttributeOwnershipRelease(rti1516e::ObjectInstanceHandle objectInstanceHandle,
@@ -1745,6 +1880,14 @@ namespace OpenRTI
             RTI_THROW((rti1516e::FederateInternalError))
         {
             SendLog(L"DEBUG:requestAttributeOwnershipRelease", 0);
+            //через callback вызываем функцию на стороне с#
+            {
+                const char* tmsg1 = "!";
+                if (requestAttributeOwnershipReleaseCallbackFunction != nullptr)
+                {
+                    requestAttributeOwnershipReleaseCallbackFunction(tmsg1, (int)strlen(tmsg1));
+                }
+            }
         }
 
         virtual void confirmAttributeOwnershipAcquisitionCancellation(rti1516e::ObjectInstanceHandle objectInstanceHandle,
@@ -1752,6 +1895,14 @@ namespace OpenRTI
             RTI_THROW((rti1516e::FederateInternalError))
         {
             SendLog(L"DEBUG:confirmAttributeOwnershipAcquisitionCancellation", 0);
+            //через callback вызываем функцию на стороне с#
+            {
+                const char* tmsg1 = "!";
+                if (confirmAttributeOwnershipAcquisitionCancellationCallbackFunction != nullptr)
+                {
+                    confirmAttributeOwnershipAcquisitionCancellationCallbackFunction(tmsg1, (int)strlen(tmsg1));
+                }
+            }
         }
 
         virtual void informAttributeOwnership(rti1516e::ObjectInstanceHandle objectInstanceHandle,
@@ -1760,6 +1911,14 @@ namespace OpenRTI
             RTI_THROW((rti1516e::FederateInternalError))
         {
             SendLog(L"DEBUG:informAttributeOwnership", 0);
+            //через callback вызываем функцию на стороне с#
+            {
+                const char* tmsg1 = "!";
+                if (informAttributeOwnershipCallbackFunction != nullptr)
+                {
+                    informAttributeOwnershipCallbackFunction(tmsg1, (int)strlen(tmsg1));
+                }
+            }
         }
 
         virtual void attributeIsNotOwned(rti1516e::ObjectInstanceHandle objectInstanceHandle,
@@ -1767,6 +1926,14 @@ namespace OpenRTI
             RTI_THROW((rti1516e::FederateInternalError))
         {
             SendLog(L"DEBUG:attributeIsNotOwned", 0);
+            //через callback вызываем функцию на стороне с#
+            {
+                const char* tmsg1 = "!";
+                if (attributeIsNotOwnedCallbackFunction != nullptr)
+                {
+                    attributeIsNotOwnedCallbackFunction(tmsg1, (int)strlen(tmsg1));
+                }
+            }
         }
 
         virtual void attributeIsOwnedByRTI(rti1516e::ObjectInstanceHandle objectInstanceHandle,
@@ -1774,6 +1941,14 @@ namespace OpenRTI
             RTI_THROW((rti1516e::FederateInternalError))
         {
             SendLog(L"DEBUG:attributeIsOwnedByRTI", 0);
+            //через callback вызываем функцию на стороне с#
+            {
+                const char* tmsg1 = "!";
+                if (attributeIsOwnedByRTICallbackFunction != nullptr)
+                {
+                    attributeIsOwnedByRTICallbackFunction(tmsg1, (int)strlen(tmsg1));
+                }
+            }
         }
 
         virtual void timeRegulationEnabled(const rti1516e::LogicalTime& logicalTime)

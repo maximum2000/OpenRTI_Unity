@@ -71,6 +71,33 @@ public class TestDLL : MonoBehaviour
     public static extern int UpdateAttributeValues(StringBuilder objectClassName, int length, StringBuilder ObjectInstanceName, StringBuilder attributeName, StringBuilder value);
 
 
+    //add 2
+    //получение класса интеракции (InteractionClass0Handle = ambassador->getInteractionClassHandle(L"HLAinteractionRoot.InteractionClass0"))
+    [DllImport("DLLtoUnity")]
+    public static extern int GetInteractionClassHandle(StringBuilder interactionClassName, int length);
+
+    //получение класса параметров интеракции (class0Parameter0Handle = ambassador->getParameterHandle(InteractionClass0Handle, L"Parameter0"))
+    [DllImport("DLLtoUnity")]
+    public static extern int GetParameterHandle(StringBuilder interactionClassName, int length, StringBuilder parametrName);
+
+
+    //подписка на эту интеракцию (ambassador->subscribeInteractionClass(InteractionClass0Handle))
+    [DllImport("DLLtoUnity")]
+    public static extern int SubscribeInteractionClass(StringBuilder interactionClassName, int length);
+
+
+    //публикация интеракции (ambassador->publishInteractionClass(InteractionClass0Handle))
+    [DllImport("DLLtoUnity")]
+    public static extern int PublishInteractionClass(StringBuilder interactionClassName, int length);
+
+
+    //отправить интеракцию ( ambassador->sendInteraction(InteractionClass0Handle, parameterValues, ambassador->getFederateHandle().encode())
+    [DllImport("DLLtoUnity")]
+    public static extern int SendInteraction(StringBuilder interactionClassName, int length, StringBuilder parametrNames, StringBuilder values);
+
+    //выйти из федерации resignFederationExecution(rti1516e::ResignAction resignAction)
+    [DllImport("DLLtoUnity")]
+    public static extern int ResignFederationExecution(StringBuilder returnstring, int length);
 
 
 
@@ -303,7 +330,120 @@ public class TestDLL : MonoBehaviour
     //callback для сообщений о удалении объекта (removeObjectInstance)
 
 
+    //virtual void requestAttributeOwnershipAssumption(rti1516e::ObjectInstanceHandle objectInstanceHandle,    rti1516e::AttributeHandleSet const& offeredAttributes,    rti1516e::VariableLengthData const& tag)
+    private delegate void requestAttributeOwnershipAssumptionCallback(IntPtr message1, int size1);
+    [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
+    private static extern void RegisterRequestAttributeOwnershipAssumptionCallback(requestAttributeOwnershipAssumptionCallback callback);
+    //Обработчик
+    private static void RequestAttributeOwnershipAssumption(IntPtr message1, int size1)
+    {
+        string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
+        Debug.Log(debugString1);
+    }
+    //virtual void requestAttributeOwnershipAssumption
 
+    //virtual void requestDivestitureConfirmation(rti1516e::ObjectInstanceHandle objectInstanceHandle,    rti1516e::AttributeHandleSet const& releasedAttributes)
+    private delegate void requestDivestitureConfirmationCallback(IntPtr message1, int size1);
+    [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
+    private static extern void RegisterRequestDivestitureConfirmationCallback(requestDivestitureConfirmationCallback callback);
+    //Обработчик
+    private static void RequestDivestitureConfirmation(IntPtr message1, int size1)
+    {
+        string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
+        Debug.Log(debugString1);
+    }
+    //virtual void requestDivestitureConfirmation
+
+    //virtual void attributeOwnershipAcquisitionNotification(rti1516e::ObjectInstanceHandle objectInstanceHandle,    rti1516e::AttributeHandleSet const& securedAttributes,    rti1516e::VariableLengthData const& tag)
+    private delegate void attributeOwnershipAcquisitionNotificationCallback(IntPtr message1, int size1);
+    [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
+    private static extern void RegisterAttributeOwnershipAcquisitionNotificationCallback(attributeOwnershipAcquisitionNotificationCallback callback);
+    //Обработчик
+    private static void AttributeOwnershipAcquisitionNotification(IntPtr message1, int size1)
+    {
+        string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
+        Debug.Log(debugString1);
+    }
+    //virtual void attributeOwnershipAcquisitionNotification
+
+    //virtual void attributeOwnershipUnavailable(rti1516e::ObjectInstanceHandle objectInstanceHandle,    rti1516e::AttributeHandleSet const& attributes)
+    private delegate void attributeOwnershipUnavailableCallback(IntPtr message1, int size1);
+    [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
+    private static extern void RegisterAttributeOwnershipUnavailableCallback(attributeOwnershipUnavailableCallback callback);
+    //Обработчик
+    private static void AttributeOwnershipUnavailable(IntPtr message1, int size1)
+    {
+        string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
+        Debug.Log(debugString1);
+    }
+    //virtual void attributeOwnershipUnavailable
+
+    //virtual void requestAttributeOwnershipRelease(rti1516e::ObjectInstanceHandle objectInstanceHandle,    rti1516e::AttributeHandleSet const& candidateAttributes,    rti1516e::VariableLengthData const& tag)
+    private delegate void requestAttributeOwnershipReleaseCallback(IntPtr message1, int size1);
+    [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
+    private static extern void RegisterRequestAttributeOwnershipReleaseCallback(requestAttributeOwnershipReleaseCallback callback);
+    //Обработчик
+    private static void RequestAttributeOwnershipRelease(IntPtr message1, int size1)
+    {
+        string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
+        Debug.Log(debugString1);
+    }
+    //virtual void requestAttributeOwnershipRelease
+
+    //virtual void confirmAttributeOwnershipAcquisitionCancellation(rti1516e::ObjectInstanceHandle objectInstanceHandle,    rti1516e::AttributeHandleSet const& attributes)
+    private delegate void confirmAttributeOwnershipAcquisitionCancellationCallback(IntPtr message1, int size1);
+    [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
+    private static extern void RegisterConfirmAttributeOwnershipAcquisitionCancellationCallback(confirmAttributeOwnershipAcquisitionCancellationCallback callback);
+    //Обработчик
+    private static void ConfirmAttributeOwnershipAcquisitionCancellation(IntPtr message1, int size1)
+    {
+        string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
+        Debug.Log(debugString1);
+    }
+    //virtual void confirmAttributeOwnershipAcquisitionCancellation
+
+    //virtual void informAttributeOwnership(rti1516e::ObjectInstanceHandle objectInstanceHandle,    rti1516e::AttributeHandle attribute,    rti1516e::FederateHandle owner)
+    private delegate void informAttributeOwnershipCallback(IntPtr message1, int size1);
+    [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
+    private static extern void RegisterInformAttributeOwnershipCallback(informAttributeOwnershipCallback callback);
+    //Обработчик
+    private static void InformAttributeOwnership(IntPtr message1, int size1)
+    {
+        string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
+        Debug.Log(debugString1);
+    }
+    //virtual void informAttributeOwnership
+
+
+
+    //virtual void attributeIsNotOwned(rti1516e::ObjectInstanceHandle objectInstanceHandle, rti1516e::AttributeHandle attribute)
+    private delegate void attributeIsNotOwnedCallback(IntPtr message1, int size1);
+    [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
+    private static extern void RegisterAttributeIsNotOwnedCallback(attributeIsNotOwnedCallback callback);
+    //Обработчик
+    private static void AttributeIsNotOwned(IntPtr message1, int size1)
+    {
+        string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
+        Debug.Log(debugString1);
+    }
+    //virtual void attributeIsNotOwned
+
+
+
+    private delegate void attributeIsOwnedByRTICallback(IntPtr message1, int size1);
+    [DllImport("DLLtoUnity", CallingConvention = CallingConvention.Cdecl)]
+    private static extern void RegisterAttributeIsOwnedByRTICallback(attributeIsOwnedByRTICallback callback);
+    //Обработчик
+    private static void AttributeIsOwnedByRTI(IntPtr message1, int size1)
+    {
+        string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
+        Debug.Log(debugString1);
+    }
+
+
+
+
+    
 
 
 
@@ -323,6 +463,16 @@ public class TestDLL : MonoBehaviour
         RegisterReflectAttributeValues(null);
         RegisterReceiveInteractionCallback(null);
         RegisterRemoveObjectInstanceCallback(null);
+
+        RegisterRequestAttributeOwnershipAssumptionCallback(null);
+        RegisterRequestDivestitureConfirmationCallback(null);
+        RegisterAttributeOwnershipAcquisitionNotificationCallback(null);
+        RegisterAttributeOwnershipUnavailableCallback(null);
+        RegisterRequestAttributeOwnershipReleaseCallback(null);
+        RegisterConfirmAttributeOwnershipAcquisitionCancellationCallback(null);
+        RegisterInformAttributeOwnershipCallback(null);
+        RegisterAttributeIsNotOwnedCallback(null);
+        RegisterAttributeIsOwnedByRTICallback(null);
     }
 
 
@@ -399,6 +549,25 @@ public class TestDLL : MonoBehaviour
             Debug.Log("->UpdateAttributeValues: " + myString);
             evokeCallback(0.1);
         }
+
+        {
+            //GetInteractionClassHandle(StringBuilder interactionClassName, int length);
+        }
+        {
+            //GetParameterHandle(StringBuilder interactionClassName, int length, StringBuilder parametrName);
+        }
+        {
+            //SubscribeInteractionClass(StringBuilder interactionClassName, int length);
+        }
+        {
+            //PublishInteractionClass(StringBuilder interactionClassName, int length);
+        }
+        {
+            //SendInteraction(StringBuilder interactionClassName, int length, StringBuilder parametrNames, StringBuilder values);
+        }
+        {    
+            //ResignFederationExecution(StringBuilder returnstring, int length);
+        }
     }
 
 
@@ -466,6 +635,17 @@ public class TestDLL : MonoBehaviour
             RegisterReflectAttributeValues(ReflectAttributeValues);
             RegisterReceiveInteractionCallback(ReceiveInteraction);
             RegisterRemoveObjectInstanceCallback(RemoveObjectInstance);
+
+
+            RegisterRequestAttributeOwnershipAssumptionCallback(RequestAttributeOwnershipAssumption);
+            RegisterRequestDivestitureConfirmationCallback(RequestDivestitureConfirmation);
+            RegisterAttributeOwnershipAcquisitionNotificationCallback(AttributeOwnershipAcquisitionNotification);
+            RegisterAttributeOwnershipUnavailableCallback(AttributeOwnershipUnavailable);
+            RegisterRequestAttributeOwnershipReleaseCallback(RequestAttributeOwnershipRelease);
+            RegisterConfirmAttributeOwnershipAcquisitionCancellationCallback(ConfirmAttributeOwnershipAcquisitionCancellation);
+            RegisterInformAttributeOwnershipCallback(InformAttributeOwnership);
+            RegisterAttributeIsNotOwnedCallback(AttributeIsNotOwned);
+            RegisterAttributeIsOwnedByRTICallback(AttributeIsOwnedByRTI);
         }
 
 
