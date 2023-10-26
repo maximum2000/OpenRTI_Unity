@@ -60,13 +60,13 @@ extern "C"
     //получение класса интеракции (InteractionClass0Handle = ambassador->getInteractionClassHandle(L"HLAinteractionRoot.InteractionClass0"))
     DLLExport int GetInteractionClassHandle(char* myString1, int length1);
     //получение класса параметров интеракции (class0Parameter0Handle = ambassador->getParameterHandle(InteractionClass0Handle, L"Parameter0"))
-    DLLExport int GetParameterHandle(char* myString1, int length1, char* myString2, int length2);
+    DLLExport int GetParameterHandle(char* myString1, int length1, char* myString2);
     //подписка на эту интеракцию (ambassador->subscribeInteractionClass(InteractionClass0Handle))
     DLLExport int SubscribeInteractionClass(char* myString1, int length1);
     //публикация интеракции (ambassador->publishInteractionClass(InteractionClass0Handle))
     DLLExport int PublishInteractionClass(char* myString1, int length1);
     //отправить интеракцию ( ambassador->sendInteraction(InteractionClass0Handle, parameterValues, ambassador->getFederateHandle().encode())
-    DLLExport int SendInteraction(char* myString1, int length1, char* myString2, int length2);
+    DLLExport int SendInteraction(char* myString1, int length1, char* myString2, char* myString3);
     //------------------------------------------------------------------------------------------------------------------
     //выйти из федерации resignFederationExecution(rti1516e::ResignAction resignAction)
     DLLExport int ResignFederationExecution(char* myString1, int length1);

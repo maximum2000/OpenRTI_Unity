@@ -828,60 +828,305 @@ int UpdateAttributeValues(char* myString1, int length1, char* myString2, char* m
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//add----------------------------------------
+// 
+// 
+rti1516e::InteractionClassHandle TempInteractionClassHandle; //хранение класса интеракции и ее параметров
 //получение класса интеракции (InteractionClass0Handle = ambassador->getInteractionClassHandle(L"HLAinteractionRoot.InteractionClass0"))
+int MyGetInteractionClassHandle(std::wstring interactionName)
+{
+    LastErrorString = L"";
+
+    //получение класса интеракции
+    try
+    {
+        TempInteractionClassHandle = ambassador->getInteractionClassHandle(interactionName); //L"HLAinteractionRoot.InteractionClass0"
+    }
+    catch (const rti1516e::Exception& e)
+    {
+        LastErrorString = e.what();
+        std::wcout << L"rti1516e::Exception: \"" << e.what() << L"\"" << std::endl;
+        return 1;
+    }
+    catch (...)
+    {
+        LastErrorString = L"Unknown Exception!";
+        std::wcout << L"Unknown Exception!" << std::endl;
+        return 1;
+    }
+    return 0;
+}
 int GetInteractionClassHandle(char* myString1, int length1)
 {
+    std::wstringstream cls1;
+    cls1 << myString1;
+    std::wstring interactionName = cls1.str();
+   
+    ambassador->SendLog(L"DEBUG: GetInteractionClassHandle:interactionName=" + interactionName, 0);
+    int ret = MyGetInteractionClassHandle(interactionName);
+    if (ret == 1)
+    {
+        std::string s(LastErrorString.begin(), LastErrorString.end());
+        strcpy_s(myString1, length1, s.c_str());
+        return 1;
+    }
+    std::wstring attributeHandleW = TempInteractionClassHandle.toString();
+    std::string s(attributeHandleW.begin(), attributeHandleW.end());
+    strcpy_s(myString1, length1, s.c_str());
     return 0;
 }
 
+
+
 //получение класса параметров интеракции (class0Parameter0Handle = ambassador->getParameterHandle(InteractionClass0Handle, L"Parameter0"))
-int GetParameterHandle(char* myString1, int length1, char* myString2, int length2)
+rti1516e::ParameterHandle TempParameterHandle;
+int MyGetParameterHandle(std::wstring interactionName, std::wstring interactionParameterName)
 {
+    LastErrorString = L"";
+
+    rti1516e::InteractionClassHandle InteractionClass0Handle;
+    rti1516e::ParameterHandle class0Parameter0Handle;
+
+    //получение класса интеракции
+    try
+    {
+        TempParameterHandle = ambassador->getParameterHandle(ambassador->getInteractionClassHandle(interactionName), interactionParameterName);
+    }
+    catch (const rti1516e::Exception& e)
+    {
+        LastErrorString = e.what();
+        std::wcout << L"rti1516e::Exception: \"" << e.what() << L"\"" << std::endl;
+        return 1;
+    }
+    catch (...)
+    {
+        LastErrorString = L"Unknown Exception!";
+        std::wcout << L"Unknown Exception!" << std::endl;
+        return 1;
+    }
+    return 0;
+}
+int GetParameterHandle(char* myString1, int length1, char* myString2)
+{
+    std::wstringstream cls1;
+    cls1 << myString1;
+    std::wstring interactionName = cls1.str();
+    std::wstringstream cls2;
+    cls2 << myString2;
+    std::wstring interactionParameterName = cls2.str();
+
+    ambassador->SendLog(L"DEBUG: GetParameterHandle:interactionName=" + interactionName + L" ,interactionParameterName=" + interactionParameterName, 0);
+    int ret = MyGetParameterHandle(interactionName, interactionParameterName);
+    if (ret == 1)
+    {
+        std::string s(LastErrorString.begin(), LastErrorString.end());
+        strcpy_s(myString1, length1, s.c_str());
+        return 1;
+    }
+    std::wstring attributeHandleW = TempParameterHandle.toString();
+    std::string s(attributeHandleW.begin(), attributeHandleW.end());
+    strcpy_s(myString1, length1, s.c_str());
     return 0;
 }
 
 //подписка на эту интеракцию (ambassador->subscribeInteractionClass(InteractionClass0Handle))
+int MySubscribeInteractionClass(std::wstring interactionName)
+{
+    LastErrorString = L"";
+
+    //получение класса интеракции
+    try
+    {
+        ambassador->subscribeInteractionClass(ambassador->getInteractionClassHandle(interactionName));
+    }
+    catch (const rti1516e::Exception& e)
+    {
+        LastErrorString = e.what();
+        std::wcout << L"rti1516e::Exception: \"" << e.what() << L"\"" << std::endl;
+        return 1;
+    }
+    catch (...)
+    {
+        LastErrorString = L"Unknown Exception!";
+        std::wcout << L"Unknown Exception!" << std::endl;
+        return 1;
+    }
+    return 0;
+}
 int SubscribeInteractionClass(char* myString1, int length1)
 {
+    std::wstringstream cls1;
+    cls1 << myString1;
+    std::wstring interactionName = cls1.str();
+
+    ambassador->SendLog(L"DEBUG: SubscribeInteractionClass:interactionName=" + interactionName, 0);
+    int ret = MySubscribeInteractionClass(interactionName);
+    if (ret == 1)
+    {
+        std::string s(LastErrorString.begin(), LastErrorString.end());
+        strcpy_s(myString1, length1, s.c_str());
+        return 1;
+    }
+    std::string s("ok");;
+    strcpy_s(myString1, length1, s.c_str());
     return 0;
 }
+
 
 //публикация интеракции (ambassador->publishInteractionClass(InteractionClass0Handle))
+int MyPublishInteractionClass(std::wstring interactionName)
+{
+    LastErrorString = L"";
+
+    //получение класса интеракции
+    try
+    {
+        ambassador->publishInteractionClass(ambassador->getInteractionClassHandle(interactionName));
+    }
+    catch (const rti1516e::Exception& e)
+    {
+        LastErrorString = e.what();
+        std::wcout << L"rti1516e::Exception: \"" << e.what() << L"\"" << std::endl;
+        return 1;
+    }
+    catch (...)
+    {
+        LastErrorString = L"Unknown Exception!";
+        std::wcout << L"Unknown Exception!" << std::endl;
+        return 1;
+    }
+    return 0;
+}
 int PublishInteractionClass(char* myString1, int length1)
 {
+    std::wstringstream cls1;
+    cls1 << myString1;
+    std::wstring interactionName = cls1.str();
+
+    ambassador->SendLog(L"DEBUG: PublishInteractionClass:interactionName=" + interactionName, 0);
+    int ret = MyPublishInteractionClass(interactionName);
+    if (ret == 1)
+    {
+        std::string s(LastErrorString.begin(), LastErrorString.end());
+        strcpy_s(myString1, length1, s.c_str());
+        return 1;
+    }
+    std::string s("ok");;
+    strcpy_s(myString1, length1, s.c_str());
     return 0;
 }
 
+//Через точку с запятой
 //отправить интеракцию ( ambassador->sendInteraction(InteractionClass0Handle, parameterValues, ambassador->getFederateHandle().encode())
-int SendInteraction(char* myString1, int length1, char* myString2, int length2)
+int MySendInteraction(std::wstring interactionName, std::wstring interactionParameterName, std::wstring parameterValue)
 {
+    LastErrorString = L"";
+
+    //разделяем по ;
+    std::vector<std::wstring> interactionParameterNames = mysplit(interactionParameterName, L";");
+    std::vector<std::wstring> parameterValues = mysplit(parameterValue, L";");
+
+    //получение класса интеракции
+    try
+    {
+        //задать значения параметрам интеракции
+        rti1516e::ParameterHandleValueMap allParameterValues;
+        rti1516e::InteractionClassHandle temphandle = ambassador->getInteractionClassHandle(interactionName);
+        for (int i = 0; i < interactionParameterNames.size(); i++)
+        {
+            allParameterValues[ambassador->getParameterHandle(temphandle, interactionParameterNames[i])] = toVariableLengthData(parameterValues[i]);
+            //allParameterValues[class1Parameter1Handle] = toVariableLengthData("parameter1");
+        }
+        ambassador->sendInteraction(temphandle, allParameterValues, ambassador->getFederateHandle().encode());
+    }
+    catch (const rti1516e::Exception& e)
+    {
+        LastErrorString = e.what();
+        std::wcout << L"rti1516e::Exception: \"" << e.what() << L"\"" << std::endl;
+        return 1;
+    }
+    catch (...)
+    {
+        LastErrorString = L"Unknown Exception!";
+        std::wcout << L"Unknown Exception!" << std::endl;
+        return 1;
+    }
     return 0;
 }
+int SendInteraction(char* myString1, int length1, char* myString2, char* myString3)
+{
+    std::wstringstream cls1;
+    cls1 << myString1;
+    std::wstring interactionName = cls1.str();
+    std::wstringstream cls2;
+    cls2 << myString2;
+    std::wstring parameterName = cls2.str();
+    std::wstringstream cls3;
+    cls3 << myString3;
+    std::wstring parameterValue = cls3.str();
+    
+
+    ambassador->SendLog(L"DEBUG: SendInteraction:" + interactionName + L"." + parameterName + L"=" + parameterValue, 0);
+   
+    int ret = MySendInteraction(interactionName, parameterName, parameterValue);
+    if (ret == 1)
+    {
+        std::string s(LastErrorString.begin(), LastErrorString.end());
+        strcpy_s(myString1, length1, s.c_str());
+        return 1;
+    }
+    std::string s("ok");;
+    strcpy_s(myString1, length1, s.c_str());
+    return 0;
+}
+
+
 
 //выйти из федерации resignFederationExecution(rti1516e::ResignAction resignAction)
-int ResignFederationExecution(char* myString1, int length1)
+int MyResignFederationExecution(std::wstring interactionName)
 {
+    LastErrorString = L"";
+
+    //получение класса интеракции
+    try
+    {
+        ambassador->resignFederationExecution(rti1516e::CANCEL_THEN_DELETE_THEN_DIVEST);
+        ambassador->destroyFederationExecution(FederationName); //getFederationExecution()
+    }
+    catch (const rti1516e::Exception& e)
+    {
+        LastErrorString = e.what();
+        std::wcout << L"rti1516e::Exception: \"" << e.what() << L"\"" << std::endl;
+        return 1;
+    }
+    catch (...)
+    {
+        LastErrorString = L"Unknown Exception!";
+        std::wcout << L"Unknown Exception!" << std::endl;
+        return 1;
+    }
     return 0;
 }
+int ResignFederationExecution(char* myString1, int length1)
+{
+    std::wstringstream cls1;
+    cls1 << myString1;
+    std::wstring interactionName = cls1.str();
+
+    ambassador->SendLog(L"DEBUG: PublishInteractionClass:interactionName=" + interactionName, 0);
+    int ret = MyPublishInteractionClass(interactionName);
+    if (ret == 1)
+    {
+        std::string s(LastErrorString.begin(), LastErrorString.end());
+        strcpy_s(myString1, length1, s.c_str());
+        return 1;
+    }
+    std::string s("ok");;
+    strcpy_s(myString1, length1, s.c_str());
+    return 0;
+}
+
+
 
 //сообщаем о желании безусловной отдачи владения другому федерату (толкаем-отдаем права) - unconditionalAttributeOwnershipDivestiture
 int UnconditionalAttributeOwnershipDivestiture(char* myString1, int length1, char* myString2, int length2)
