@@ -544,19 +544,40 @@ int GetObjectInstanceHandle(wchar_t*  myString1, int length1)
     return 0;
 }
 
+std::vector<std::wstring> mysplit(std::wstring text, std::wstring delim) {
+    std::vector<std::wstring> vec;
+    size_t pos = 0, prevPos = 0;
+    while (1) {
+        pos = text.find(delim, prevPos);
+        if (pos == std::string::npos) {
+            vec.push_back(text.substr(prevPos));
+            return vec;
+        }
+
+        vec.push_back(text.substr(prevPos, pos - prevPos));
+        prevPos = pos + delim.length();
+    }
+}
 
 //!!!!! Через запятую
 //опубликовать объект и атрибуты (через запятую) (ambassador->publishObjectClassAttributes (har* myString1, int length1, char* myString2, int length2))
 int MyPublishObjectClassAttributes(std::wstring className, std::wstring attributeName)
 {
     LastErrorString = L"";
+
     //хранение дискриптора аттрибутов
     rti1516e::AttributeHandleSet _attributes;
+    //разделяем по ;
+    std::vector<std::wstring> attributeNames = mysplit(attributeName, L";");
+   
     //получение класса объекта
     try
     {
-        rti1516e::AttributeHandle newattribute = ambassador->getAttributeHandle(ambassador->getObjectClassHandle(className), attributeName); // L"Attribute0"
-        _attributes.insert(newattribute);
+        for (int i = 0; i < attributeNames.size(); i++)
+        {
+            rti1516e::AttributeHandle newattribute = ambassador->getAttributeHandle(ambassador->getObjectClassHandle(className), attributeNames[i]); // L"Attribute0"
+            _attributes.insert(newattribute);
+        }
         ambassador->publishObjectClassAttributes(ambassador->getObjectClassHandle(className), _attributes);
     }
     catch (const rti1516e::Exception& e)
@@ -602,12 +623,18 @@ int MySubscribeObjectClassAttributes(std::wstring className, std::wstring attrib
     LastErrorString = L"";
     //хранение дискриптора аттрибутов
     rti1516e::AttributeHandleSet _attributes;
+    //разделяем по ;
+    std::vector<std::wstring> attributeNames = mysplit(attributeName, L";");
+
     //получение класса объекта
     try
     {
         rti1516e::ObjectClassHandle _ObjectClassHandle = ambassador->getObjectClassHandle(className);
-        rti1516e::AttributeHandle newattribute = ambassador->getAttributeHandle(_ObjectClassHandle, attributeName); // L"Attribute0"
-        _attributes.insert(newattribute);
+        for (int i = 0; i < attributeNames.size(); i++)
+        {
+            rti1516e::AttributeHandle newattribute = ambassador->getAttributeHandle(_ObjectClassHandle, attributeNames[i]); // L"Attribute0"
+            _attributes.insert(newattribute);
+        }
         ambassador->subscribeObjectClassAttributes(_ObjectClassHandle, _attributes);
     }
     catch (const rti1516e::Exception& e)
