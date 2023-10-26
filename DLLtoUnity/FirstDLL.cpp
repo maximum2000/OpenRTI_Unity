@@ -499,6 +499,13 @@ int MyGetObjectInstanceHandle(std::wstring ObjectInstanceName)
     //получение класса объекта
     try
     {
+        ambassador->SendLog(ObjectInstanceName, 0);
+        if (ObjectInstanceName != L"Valve124")
+        {
+            ambassador->SendLog(L"Valve124!="+ ObjectInstanceName, 0);
+        }
+        ambassador->SendLog(ambassador->getObjectInstanceHandle(L"Valve124").toString(), 0);
+        ambassador->SendLog(ambassador->getObjectInstanceHandle(ObjectInstanceName).toString(), 0);
         TempObjectInstanceHandle = ambassador->getObjectInstanceHandle(ObjectInstanceName); // L"Valve12"
     }
     catch (const rti1516e::Exception& e)
