@@ -100,7 +100,54 @@ public class TestDLL : MonoBehaviour
     public static extern int ResignFederationExecution(StringBuilder returnstring, int length);
 
 
+    //сообщаем о желании безусловной отдачи владения другому федерату (толкаем-отдаем права) - unconditionalAttributeOwnershipDivestiture
+    [DllImport("DLLtoUnity")]
+    public static extern int UnconditionalAttributeOwnershipDivestiture(StringBuilder string1, int length1, StringBuilder string2, StringBuilder string3);
 
+    //сообщаем о желании согласованной отдачи владения другому федерату (толкаем-отдаем права) - negotiatedAttributeOwnershipDivestiture
+    [DllImport("DLLtoUnity")]
+    public static extern int NegotiatedAttributeOwnershipDivestiture(StringBuilder string1, int length1, StringBuilder string2, StringBuilder string3);
+
+    //подтверждаем отдачу владения (толкаем-отдаем права) - confirmDivestiture
+    [DllImport("DLLtoUnity")]
+    public static extern int ConfirmDivestiture(StringBuilder string1, int length1, StringBuilder string2, StringBuilder string3);
+
+
+
+
+
+
+    //Навязчиво просим отдать права нам (тянем-требуем права) - attributeOwnershipAcquisition
+    [DllImport("DLLtoUnity")]
+    public static extern int AttributeOwnershipAcquisition(StringBuilder string1, int length1);
+
+    //Пытаемся спросить отдать права нам, если сейчас они никому не пренадлежат, если комуто принадлежат надо навязчиво требовать (тянем права) - attributeOwnershipAcquisitionIfAvailable
+    [DllImport("DLLtoUnity")]
+    public static extern int AttributeOwnershipAcquisitionIfAvailable(StringBuilder string1, int length1);
+
+    //отказать в передаче владения, даже если нас навязчиво попросили - attributeOwnershipReleaseDenied
+    [DllImport("DLLtoUnity")]
+    public static extern int AttributeOwnershipReleaseDenied(StringBuilder string1, int length1);
+
+    //разрешить передачу владения - attributeOwnershipDivestitureIfWanted
+    [DllImport("DLLtoUnity")]
+    public static extern int AttributeOwnershipDivestitureIfWanted(StringBuilder string1, int length1);
+
+    //прекратить согласование передачи прав - cancelNegotiatedAttributeOwnershipDivestiture
+    [DllImport("DLLtoUnity")]
+    public static extern int CancelNegotiatedAttributeOwnershipDivestiture(StringBuilder string1, int length1);
+
+    //cancelAttributeOwnershipAcquisition
+    [DllImport("DLLtoUnity")]
+    public static extern int CancelAttributeOwnershipAcquisition(StringBuilder string1, int length1);
+
+    //видимо узнать кому сейчас паринадлежат права - queryAttributeOwnership
+    [DllImport("DLLtoUnity")]
+    public static extern int queryAttributeOwnership(StringBuilder string1, int length1);
+
+    //видимо узнать, нам сейчас сейчас паринадлежат права или нет - isAttributeOwnedByFederate
+    [DllImport("DLLtoUnity")]
+    public static extern int isAttributeOwnedByFederate(StringBuilder string1, int length1);
 
 
 
@@ -567,6 +614,23 @@ public class TestDLL : MonoBehaviour
         }
         {    
             //ResignFederationExecution(StringBuilder returnstring, int length);
+        }
+
+
+        {
+            StringBuilder teststring = new StringBuilder("0123456789", 100);
+            UnconditionalAttributeOwnershipDivestiture(teststring, teststring.Capacity, teststring, teststring);
+            NegotiatedAttributeOwnershipDivestiture(teststring, teststring.Capacity, teststring, teststring);
+            ConfirmDivestiture(teststring, teststring.Capacity, teststring, teststring);
+
+            AttributeOwnershipAcquisition(teststring, teststring.Capacity);
+            AttributeOwnershipAcquisitionIfAvailable(teststring, teststring.Capacity);
+            AttributeOwnershipReleaseDenied(teststring, teststring.Capacity);
+            AttributeOwnershipDivestitureIfWanted(teststring, teststring.Capacity);
+            CancelNegotiatedAttributeOwnershipDivestiture(teststring, teststring.Capacity);
+            CancelAttributeOwnershipAcquisition(teststring, teststring.Capacity);
+            queryAttributeOwnership(teststring, teststring.Capacity);
+            isAttributeOwnedByFederate(teststring, teststring.Capacity);
         }
     }
 

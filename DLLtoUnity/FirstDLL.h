@@ -73,27 +73,28 @@ extern "C"
 
     //------------------------------------------------------------------------------------------------------------------
     //сообщаем о желании безусловной отдачи владения другому федерату (толкаем-отдаем права) - unconditionalAttributeOwnershipDivestiture
-    DLLExport int UnconditionalAttributeOwnershipDivestiture(char* myString1, int length1, char* myString2, int length2);
+    DLLExport int UnconditionalAttributeOwnershipDivestiture(char* myString1, int length1, char* myString2, char* myString3);
     //сообщаем о желании согласованной отдачи владения другому федерату (толкаем-отдаем права) - negotiatedAttributeOwnershipDivestiture
-    DLLExport int NegotiatedAttributeOwnershipDivestiture(char* myString1, int length1, char* myString2, int length2);
+    DLLExport int NegotiatedAttributeOwnershipDivestiture(char* myString1, int length1, char* myString2, char* myString3);
     //подтверждаем отдачу владения (толкаем-отдаем права) - confirmDivestiture
-    DLLExport int ConfirmDivestiture(char* myString1, int length1, char* myString2, int length2);
+    DLLExport int ConfirmDivestiture(char* myString1, int length1, char* myString2, char* myString3);
+
     //Навязчиво просим отдать права нам (тянем-требуем права) - attributeOwnershipAcquisition
-    DLLExport int AttributeOwnershipAcquisition(char* myString1, int length1, char* myString2, int length2);
+    DLLExport int AttributeOwnershipAcquisition(char* myString1, int length1);
     //Пытаемся спросить отдать права нам, если сейчас они никому не пренадлежат, если комуто принадлежат надо навязчиво требовать (тянем права) - attributeOwnershipAcquisitionIfAvailable
-    DLLExport int AttributeOwnershipAcquisitionIfAvailable(char* myString1, int length1, char* myString2, int length2);
+    DLLExport int AttributeOwnershipAcquisitionIfAvailable(char* myString1, int length1);
     //отказать в передаче владения, даже если нас навязчиво попросили - attributeOwnershipReleaseDenied
-    DLLExport int AttributeOwnershipReleaseDenied(char* myString1, int length1, char* myString2, int length2);
+    DLLExport int AttributeOwnershipReleaseDenied(char* myString1, int length1);
     //разрешить передачу владения - attributeOwnershipDivestitureIfWanted
-    DLLExport int AttributeOwnershipDivestitureIfWanted(char* myString1, int length1, char* myString2, int length2);
+    DLLExport int AttributeOwnershipDivestitureIfWanted(char* myString1, int length1);
     //прекратить согласование передачи прав - cancelNegotiatedAttributeOwnershipDivestiture
-    DLLExport int CancelNegotiatedAttributeOwnershipDivestiture(char* myString1, int length1, char* myString2, int length2);
+    DLLExport int CancelNegotiatedAttributeOwnershipDivestiture(char* myString1, int length1);
     //cancelAttributeOwnershipAcquisition
-    DLLExport int CancelAttributeOwnershipAcquisition(char* myString1, int length1, char* myString2, int length2);
+    DLLExport int CancelAttributeOwnershipAcquisition(char* myString1, int length1);
     //видимо узнать кому сейчас паринадлежат права - queryAttributeOwnership
-    DLLExport int queryAttributeOwnership(char* myString1, int length1, char* myString2, int length2);
+    DLLExport int queryAttributeOwnership(char* myString1, int length1);
     //видимо узнать, нам сейчас сейчас паринадлежат права или нет - isAttributeOwnedByFederate
-    DLLExport int isAttributeOwnedByFederate(char* myString1, int length1, char* myString2, int length2);
+    DLLExport int isAttributeOwnedByFederate(char* myString1, int length1);
 
 
     //v1

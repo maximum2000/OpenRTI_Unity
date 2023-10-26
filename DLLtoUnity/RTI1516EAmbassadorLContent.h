@@ -647,57 +647,58 @@ namespace OpenRTI
             const rti1516e::AttributeHandleSet& attributeHandleSet)
         {
             _ambassador->unconditionalAttributeOwnershipDivestiture(objectInstanceHandle, attributeHandleSet);
-            //_ambassador->attributeOwnershipAcquisition()
         }
 
         // // 7.3
-        //  void negotiatedAttributeOwnershipDivestiture
-        // (ObjectInstanceHandle objectInstanceHandle,
-        //  AttributeHandleSet const & attributes,
-        //  VariableLengthData const & tag)
+       // void negotiatedAttributeOwnershipDivestiture(const rti1516e::ObjectInstanceHandle objectInstanceHandle, const rti1516e::AttributeHandleSet& attributes, const rti1516e::VariableLengthData& tag)
+       // {
+       //     _ambassador->negotiatedAttributeOwnershipDivestiture(objectInstanceHandle, attributes, tag);
+       // }
 
         // // 7.6
-        //  void confirmDivestiture
-        // (ObjectInstanceHandle objectInstanceHandle,
-        //  AttributeHandleSet const & confirmedAttributes,
-        //  VariableLengthData const & tag)
+        //void confirmDivestiture(const rti1516e::ObjectInstanceHandle objectInstanceHandle, const rti1516e::AttributeHandleSet& confirmedAttributes, const rti1516e::VariableLengthData& tag)
+        //{
+        //    _ambassador->confirmDivestiture(objectInstanceHandle, confirmedAttributes, tag);
+        //}
 
         // // 7.8
-        //  void attributeOwnershipAcquisition
-        // (ObjectInstanceHandle objectInstanceHandle,
-        //  AttributeHandleSet const & desiredAttributes,
-        //  VariableLengthData const & tag)
+        //void attributeOwnershipAcquisition(ObjectInstanceHandle objectInstanceHandle, AttributeHandleSet const& desiredAttributes, VariableLengthData const& tag)
+        //{
+        //
+        //}
 
         // // 7.9
-        //  void attributeOwnershipAcquisitionIfAvailable
-        // (ObjectInstanceHandle objectInstanceHandle,
-        //  AttributeHandleSet const & desiredAttributes)
+        //void attributeOwnershipAcquisitionIfAvailable(ObjectInstanceHandle objectInstanceHandle, AttributeHandleSet const& desiredAttributes)
+        //{
+        //
+        //}
 
         // // 7.12
-        //  void attributeOwnershipDivestitureIfWanted
-        // (ObjectInstanceHandle objectInstanceHandle,
-        //  AttributeHandleSet const & attributes,
-        //  AttributeHandleSet & theDivestedAttributes) // filled by RTI
+        //void attributeOwnershipDivestitureIfWanted(ObjectInstanceHandle objectInstanceHandle, AttributeHandleSet const& attributes, AttributeHandleSet& theDivestedAttributes) // filled by RTI
+        //{
+        //
+        //}
 
         // // 7.13
-        //  void cancelNegotiatedAttributeOwnershipDivestiture
-        // (ObjectInstanceHandle objectInstanceHandle,
-        //  AttributeHandleSet const & attributes)
-
+        //  void cancelNegotiatedAttributeOwnershipDivestiture (ObjectInstanceHandle objectInstanceHandle, AttributeHandleSet const & attributes)
+        //    {
+        //    }
+         
         // // 7.14
-        //  void cancelAttributeOwnershipAcquisition
-        // (ObjectInstanceHandle objectInstanceHandle,
-        //  AttributeHandleSet const & attributes)
+        //  void cancelAttributeOwnershipAcquisition (ObjectInstanceHandle objectInstanceHandle, AttributeHandleSet const & attributes)
+        // {
+        // }
+        
 
         // // 7.16
-        //  void queryAttributeOwnership
-        // (ObjectInstanceHandle objectInstanceHandle,
-        //  AttributeHandle attribute)
+        //  void queryAttributeOwnership (ObjectInstanceHandle objectInstanceHandle, AttributeHandle attribute)
+        //{
+        //}
 
         // // 7.18
-        //  bool isAttributeOwnedByFederate
-        // (ObjectInstanceHandle objectInstanceHandle,
-        //  AttributeHandle attribute)
+        //  bool isAttributeOwnedByFederate (ObjectInstanceHandle objectInstanceHandle, AttributeHandle attribute)
+        //{
+        //}
 
         void enableTimeRegulation(const rti1516e::LogicalTimeInterval& logicalTimeInterval)
         {

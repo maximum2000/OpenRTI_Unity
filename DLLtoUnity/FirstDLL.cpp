@@ -499,13 +499,13 @@ int MyGetObjectInstanceHandle(std::wstring ObjectInstanceName)
     //получение класса объекта
     try
     {
-        ambassador->SendLog(ObjectInstanceName, 0);
-        if (ObjectInstanceName != L"Valve124")
-        {
-            ambassador->SendLog(L"Valve124!="+ ObjectInstanceName, 0);
-        }
-        ambassador->SendLog(ambassador->getObjectInstanceHandle(L"Valve124").toString(), 0);
-        ambassador->SendLog(ambassador->getObjectInstanceHandle(ObjectInstanceName).toString(), 0);
+        //ambassador->SendLog(ObjectInstanceName, 0);
+        //if (ObjectInstanceName != L"Valve124")
+        //{
+        //    ambassador->SendLog(L"Valve124!="+ ObjectInstanceName, 0);
+        //}
+        //ambassador->SendLog(ambassador->getObjectInstanceHandle(L"Valve124").toString(), 0);
+        //ambassador->SendLog(ambassador->getObjectInstanceHandle(ObjectInstanceName).toString(), 0);
         TempObjectInstanceHandle = ambassador->getObjectInstanceHandle(ObjectInstanceName); // L"Valve12"
     }
     catch (const rti1516e::Exception& e)
@@ -1129,69 +1129,265 @@ int ResignFederationExecution(char* myString1, int length1)
 
 
 
+
 //сообщаем о желании безусловной отдачи владения другому федерату (толкаем-отдаем права) - unconditionalAttributeOwnershipDivestiture
-int UnconditionalAttributeOwnershipDivestiture(char* myString1, int length1, char* myString2, int length2)
+int MyUnconditionalAttributeOwnershipDivestiture(std::wstring ClassName, std::wstring ObjectInstanceName, std::wstring attributeName)
 {
+    LastErrorString = L"";
+
+    try
+    {
+        //хранение дискриптора аттрибутов
+        rti1516e::AttributeHandleSet _attributes;
+        //разделяем по ;
+        std::vector<std::wstring> attributeNames = mysplit(attributeName, L";");
+        for (int i = 0; i < attributeNames.size(); i++)
+        {
+            rti1516e::AttributeHandle newattribute = ambassador->getAttributeHandle(ambassador->getObjectClassHandle(ClassName), attributeNames[i]); // L"Attribute0"
+            _attributes.insert(newattribute);
+        }
+        ambassador->unconditionalAttributeOwnershipDivestiture(ambassador->getObjectInstanceHandle(ObjectInstanceName), _attributes);
+    }
+    catch (const rti1516e::Exception& e)
+    {
+        LastErrorString = e.what();
+        std::wcout << L"rti1516e::Exception: \"" << e.what() << L"\"" << std::endl;
+        return 1;
+    }
+    catch (...)
+    {
+        LastErrorString = L"Unknown Exception!";
+        std::wcout << L"Unknown Exception!" << std::endl;
+        return 1;
+    }
+    return 0;
+}
+int UnconditionalAttributeOwnershipDivestiture(char* myString1, int length1, char* myString2, char* myString3)
+{
+    std::wstringstream cls1;
+    cls1 << myString1;
+    std::wstring ClassName = cls1.str();
+    std::wstringstream cls2;
+    cls2 << myString2;
+    std::wstring ObjectInstanceName = cls2.str();
+    std::wstringstream cls3;
+    cls3 << myString3;
+    std::wstring attributeName = cls3.str();
+    ambassador->SendLog(L"DEBUG: UnconditionalAttributeOwnershipDivestiture" + ClassName + L"." + ObjectInstanceName + L"" + attributeName, 0);
+    int ret = MyUnconditionalAttributeOwnershipDivestiture(ClassName, ObjectInstanceName, attributeName);
+    if (ret == 1)
+    {
+        std::string s(LastErrorString.begin(), LastErrorString.end());
+        strcpy_s(myString1, length1, s.c_str());
+        return 1;
+    }
+    std::string s("ok");;
+    strcpy_s(myString1, length1, s.c_str());
     return 0;
 }
 
-//сообщаем о желании согласованной отдачи владения другому федерату (толкаем-отдаем права) - negotiatedAttributeOwnershipDivestiture
-int NegotiatedAttributeOwnershipDivestiture(char* myString1, int length1, char* myString2, int length2)
+//!сообщаем о желании согласованной отдачи владения другому федерату (толкаем-отдаем права) - negotiatedAttributeOwnershipDivestiture
+int MyNegotiatedAttributeOwnershipDivestiture(std::wstring ClassName, std::wstring ObjectInstanceName, std::wstring attributeName)
 {
+    LastErrorString = L"";
+
+    try
+    {
+        //хранение дискриптора аттрибутов
+        rti1516e::AttributeHandleSet _attributes;
+        //разделяем по ;
+        std::vector<std::wstring> attributeNames = mysplit(attributeName, L";");
+        for (int i = 0; i < attributeNames.size(); i++)
+        {
+            rti1516e::AttributeHandle newattribute = ambassador->getAttributeHandle(ambassador->getObjectClassHandle(ClassName), attributeNames[i]); // L"Attribute0"
+            _attributes.insert(newattribute);
+        }
+        //ambassador->negotiatedAttributeOwnershipDivestiture(ambassador->getObjectInstanceHandle(ObjectInstanceName), _attributes);
+    }
+    catch (const rti1516e::Exception& e)
+    {
+        LastErrorString = e.what();
+        std::wcout << L"rti1516e::Exception: \"" << e.what() << L"\"" << std::endl;
+        return 1;
+    }
+    catch (...)
+    {
+        LastErrorString = L"Unknown Exception!";
+        std::wcout << L"Unknown Exception!" << std::endl;
+        return 1;
+    }
+    return 0;
+}
+int NegotiatedAttributeOwnershipDivestiture(char* myString1, int length1, char* myString2, char* myString3)
+{
+    std::wstringstream cls1;
+    cls1 << myString1;
+    std::wstring ClassName = cls1.str();
+    std::wstringstream cls2;
+    cls2 << myString2;
+    std::wstring ObjectInstanceName = cls2.str();
+    std::wstringstream cls3;
+    cls3 << myString3;
+    std::wstring attributeName = cls3.str();
+    ambassador->SendLog(L"DEBUG: NegotiatedAttributeOwnershipDivestiture" + ClassName + L"." + ObjectInstanceName + L"" + attributeName, 0);
+    int ret = MyNegotiatedAttributeOwnershipDivestiture(ClassName, ObjectInstanceName, attributeName);
+    if (ret == 1)
+    {
+        std::string s(LastErrorString.begin(), LastErrorString.end());
+        strcpy_s(myString1, length1, s.c_str());
+        return 1;
+    }
+    std::string s("ok");;
+    strcpy_s(myString1, length1, s.c_str());
     return 0;
 }
 
 //подтверждаем отдачу владения (толкаем-отдаем права) - confirmDivestiture
-int ConfirmDivestiture(char* myString1, int length1, char* myString2, int length2)
+int MyConfirmDivestiture(std::wstring ClassName, std::wstring ObjectInstanceName, std::wstring attributeName)
 {
+    LastErrorString = L"";
+
+    try
+    {
+        //хранение дискриптора аттрибутов
+        rti1516e::AttributeHandleSet _attributes;
+        //разделяем по ;
+        std::vector<std::wstring> attributeNames = mysplit(attributeName, L";");
+        for (int i = 0; i < attributeNames.size(); i++)
+        {
+            rti1516e::AttributeHandle newattribute = ambassador->getAttributeHandle(ambassador->getObjectClassHandle(ClassName), attributeNames[i]); // L"Attribute0"
+            _attributes.insert(newattribute);
+        }
+        rti1516e::VariableLengthData tag = toVariableLengthData(OpenRTI::Clock::now());
+
+        //ambassador->confirmDivestiture(ambassador->getObjectInstanceHandle(ObjectInstanceName), _attributes, tag);
+    }
+    catch (const rti1516e::Exception& e)
+    {
+        LastErrorString = e.what();
+        std::wcout << L"rti1516e::Exception: \"" << e.what() << L"\"" << std::endl;
+        return 1;
+    }
+    catch (...)
+    {
+        LastErrorString = L"Unknown Exception!";
+        std::wcout << L"Unknown Exception!" << std::endl;
+        return 1;
+    }
+    return 0;
+}
+int ConfirmDivestiture(char* myString1, int length1, char* myString2, char* myString3)
+{
+    std::wstringstream cls1;
+    cls1 << myString1;
+    std::wstring ClassName = cls1.str();
+    std::wstringstream cls2;
+    cls2 << myString2;
+    std::wstring ObjectInstanceName = cls2.str();
+    std::wstringstream cls3;
+    cls3 << myString3;
+    std::wstring attributeName = cls3.str();
+    ambassador->SendLog(L"DEBUG: ConfirmDivestiture" + ClassName + L"." + ObjectInstanceName + L"" + attributeName, 0);
+    int ret = MyConfirmDivestiture(ClassName, ObjectInstanceName, attributeName);
+    if (ret == 1)
+    {
+        std::string s(LastErrorString.begin(), LastErrorString.end());
+        strcpy_s(myString1, length1, s.c_str());
+        return 1;
+    }
+    std::string s("ok");;
+    strcpy_s(myString1, length1, s.c_str());
     return 0;
 }
 
+
+
 //Навязчиво просим отдать права нам (тянем-требуем права) - attributeOwnershipAcquisition
-int AttributeOwnershipAcquisition(char* myString1, int length1, char* myString2, int length2)
+int AttributeOwnershipAcquisition(char* myString1, int length1)
 {
+    std::wstringstream cls1;
+    cls1 << myString1;
+    std::wstring Name = cls1.str();
+    //ambassador->attributeOwnerhipAcq
+
+    ambassador->SendLog(L"DEBUG: AttributeOwnershipAcquisition" + Name, 0);
     return 0;
 }
 
 //Пытаемся спросить отдать права нам, если сейчас они никому не пренадлежат, если комуто принадлежат надо навязчиво требовать (тянем права) - attributeOwnershipAcquisitionIfAvailable
-int AttributeOwnershipAcquisitionIfAvailable(char* myString1, int length1, char* myString2, int length2)
+int AttributeOwnershipAcquisitionIfAvailable(char* myString1, int length1)
 {
+    std::wstringstream cls1;
+    cls1 << myString1;
+    std::wstring Name = cls1.str();
+
+    ambassador->SendLog(L"DEBUG: AttributeOwnershipAcquisitionIfAvailable" + Name, 0);
     return 0;
 }
 
 //отказать в передаче владения, даже если нас навязчиво попросили - attributeOwnershipReleaseDenied
-DLLExport int AttributeOwnershipReleaseDenied(char* myString1, int length1, char* myString2, int length2)
+DLLExport int AttributeOwnershipReleaseDenied(char* myString1, int length1)
 {
+    std::wstringstream cls1;
+    cls1 << myString1;
+    std::wstring Name = cls1.str();
+
+    ambassador->SendLog(L"DEBUG: AttributeOwnershipReleaseDenied" + Name, 0);
     return 0;
 }
 
 //разрешить передачу владения - attributeOwnershipDivestitureIfWanted
-int AttributeOwnershipDivestitureIfWanted(char* myString1, int length1, char* myString2, int length2)
+int AttributeOwnershipDivestitureIfWanted(char* myString1, int length1)
 {
+    std::wstringstream cls1;
+    cls1 << myString1;
+    std::wstring Name = cls1.str();
+
+    ambassador->SendLog(L"DEBUG: AttributeOwnershipDivestitureIfWanted" + Name, 0);
     return 0;
 }
 
 //прекратить согласование передачи прав - cancelNegotiatedAttributeOwnershipDivestiture
-int CancelNegotiatedAttributeOwnershipDivestiture(char* myString1, int length1, char* myString2, int length2)
+int CancelNegotiatedAttributeOwnershipDivestiture(char* myString1, int length1)
 {
+    std::wstringstream cls1;
+    cls1 << myString1;
+    std::wstring Name = cls1.str();
+
+    ambassador->SendLog(L"DEBUG: CancelNegotiatedAttributeOwnershipDivestiture" + Name, 0);
     return 0;
 }
 
 //cancelAttributeOwnershipAcquisition
-int CancelAttributeOwnershipAcquisition(char* myString1, int length1, char* myString2, int length2)
+int CancelAttributeOwnershipAcquisition(char* myString1, int length1)
 {
+    std::wstringstream cls1;
+    cls1 << myString1;
+    std::wstring Name = cls1.str();
+
+    ambassador->SendLog(L"DEBUG: CancelAttributeOwnershipAcquisition" + Name, 0);
     return 0;
 }
 
 //видимо узнать кому сейчас паринадлежат права - queryAttributeOwnership
-int queryAttributeOwnership(char* myString1, int length1, char* myString2, int length2)
+int queryAttributeOwnership(char* myString1, int length1)
 {
+    std::wstringstream cls1;
+    cls1 << myString1;
+    std::wstring Name = cls1.str();
+
+    ambassador->SendLog(L"DEBUG: queryAttributeOwnership" + Name, 0);
     return 0;
 }
 
 //видимо узнать, нам сейчас сейчас паринадлежат права или нет - isAttributeOwnedByFederate
-int isAttributeOwnedByFederate(char* myString1, int length1, char* myString2, int length2)
+int isAttributeOwnedByFederate(char* myString1, int length1)
 {
+    std::wstringstream cls1;
+    cls1 << myString1;
+    std::wstring Name = cls1.str();
+
+    ambassador->SendLog(L"DEBUG: isAttributeOwnedByFederate" + Name, 0);
     return 0;
 }
 
