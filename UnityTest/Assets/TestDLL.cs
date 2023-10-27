@@ -203,7 +203,7 @@ public class TestDLL : MonoBehaviour
     private static void DebugLog(IntPtr message, int color, int size)
     {
         string debugString = Marshal.PtrToStringAnsi(message, size);
-        Debug.Log(debugString);
+        Debug.Log("c# debug:" + debugString);
     }
     //end callback для Debug'а
 
@@ -214,8 +214,9 @@ public class TestDLL : MonoBehaviour
     //Обработчик события потери соединения
     private static void ConnectionLost(IntPtr message, int size)
     {
+        Debug.Log("c# callback:" + "ConnectionLost");
         string debugString = Marshal.PtrToStringAnsi(message, size);
-        Debug.Log(debugString);
+        Debug.Log("c# debug:" + debugString);
     }
     //end callback для сообщений о потери соединения (connectionLost)
 
@@ -227,10 +228,11 @@ public class TestDLL : MonoBehaviour
     //обработчик 
     private static void ReportFederationExecutions(IntPtr message1, IntPtr message2, int size1, int size2)
     {
+        Debug.Log("c# callback:" + "ReportFederationExecutions");
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
         string debugString2 = Marshal.PtrToStringAnsi(message2, size2);
-        Debug.Log(debugString1);
-        Debug.Log(debugString2);
+        Debug.Log("c# debug:" + debugString1);
+        Debug.Log("c# debug:" + debugString2);
     }
     //end callback для сообщений информации о выполнении федерации (reportFederationExecutions)
 
@@ -241,8 +243,9 @@ public class TestDLL : MonoBehaviour
     //Обработчик
     private static void SynchronizationPointRegistrationSucceeded(IntPtr message1,  int size1)
     {
+        Debug.Log("c# callback:" + "SynchronizationPointRegistrationSucceeded");
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
-        Debug.Log(debugString1);
+        Debug.Log("c# debug:" + debugString1);
     }
     //end callback для сообщений информации о успешности регистрации точки синхронизации (synchronizationPointRegistrationSucceeded)
 
@@ -254,10 +257,11 @@ public class TestDLL : MonoBehaviour
     //Обработчик
     private static void SynchronizationPointRegistrationFailed(IntPtr message1, IntPtr message2, int size1, int size2)
     {
+        Debug.Log("c# callback:" + "SynchronizationPointRegistrationFailed");
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
         string debugString2 = Marshal.PtrToStringAnsi(message2, size2);
-        Debug.Log(debugString1);
-        Debug.Log(debugString2);
+        Debug.Log("c# debug:" + debugString1);
+        Debug.Log("c# debug:" + debugString2);
     }
     //end callback для сообщений информации о провале регистрации точки синхронизации (synchronizationPointRegistrationFailedCallback)
 
@@ -268,8 +272,9 @@ public class TestDLL : MonoBehaviour
     //Обработчик
     private static void AnnounceSynchronizationPoint(IntPtr message1, int size1)
     {
+        Debug.Log("c# callback:" + "AnnounceSynchronizationPoint");
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
-        Debug.Log(debugString1);
+        Debug.Log("c# debug:" + debugString1);
     }
     //end callback для сообщений информации о установке синхронизации (announceSynchronizationPointCallback)
 
@@ -280,15 +285,11 @@ public class TestDLL : MonoBehaviour
     //Обработчик
     private static void FederationSynchronized(IntPtr message1, int size1)
     {
+        Debug.Log("c# callback:" + "FederationSynchronized");
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
-        Debug.Log(debugString1);
+        Debug.Log("c# debug:" + debugString1);
     }
     //end callback для сообщений о факте того, что вся федерация синхронизирована (federationSynchronized)
-
-    ///////////////////////////////////////
-
-
-
 
     //callback для сообщений информации о резервировании имени объекта (objectInstanceNameReservationSucceeded)
     private delegate void objectInstanceNameReservationSucceededCallback(IntPtr message1, int size1);
@@ -297,8 +298,9 @@ public class TestDLL : MonoBehaviour
     //Обработчик
     private static void ObjectInstanceNameReservationSucceeded(IntPtr message1, int size1)
     {
+        Debug.Log("c# callback:" + "ObjectInstanceNameReservationSucceeded");
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
-        Debug.Log(debugString1);
+        Debug.Log("c# debug:" + debugString1);
     }
     //callback для сообщений информации о резервировании имени объекта (objectInstanceNameReservationSucceeded)
 
@@ -309,8 +311,9 @@ public class TestDLL : MonoBehaviour
     //Обработчик
     private static void ObjectInstanceNameReservationFailed(IntPtr message1, int size1)
     {
+        Debug.Log("c# callback:" + "ObjectInstanceNameReservationFailed");
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
-        Debug.Log(debugString1);
+        Debug.Log("c# debug:" + debugString1);
     }
     //callback для сообщений информации о резервировании имени объекта (objectInstanceNameReservationFailed)
 
@@ -322,12 +325,13 @@ public class TestDLL : MonoBehaviour
     //Обработчик
     private static void DiscoverObjectInstance(IntPtr message1, int size1, IntPtr message2, int size2, IntPtr message3, int size3)
     {
+        Debug.Log("c# callback:" + "DiscoverObjectInstance");
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
         string debugString2 = Marshal.PtrToStringAnsi(message2, size2);
         string debugString3 = Marshal.PtrToStringAnsi(message3, size3);
-        Debug.Log(debugString1);
-        Debug.Log(debugString2);
-        Debug.Log(debugString3);
+        Debug.Log("c# debug:" + debugString1);
+        Debug.Log("c# debug:" + debugString2);
+        Debug.Log("c# debug:" + debugString3);
     }
     //callback для сообщений о создании нового объекта (discoverObjectInstance)
 
@@ -338,12 +342,13 @@ public class TestDLL : MonoBehaviour
     //Обработчик
     private static void ReflectAttributeValues(IntPtr message1, int size1, IntPtr message2, int size2, IntPtr message3, int size3)
     {
+        Debug.Log("c# callback:" + "ReflectAttributeValues");
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
         string debugString2 = Marshal.PtrToStringAnsi(message2, size2);
         string debugString3 = Marshal.PtrToStringAnsi(message3, size3);
-        Debug.Log(debugString1);
-        Debug.Log(debugString2);
-        Debug.Log(debugString3);
+        Debug.Log("c# debug:" + debugString1);
+        Debug.Log("c# debug:" + debugString2);
+        Debug.Log("c# debug:" + debugString3);
     }
     //callback для сообщений о изменении атрибута (reflectAttributeValues)
 
@@ -354,12 +359,13 @@ public class TestDLL : MonoBehaviour
     //Обработчик
     private static void ReceiveInteraction(IntPtr message1, int size1, IntPtr message2, int size2, IntPtr message3, int size3)
     {
+        Debug.Log("c# callback:" + "ReceiveInteraction");
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
         string debugString2 = Marshal.PtrToStringAnsi(message2, size2);
         string debugString3 = Marshal.PtrToStringAnsi(message3, size3);
-        Debug.Log(debugString1);
-        Debug.Log(debugString2);
-        Debug.Log(debugString3);
+        Debug.Log("c# debug:" + debugString1);
+        Debug.Log("c# debug:" + debugString2);
+        Debug.Log("c# debug:" + debugString3);
     }
     //callback для сообщений о получении интеракции (receiveInteraction)
 
@@ -371,8 +377,9 @@ public class TestDLL : MonoBehaviour
     //Обработчик
     private static void RemoveObjectInstance(IntPtr message1, int size1)
     {
+        Debug.Log("c# callback:" + "RemoveObjectInstance");
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
-        Debug.Log(debugString1);
+        Debug.Log("c# debug:" + debugString1);
     }
     //callback для сообщений о удалении объекта (removeObjectInstance)
 
@@ -384,8 +391,9 @@ public class TestDLL : MonoBehaviour
     //Обработчик
     private static void RequestAttributeOwnershipAssumption(IntPtr message1, int size1)
     {
+        Debug.Log("c# callback:" + "RequestAttributeOwnershipAssumption");
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
-        Debug.Log(debugString1);
+        Debug.Log("c# debug:" + debugString1);
     }
     //virtual void requestAttributeOwnershipAssumption
 
@@ -396,8 +404,9 @@ public class TestDLL : MonoBehaviour
     //Обработчик
     private static void RequestDivestitureConfirmation(IntPtr message1, int size1)
     {
+        Debug.Log("c# callback:" + "RequestDivestitureConfirmation");
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
-        Debug.Log(debugString1);
+        Debug.Log("c# debug:" + debugString1);
     }
     //virtual void requestDivestitureConfirmation
 
@@ -408,8 +417,9 @@ public class TestDLL : MonoBehaviour
     //Обработчик
     private static void AttributeOwnershipAcquisitionNotification(IntPtr message1, int size1)
     {
+        Debug.Log("c# callback:" + "AttributeOwnershipAcquisitionNotification");
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
-        Debug.Log(debugString1);
+        Debug.Log("c# debug:" + debugString1);
     }
     //virtual void attributeOwnershipAcquisitionNotification
 
@@ -420,8 +430,9 @@ public class TestDLL : MonoBehaviour
     //Обработчик
     private static void AttributeOwnershipUnavailable(IntPtr message1, int size1)
     {
+        Debug.Log("c# callback:" + "AttributeOwnershipUnavailable");
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
-        Debug.Log(debugString1);
+        Debug.Log("c# debug:" + debugString1);
     }
     //virtual void attributeOwnershipUnavailable
 
@@ -432,8 +443,9 @@ public class TestDLL : MonoBehaviour
     //Обработчик
     private static void RequestAttributeOwnershipRelease(IntPtr message1, int size1)
     {
+        Debug.Log("c# callback:" + "RequestAttributeOwnershipRelease");
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
-        Debug.Log(debugString1);
+        Debug.Log("c# debug:" + debugString1);
     }
     //virtual void requestAttributeOwnershipRelease
 
@@ -444,8 +456,9 @@ public class TestDLL : MonoBehaviour
     //Обработчик
     private static void ConfirmAttributeOwnershipAcquisitionCancellation(IntPtr message1, int size1)
     {
+        Debug.Log("c# callback:" + "ConfirmAttributeOwnershipAcquisitionCancellation");
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
-        Debug.Log(debugString1);
+        Debug.Log("c# debug:" + debugString1);
     }
     //virtual void confirmAttributeOwnershipAcquisitionCancellation
 
@@ -456,8 +469,9 @@ public class TestDLL : MonoBehaviour
     //Обработчик
     private static void InformAttributeOwnership(IntPtr message1, int size1)
     {
+        Debug.Log("c# callback:" + "InformAttributeOwnership");
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
-        Debug.Log(debugString1);
+        Debug.Log("c# debug:" + debugString1);
     }
     //virtual void informAttributeOwnership
 
@@ -470,8 +484,9 @@ public class TestDLL : MonoBehaviour
     //Обработчик
     private static void AttributeIsNotOwned(IntPtr message1, int size1)
     {
+        Debug.Log("c# callback:" + "AttributeIsNotOwned");
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
-        Debug.Log(debugString1);
+        Debug.Log("c# debug:" + debugString1);
     }
     //virtual void attributeIsNotOwned
 
@@ -483,8 +498,9 @@ public class TestDLL : MonoBehaviour
     //Обработчик
     private static void AttributeIsOwnedByRTI(IntPtr message1, int size1)
     {
+        Debug.Log("c# callback:" + "AttributeIsOwnedByRTI");
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
-        Debug.Log(debugString1);
+        Debug.Log("c# debug:" + debugString1);
     }
 
 
@@ -530,7 +546,7 @@ public class TestDLL : MonoBehaviour
             StringBuilder className = new StringBuilder("HLAobjectRoot.ObjectClass0", 100);
             GetObjectClassHandle(className, className.Capacity);
             string myString = className.ToString();
-            Debug.Log("->GetObjectClassHandle: " + myString);
+            Debug.Log("c# debug:" + "->GetObjectClassHandle: " + myString);
             evokeCallback(0.1);
         }
 
@@ -539,7 +555,7 @@ public class TestDLL : MonoBehaviour
             StringBuilder attributeName = new StringBuilder("Attribute0", 100);
             GetAttributeHandle(className, className.Capacity, attributeName);
             string myString = className.ToString();
-            Debug.Log("->GetAttributeHandle: " + myString);
+            Debug.Log("c# debug:" + "->GetAttributeHandle: " + myString);
             evokeCallback(0.1);
         }
 
@@ -547,7 +563,7 @@ public class TestDLL : MonoBehaviour
             StringBuilder ObjectInstanceName = new StringBuilder("Valve124", 100);
             GetObjectInstanceHandle(ObjectInstanceName, ObjectInstanceName.Capacity);
             string myString = ObjectInstanceName.ToString();
-            Debug.Log("->ObjectInstanceName: " + myString);
+            Debug.Log("c# debug:" + "->ObjectInstanceName: " + myString);
             evokeCallback(0.1);
         }
 
@@ -556,7 +572,7 @@ public class TestDLL : MonoBehaviour
             StringBuilder attributeName = new StringBuilder("Attribute0", 100);
             PublishObjectClassAttributes(className, className.Capacity, attributeName);
             string myString = className.ToString();
-            Debug.Log("->PublishObjectClassAttributes: " + myString);
+            Debug.Log("c# debug:" + "->PublishObjectClassAttributes: " + myString);
             evokeCallback(0.1);
         }
 
@@ -565,7 +581,7 @@ public class TestDLL : MonoBehaviour
             StringBuilder attributeName = new StringBuilder("Attribute0", 100);
             SubscribeObjectClassAttributes(className, className.Capacity, attributeName);
             string myString = className.ToString();
-            Debug.Log("->SubscribeObjectClassAttributes: " + myString);
+            Debug.Log("c# debug:" + "->SubscribeObjectClassAttributes: " + myString);
             evokeCallback(0.1);
         }
 
@@ -573,7 +589,7 @@ public class TestDLL : MonoBehaviour
             StringBuilder objectInstanceName = new StringBuilder("Valve444", 100);
             ReserveObjectInstanceName(objectInstanceName, objectInstanceName.Capacity);
             string myString = objectInstanceName.ToString();
-            Debug.Log("->ReserveObjectInstanceName: " + myString);
+            Debug.Log("c# debug:" + "->ReserveObjectInstanceName: " + myString);
             evokeCallback(0.1);
         }
 
@@ -582,7 +598,7 @@ public class TestDLL : MonoBehaviour
             StringBuilder objectInstanceName = new StringBuilder("Valve444", 100);
             RegisterObjectInstance(objectClassName, objectClassName.Capacity, objectInstanceName);
             string myString = objectClassName.ToString();
-            Debug.Log("->RegisterObjectInstance: " + myString);
+            Debug.Log("c# debug:" + "->RegisterObjectInstance: " + myString);
             evokeCallback(0.1);
         }
 
@@ -593,30 +609,48 @@ public class TestDLL : MonoBehaviour
             StringBuilder value = new StringBuilder("Max54321", 100);
             UpdateAttributeValues(objectClassName, objectClassName.Capacity, ObjectInstanceName, attributeName, value);
             string myString = objectClassName.ToString();
-            Debug.Log("->UpdateAttributeValues: " + myString);
+            Debug.Log("c# debug:" + "->UpdateAttributeValues: " + myString);
             evokeCallback(0.1);
         }
 
         {
-            //GetInteractionClassHandle(StringBuilder interactionClassName, int length);
+            StringBuilder interactionClassName = new StringBuilder("HLAinteractionRoot.InteractionClass0", 100);
+            GetInteractionClassHandle(interactionClassName, interactionClassName.Capacity);
+            Debug.Log("c# debug:" + "->GetInteractionClassHandle: " + interactionClassName.ToString());
+            evokeCallback(0.1);
         }
         {
-            //GetParameterHandle(StringBuilder interactionClassName, int length, StringBuilder parametrName);
+            StringBuilder interactionClassName = new StringBuilder("HLAinteractionRoot.InteractionClass0", 100);
+            StringBuilder parametrName = new StringBuilder("Parameter0", 100);
+            GetParameterHandle(interactionClassName, interactionClassName.Capacity, parametrName);
+            Debug.Log("c# debug:" + "->GetParameterHandle: " + interactionClassName.ToString());
+            evokeCallback(0.1);
         }
         {
-            //SubscribeInteractionClass(StringBuilder interactionClassName, int length);
+            StringBuilder interactionClassName = new StringBuilder("HLAinteractionRoot.InteractionClass0", 100);
+            SubscribeInteractionClass(interactionClassName, interactionClassName.Capacity);
+            Debug.Log("c# debug:" + "->SubscribeInteractionClass: " + interactionClassName.ToString());
+            evokeCallback(0.1);
         }
         {
-            //PublishInteractionClass(StringBuilder interactionClassName, int length);
+            StringBuilder interactionClassName = new StringBuilder("HLAinteractionRoot.InteractionClass0", 100);
+            PublishInteractionClass(interactionClassName, interactionClassName.Capacity);
+            Debug.Log("c# debug:" + "->PublishInteractionClass: " + interactionClassName.ToString());
+            evokeCallback(0.1);
         }
         {
-            //SendInteraction(StringBuilder interactionClassName, int length, StringBuilder parametrNames, StringBuilder values);
+            StringBuilder interactionClassName = new StringBuilder("HLAinteractionRoot.InteractionClass0", 100);
+            StringBuilder parametrName = new StringBuilder("Parameter0", 100);
+            StringBuilder parametrValue = new StringBuilder("900.123", 100);
+            SendInteraction(interactionClassName, interactionClassName.Capacity, parametrName, parametrValue);
+            Debug.Log("c# debug:" + "->SendInteraction: " + interactionClassName.ToString());
+            evokeCallback(0.1);
         }
         {    
             //ResignFederationExecution(StringBuilder returnstring, int length);
         }
 
-
+        /*
         {
             StringBuilder teststring = new StringBuilder("0123456789", 100);
             UnconditionalAttributeOwnershipDivestiture(teststring, teststring.Capacity, teststring, teststring);
@@ -632,6 +666,7 @@ public class TestDLL : MonoBehaviour
             queryAttributeOwnership(teststring, teststring.Capacity);
             isAttributeOwnedByFederate(teststring, teststring.Capacity);
         }
+        */
     }
 
 
@@ -648,7 +683,7 @@ public class TestDLL : MonoBehaviour
         StringBuilder str2 = new StringBuilder(100);
         SynchronizationPointAchieved(str2, str2.Capacity);
         string myString2 = str2.ToString();
-        Debug.Log("SynchronizationPointAchieved: " + myString2);
+        Debug.Log("c# debug:" + "SynchronizationPointAchieved: " + myString2);
 
         text1.text = myString2;
     }
@@ -658,7 +693,7 @@ public class TestDLL : MonoBehaviour
         StringBuilder str2 = new StringBuilder(100);
         RegisterFederationSynchronizationPoint(str2, str2.Capacity);
         string myString2 = str2.ToString();
-        Debug.Log("RegisterFederationSynchronizationPoint: " + myString2);
+        Debug.Log("c# debug:" + "RegisterFederationSynchronizationPoint: " + myString2);
 
         text1.text = myString2;
     }
@@ -675,7 +710,7 @@ public class TestDLL : MonoBehaviour
         StringBuilder str2 = new StringBuilder(100);
         ListFederationExecutions(str2, str2.Capacity);
         string myString2 = str2.ToString();
-        Debug.Log("ListFederationExecutions: " + myString2);
+        Debug.Log("c# debug:" + "ListFederationExecutions: " + myString2);
 
         text1.text = myString2;
     }
@@ -717,7 +752,7 @@ public class TestDLL : MonoBehaviour
         StringBuilder str2 = new StringBuilder(IP.text, 100);
         Connect(str2, str2.Capacity);
         string myString2 = str2.ToString();
-        Debug.Log("Connect: " + myString2);
+        Debug.Log("c# debug:" + "Connect: " + myString2);
 
         text1.text = myString2;
     }
@@ -730,7 +765,7 @@ public class TestDLL : MonoBehaviour
 
         CreateFederationExecution(str2, str2.Capacity, str3);
         string myString2 = str2.ToString();
-        Debug.Log("CreateFederationExecution: " + myString2);
+        Debug.Log("c# debug:" + "CreateFederationExecution: " + myString2);
 
         text1.text = myString2;
     }
@@ -740,7 +775,7 @@ public class TestDLL : MonoBehaviour
         StringBuilder str2 = new StringBuilder(FedarateName.text, 100);
         JoinFederationExecution(str2, str2.Capacity);
         string myString2 = str2.ToString();
-        Debug.Log("JoinFederationExecution: " + myString2);
+        Debug.Log("c# debug:" + "JoinFederationExecution: " + myString2);
 
         text1.text = myString2;
     }
@@ -750,7 +785,7 @@ public class TestDLL : MonoBehaviour
         StringBuilder str2 = new StringBuilder( 100);
         TestInteraction(str2, str2.Capacity);
         string myString2 = str2.ToString();
-        Debug.Log("TestInteraction: " + myString2);
+        Debug.Log("c# debug:" + "TestInteraction: " + myString2);
         text1.text = myString2;
     }
 
@@ -765,7 +800,7 @@ public class TestDLL : MonoBehaviour
 
         TestObjects(str2, str2.Capacity, className, attributeName, objectInstanceName);
         string myString2 = str2.ToString();
-        Debug.Log("TestObjects: " + myString2);
+        Debug.Log("c# debug:" + "TestObjects: " + myString2);
         text1.text = myString2;
     }
 
@@ -781,7 +816,7 @@ public class TestDLL : MonoBehaviour
 
         SetValueAttributeObject(str2, str2.Capacity, objectInstanceName, attributeName, attributeValue);
         string myString2 = str2.ToString();
-        Debug.Log("TestObjects: " + myString2);
+        Debug.Log("c# debug:" + "TestObjects: " + myString2);
         text1.text = myString2;
     }
 

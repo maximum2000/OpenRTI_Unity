@@ -163,8 +163,8 @@ int CreateFederationExecution(char* myString1, int length1, char* myString2)
     cls2 << myString2;
     std::wstring file = cls2.str();
 
-    ambassador->SendLog(L"DEBUG: CreateFederationExecution:IP=" + IP, 0);
-    ambassador->SendLog(L"DEBUG: CreateFederationExecution:name=" + name, 0);
+    ambassador->SendLog(L"debug DLL: CreateFederationExecution:IP=" + IP, 0);
+    ambassador->SendLog(L"debug DLL: CreateFederationExecution:name=" + name, 0);
 
     // create, must work
     int ret = MyCreateFederationExecution(name, file);
@@ -211,7 +211,7 @@ int JoinFederationExecution(char* myString, int length)
     cls << myString;
     std::wstring name = cls.str();
 
-    ambassador->SendLog(L"DEBUG: JoinFederationExecution:name=" + name, 0);
+    ambassador->SendLog(L"debug DLL: JoinFederationExecution:name=" + name, 0);
 
     // join must work
     int ret = MyJoinFederationExecution(name);
@@ -255,7 +255,7 @@ int ListFederationExecutions(char* myString, int length)
     ambassador->evokeCallback(1.0);
     int ret = MyListFederationExecutions();
 
-    ambassador->SendLog(L"DEBUG: ListFederationExecutions call", 0);
+    ambassador->SendLog(L"debug DLL: ListFederationExecutions call", 0);
 
     if (ret == 1)
     {
@@ -303,7 +303,7 @@ int MyRegisterFederationSynchronizationPoint()
 int RegisterFederationSynchronizationPoint(char* myString, int length)
 {
     int ret = MyRegisterFederationSynchronizationPoint();
-    ambassador->SendLog(L"DEBUG: RegisterFederationSynchronizationPoint call", 0);
+    ambassador->SendLog(L"debug DLL: RegisterFederationSynchronizationPoint call", 0);
 
     if (ret == 1)
     {
@@ -324,7 +324,7 @@ int MySynchronizationPointAchieved()
     try
     {
         ambassador->synchronizationPointAchieved(L"PPP");
-        ambassador->SendLog(L"DEBUG: synchronizationPointAchieved call", 0);
+        ambassador->SendLog(L"debug DLL: synchronizationPointAchieved call", 0);
     }
     catch (const rti1516e::Exception& e)
     {
@@ -366,7 +366,7 @@ int SynchronizationPointAchieved(char* myString, int length)
 int evokeCallback(double dT)
 {
     ambassador->evokeCallback(dT);
-    ambassador->SendLog(L"DEBUG: evokeCallback call", 0);
+    ambassador->SendLog(L"debug DLL: evokeCallback call", 0);
     return 0;
 }
 
@@ -429,7 +429,7 @@ int GetObjectClassHandle(char* myString, int length)
     std::wstringstream cls;
     cls << myString;
     std::wstring className = cls.str();
-    ambassador->SendLog(L"DEBUG: GetObjectClassHandle:name=" + className, 0);
+    ambassador->SendLog(L"debug DLL: GetObjectClassHandle:name=" + className, 0);
     int ret = MyGetObjectClassHandle(className);
     if (ret == 1)
     {
@@ -476,7 +476,7 @@ int GetAttributeHandle(char* myString1, int length1, char* myString2)
     std::wstringstream cls2;
     cls2 << myString2;
     std::wstring attributeName = cls2.str();
-    ambassador->SendLog(L"DEBUG: GetAttributeHandle:className=" + className + L" attributeName:" + attributeName, 0);
+    ambassador->SendLog(L"debug DLL: GetAttributeHandle:className=" + className + L" attributeName:" + attributeName, 0);
     int ret = MyGetAttributeHandle(className, attributeName);
     if (ret == 1)
     {
@@ -528,7 +528,7 @@ int GetObjectInstanceHandle(wchar_t*  myString1, int length1)
     cls1 << myString1;
     std::wstring objectInstanceName = cls1.str();
     
-    ambassador->SendLog(L"DEBUG: GetObjectInstanceHandle:objectInstanceName=" + objectInstanceName, 0);
+    ambassador->SendLog(L"debug DLL: GetObjectInstanceHandle:objectInstanceName=" + objectInstanceName, 0);
     int ret = MyGetObjectInstanceHandle(objectInstanceName);
     if (ret == 1)
     {
@@ -602,7 +602,7 @@ int PublishObjectClassAttributes(char* myString1, int length1, char* myString2)
     std::wstringstream cls2;
     cls2 << myString2;
     std::wstring attributeName = cls2.str();
-    ambassador->SendLog(L"DEBUG: PublishObjectClassAttributes:className=" + className + L" attributeName:" + attributeName, 0);
+    ambassador->SendLog(L"debug DLL: PublishObjectClassAttributes:className=" + className + L" attributeName:" + attributeName, 0);
     int ret = MyPublishObjectClassAttributes(className, attributeName);
     if (ret == 1)
     {
@@ -659,7 +659,7 @@ int SubscribeObjectClassAttributes(char* myString1, int length1, char* myString2
     std::wstringstream cls2;
     cls2 << myString2;
     std::wstring attributeName = cls2.str();
-    ambassador->SendLog(L"DEBUG: SubscribeObjectClassAttributes:className=" + className + L" attributeName:" + attributeName, 0);
+    ambassador->SendLog(L"debug DLL: SubscribeObjectClassAttributes:className=" + className + L" attributeName:" + attributeName, 0);
     int ret = MySubscribeObjectClassAttributes(className, attributeName);
     if (ret == 1)
     {
@@ -701,7 +701,7 @@ int ReserveObjectInstanceName(char* myString1, int length1)
     cls1 << myString1;
     std::wstring objectInstanceName = cls1.str();
 
-    ambassador->SendLog(L"DEBUG: ReserveObjectInstanceName:objectInstanceName=" + objectInstanceName, 0);
+    ambassador->SendLog(L"debug DLL: ReserveObjectInstanceName:objectInstanceName=" + objectInstanceName, 0);
     int ret = MyReserveObjectInstanceName(objectInstanceName);
     if (ret == 1)
     {
@@ -749,7 +749,7 @@ int RegisterObjectInstance(char* myString1, int length1, char* myString2)
     std::wstringstream cls2;
     cls2 << myString2;
     std::wstring objectInstanceName = cls2.str();
-    ambassador->SendLog(L"DEBUG: MyRegisterObjectInstance:className=" + className + L" objectInstanceName:" + objectInstanceName, 0);
+    ambassador->SendLog(L"debug DLL: MyRegisterObjectInstance:className=" + className + L" objectInstanceName:" + objectInstanceName, 0);
     int ret = MyRegisterObjectInstance(className, objectInstanceName);
     if (ret == 1)
     {
@@ -813,7 +813,7 @@ int UpdateAttributeValues(char* myString1, int length1, char* myString2, char* m
     cls4 << myString4;
     std::wstring attributeValue = cls4.str();
 
-    ambassador->SendLog(L"DEBUG: UpdateAttributeValues:" + className + L"." +  objectInstanceName + L"." + attributeName + L"=" + attributeValue, 0);
+    ambassador->SendLog(L"debug DLL: UpdateAttributeValues:" + className + L"." +  objectInstanceName + L"." + attributeName + L"=" + attributeValue, 0);
     int ret = MyUpdateAttributeValues(className, objectInstanceName, attributeName, attributeValue);
     if (ret == 1)
     {
@@ -862,7 +862,7 @@ int GetInteractionClassHandle(char* myString1, int length1)
     cls1 << myString1;
     std::wstring interactionName = cls1.str();
    
-    ambassador->SendLog(L"DEBUG: GetInteractionClassHandle:interactionName=" + interactionName, 0);
+    ambassador->SendLog(L"debug DLL: GetInteractionClassHandle:interactionName=" + interactionName, 0);
     int ret = MyGetInteractionClassHandle(interactionName);
     if (ret == 1)
     {
@@ -915,7 +915,7 @@ int GetParameterHandle(char* myString1, int length1, char* myString2)
     cls2 << myString2;
     std::wstring interactionParameterName = cls2.str();
 
-    ambassador->SendLog(L"DEBUG: GetParameterHandle:interactionName=" + interactionName + L" ,interactionParameterName=" + interactionParameterName, 0);
+    ambassador->SendLog(L"debug DLL: GetParameterHandle:interactionName=" + interactionName + L" ,interactionParameterName=" + interactionParameterName, 0);
     int ret = MyGetParameterHandle(interactionName, interactionParameterName);
     if (ret == 1)
     {
@@ -959,7 +959,7 @@ int SubscribeInteractionClass(char* myString1, int length1)
     cls1 << myString1;
     std::wstring interactionName = cls1.str();
 
-    ambassador->SendLog(L"DEBUG: SubscribeInteractionClass:interactionName=" + interactionName, 0);
+    ambassador->SendLog(L"debug DLL: SubscribeInteractionClass:interactionName=" + interactionName, 0);
     int ret = MySubscribeInteractionClass(interactionName);
     if (ret == 1)
     {
@@ -1003,7 +1003,7 @@ int PublishInteractionClass(char* myString1, int length1)
     cls1 << myString1;
     std::wstring interactionName = cls1.str();
 
-    ambassador->SendLog(L"DEBUG: PublishInteractionClass:interactionName=" + interactionName, 0);
+    ambassador->SendLog(L"debug DLL: PublishInteractionClass:interactionName=" + interactionName, 0);
     int ret = MyPublishInteractionClass(interactionName);
     if (ret == 1)
     {
@@ -1066,7 +1066,7 @@ int SendInteraction(char* myString1, int length1, char* myString2, char* myStrin
     std::wstring parameterValue = cls3.str();
     
 
-    ambassador->SendLog(L"DEBUG: SendInteraction:" + interactionName + L"." + parameterName + L"=" + parameterValue, 0);
+    ambassador->SendLog(L"debug DLL: SendInteraction:" + interactionName + L"." + parameterName + L"=" + parameterValue, 0);
    
     int ret = MySendInteraction(interactionName, parameterName, parameterValue);
     if (ret == 1)
@@ -1113,7 +1113,7 @@ int ResignFederationExecution(char* myString1, int length1)
     cls1 << myString1;
     std::wstring interactionName = cls1.str();
 
-    ambassador->SendLog(L"DEBUG: PublishInteractionClass:interactionName=" + interactionName, 0);
+    ambassador->SendLog(L"debug DLL: PublishInteractionClass:interactionName=" + interactionName, 0);
     int ret = MyPublishInteractionClass(interactionName);
     if (ret == 1)
     {
@@ -1173,7 +1173,7 @@ int UnconditionalAttributeOwnershipDivestiture(char* myString1, int length1, cha
     std::wstringstream cls3;
     cls3 << myString3;
     std::wstring attributeName = cls3.str();
-    ambassador->SendLog(L"DEBUG: UnconditionalAttributeOwnershipDivestiture" + ClassName + L"." + ObjectInstanceName + L"" + attributeName, 0);
+    ambassador->SendLog(L"debug DLL: UnconditionalAttributeOwnershipDivestiture" + ClassName + L"." + ObjectInstanceName + L"" + attributeName, 0);
     int ret = MyUnconditionalAttributeOwnershipDivestiture(ClassName, ObjectInstanceName, attributeName);
     if (ret == 1)
     {
@@ -1229,7 +1229,7 @@ int NegotiatedAttributeOwnershipDivestiture(char* myString1, int length1, char* 
     std::wstringstream cls3;
     cls3 << myString3;
     std::wstring attributeName = cls3.str();
-    ambassador->SendLog(L"DEBUG: NegotiatedAttributeOwnershipDivestiture" + ClassName + L"." + ObjectInstanceName + L"" + attributeName, 0);
+    ambassador->SendLog(L"debug DLL: NegotiatedAttributeOwnershipDivestiture" + ClassName + L"." + ObjectInstanceName + L"" + attributeName, 0);
     int ret = MyNegotiatedAttributeOwnershipDivestiture(ClassName, ObjectInstanceName, attributeName);
     if (ret == 1)
     {
@@ -1287,7 +1287,7 @@ int ConfirmDivestiture(char* myString1, int length1, char* myString2, char* mySt
     std::wstringstream cls3;
     cls3 << myString3;
     std::wstring attributeName = cls3.str();
-    ambassador->SendLog(L"DEBUG: ConfirmDivestiture" + ClassName + L"." + ObjectInstanceName + L"" + attributeName, 0);
+    ambassador->SendLog(L"debug DLL: ConfirmDivestiture" + ClassName + L"." + ObjectInstanceName + L"" + attributeName, 0);
     int ret = MyConfirmDivestiture(ClassName, ObjectInstanceName, attributeName);
     if (ret == 1)
     {
@@ -1310,7 +1310,7 @@ int AttributeOwnershipAcquisition(char* myString1, int length1)
     std::wstring Name = cls1.str();
     //ambassador->attributeOwnerhipAcq
 
-    ambassador->SendLog(L"DEBUG: AttributeOwnershipAcquisition" + Name, 0);
+    ambassador->SendLog(L"debug DLL: AttributeOwnershipAcquisition" + Name, 0);
     return 0;
 }
 
@@ -1321,7 +1321,7 @@ int AttributeOwnershipAcquisitionIfAvailable(char* myString1, int length1)
     cls1 << myString1;
     std::wstring Name = cls1.str();
 
-    ambassador->SendLog(L"DEBUG: AttributeOwnershipAcquisitionIfAvailable" + Name, 0);
+    ambassador->SendLog(L"debug DLL: AttributeOwnershipAcquisitionIfAvailable" + Name, 0);
     return 0;
 }
 
@@ -1332,7 +1332,7 @@ DLLExport int AttributeOwnershipReleaseDenied(char* myString1, int length1)
     cls1 << myString1;
     std::wstring Name = cls1.str();
 
-    ambassador->SendLog(L"DEBUG: AttributeOwnershipReleaseDenied" + Name, 0);
+    ambassador->SendLog(L"debug DLL: AttributeOwnershipReleaseDenied" + Name, 0);
     return 0;
 }
 
@@ -1343,7 +1343,7 @@ int AttributeOwnershipDivestitureIfWanted(char* myString1, int length1)
     cls1 << myString1;
     std::wstring Name = cls1.str();
 
-    ambassador->SendLog(L"DEBUG: AttributeOwnershipDivestitureIfWanted" + Name, 0);
+    ambassador->SendLog(L"debug DLL: AttributeOwnershipDivestitureIfWanted" + Name, 0);
     return 0;
 }
 
@@ -1354,7 +1354,7 @@ int CancelNegotiatedAttributeOwnershipDivestiture(char* myString1, int length1)
     cls1 << myString1;
     std::wstring Name = cls1.str();
 
-    ambassador->SendLog(L"DEBUG: CancelNegotiatedAttributeOwnershipDivestiture" + Name, 0);
+    ambassador->SendLog(L"debug DLL: CancelNegotiatedAttributeOwnershipDivestiture" + Name, 0);
     return 0;
 }
 
@@ -1365,7 +1365,7 @@ int CancelAttributeOwnershipAcquisition(char* myString1, int length1)
     cls1 << myString1;
     std::wstring Name = cls1.str();
 
-    ambassador->SendLog(L"DEBUG: CancelAttributeOwnershipAcquisition" + Name, 0);
+    ambassador->SendLog(L"debug DLL: CancelAttributeOwnershipAcquisition" + Name, 0);
     return 0;
 }
 
@@ -1376,7 +1376,7 @@ int queryAttributeOwnership(char* myString1, int length1)
     cls1 << myString1;
     std::wstring Name = cls1.str();
 
-    ambassador->SendLog(L"DEBUG: queryAttributeOwnership" + Name, 0);
+    ambassador->SendLog(L"debug DLL: queryAttributeOwnership" + Name, 0);
     return 0;
 }
 
@@ -1387,7 +1387,7 @@ int isAttributeOwnedByFederate(char* myString1, int length1)
     cls1 << myString1;
     std::wstring Name = cls1.str();
 
-    ambassador->SendLog(L"DEBUG: isAttributeOwnedByFederate" + Name, 0);
+    ambassador->SendLog(L"debug DLL: isAttributeOwnedByFederate" + Name, 0);
     return 0;
 }
 
@@ -1522,7 +1522,7 @@ int TestInteraction(char* myString, int length)
     //std::wstring name = cls.str();
 
     //ambassador->SendLog(name, 0);
-    ambassador->SendLog(L"DEBUG: TestInteraction call", 0);
+    ambassador->SendLog(L"debug DLL: TestInteraction call", 0);
 
     // join must work
     int ret = MyTestInteraction();
@@ -1717,10 +1717,10 @@ int TestObjects(char* myString, int length, char* _className, char* _attributeNa
 
 
     //ambassador->SendLog(name, 0);
-    ambassador->SendLog(L"DEBUG: TestObjects call", 0);
-    ambassador->SendLog(L"DEBUG: TestObjects:className=" + className, 0);
-    ambassador->SendLog(L"DEBUG: TestObjects:attributeName=" + attributeName, 0);
-    ambassador->SendLog(L"DEBUG: TestObjects:objectInstanceName=" + objectInstanceName, 0);
+    ambassador->SendLog(L"debug DLL: TestObjects call", 0);
+    ambassador->SendLog(L"debug DLL: TestObjects:className=" + className, 0);
+    ambassador->SendLog(L"debug DLL: TestObjects:attributeName=" + attributeName, 0);
+    ambassador->SendLog(L"debug DLL: TestObjects:objectInstanceName=" + objectInstanceName, 0);
 
     // join must work
     int ret = MyTestObjects(className, attributeName, objectInstanceName);
@@ -1787,10 +1787,10 @@ int SetValueAttributeObject(char* myString, int length, char* _objectInstanceNam
     std::wstring attributeValue = cls4.str();
     
     //ambassador->SendLog(name, 0);
-    ambassador->SendLog(L"DEBUG: SetValueAttributeObject call", 0);
-    ambassador->SendLog(L"DEBUG: SetValueAttributeObject:objectInstanceName=" + objectInstanceName, 0);
-    ambassador->SendLog(L"DEBUG: SetValueAttributeObject:attributeName=" + attributeName, 0);
-    ambassador->SendLog(L"DEBUG: SetValueAttributeObject:attributeValue=" + attributeValue, 0);
+    ambassador->SendLog(L"debug DLL: SetValueAttributeObject call", 0);
+    ambassador->SendLog(L"debug DLL: SetValueAttributeObject:objectInstanceName=" + objectInstanceName, 0);
+    ambassador->SendLog(L"debug DLL: SetValueAttributeObject:attributeName=" + attributeName, 0);
+    ambassador->SendLog(L"debug DLL: SetValueAttributeObject:attributeValue=" + attributeValue, 0);
 
 
     // join must work
