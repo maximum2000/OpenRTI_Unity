@@ -6,13 +6,20 @@ using System.Runtime.InteropServices;
 using System;
 using System.Text;
 using TMPro;
+//using UnityEngine.Events;
 
+
+//[System.Serializable]
+//public class MyInteractionEvent : UnityEvent<int> { }
 
 
 public class IEEE1516_2010_E_DLL : MonoBehaviour
 {
     //Все callback'и расположены в файле...
     //ieee1516\DLLtoUnity\RTI1516EAmbassadorLContent.h
+    //public MyInteractionEvent ReceiveInteractionEvent;
+    //public  Action<int> HealthChangedAction;
+
 
     //имя класса для создаваемого объекта
     public TMP_InputField IP;
@@ -228,8 +235,8 @@ public class IEEE1516_2010_E_DLL : MonoBehaviour
         Debug.Log("c# callback:" + "ReportFederationExecutions");
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
         string debugString2 = Marshal.PtrToStringAnsi(message2, size2);
-        Debug.Log("c# debug:" + debugString1);
-        Debug.Log("c# debug:" + debugString2);
+        Debug.Log("c# debug:federationExecutionName:" + debugString1);
+        Debug.Log("c# debug:logicalTimeImplementationName:" + debugString2);
     }
     //end callback для сообщений информации о выполнении федерации (reportFederationExecutions)
 
@@ -242,7 +249,7 @@ public class IEEE1516_2010_E_DLL : MonoBehaviour
     {
         Debug.Log("c# callback:" + "SynchronizationPointRegistrationSucceeded");
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
-        Debug.Log("c# debug:" + debugString1);
+        Debug.Log("c# debug:label:" + debugString1);
     }
     //end callback для сообщений информации о успешности регистрации точки синхронизации (synchronizationPointRegistrationSucceeded)
 
@@ -257,8 +264,8 @@ public class IEEE1516_2010_E_DLL : MonoBehaviour
         Debug.Log("c# callback:" + "SynchronizationPointRegistrationFailed");
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
         string debugString2 = Marshal.PtrToStringAnsi(message2, size2);
-        Debug.Log("c# debug:" + debugString1);
-        Debug.Log("c# debug:" + debugString2);
+        Debug.Log("c# debug:label:" + debugString1);
+        Debug.Log("c# debug:synchronizationPointFlag:" + debugString2);
     }
     //end callback для сообщений информации о провале регистрации точки синхронизации (synchronizationPointRegistrationFailedCallback)
 
@@ -271,7 +278,7 @@ public class IEEE1516_2010_E_DLL : MonoBehaviour
     {
         Debug.Log("c# callback:" + "AnnounceSynchronizationPoint");
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
-        Debug.Log("c# debug:" + debugString1);
+        Debug.Log("c# debug:label:" + debugString1);
     }
     //end callback для сообщений информации о установке синхронизации (announceSynchronizationPointCallback)
 
@@ -284,7 +291,7 @@ public class IEEE1516_2010_E_DLL : MonoBehaviour
     {
         Debug.Log("c# callback:" + "FederationSynchronized");
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
-        Debug.Log("c# debug:" + debugString1);
+        Debug.Log("c# debug:label:" + debugString1);
     }
     //end callback для сообщений о факте того, что вся федерация синхронизирована (federationSynchronized)
 
@@ -297,7 +304,7 @@ public class IEEE1516_2010_E_DLL : MonoBehaviour
     {
         Debug.Log("c# callback:" + "ObjectInstanceNameReservationSucceeded");
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
-        Debug.Log("c# debug:" + debugString1);
+        Debug.Log("c# debug:name:" + debugString1);
     }
     //callback для сообщений информации о резервировании имени объекта (objectInstanceNameReservationSucceeded)
 
@@ -310,7 +317,7 @@ public class IEEE1516_2010_E_DLL : MonoBehaviour
     {
         Debug.Log("c# callback:" + "ObjectInstanceNameReservationFailed");
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
-        Debug.Log("c# debug:" + debugString1);
+        Debug.Log("c# debug:name:" + debugString1);
     }
     //callback для сообщений информации о резервировании имени объекта (objectInstanceNameReservationFailed)
 
@@ -326,9 +333,9 @@ public class IEEE1516_2010_E_DLL : MonoBehaviour
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
         string debugString2 = Marshal.PtrToStringAnsi(message2, size2);
         string debugString3 = Marshal.PtrToStringAnsi(message3, size3);
-        Debug.Log("c# debug:" + debugString1);
-        Debug.Log("c# debug:" + debugString2);
-        Debug.Log("c# debug:" + debugString3);
+        Debug.Log("c# debug:objectClassHandle:" + debugString1);
+        Debug.Log("c# debug:objectInstanceHandle:" + debugString2);
+        Debug.Log("c# debug:objectInstanceName:" + debugString3);
     }
     //callback для сообщений о создании нового объекта (discoverObjectInstance)
 
@@ -343,9 +350,9 @@ public class IEEE1516_2010_E_DLL : MonoBehaviour
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
         string debugString2 = Marshal.PtrToStringAnsi(message2, size2);
         string debugString3 = Marshal.PtrToStringAnsi(message3, size3);
-        Debug.Log("c# debug:" + debugString1);
-        Debug.Log("c# debug:" + debugString2);
-        Debug.Log("c# debug:" + debugString3);
+        Debug.Log("c# debug:objectInstanceHandle:" + debugString1);
+        Debug.Log("c# debug:attributeHandle:" + debugString2);
+        Debug.Log("c# debug:value:" + debugString3);
     }
     //callback для сообщений о изменении атрибута (reflectAttributeValues)
 
@@ -360,9 +367,13 @@ public class IEEE1516_2010_E_DLL : MonoBehaviour
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
         string debugString2 = Marshal.PtrToStringAnsi(message2, size2);
         string debugString3 = Marshal.PtrToStringAnsi(message3, size3);
-        Debug.Log("c# debug:" + debugString1);
-        Debug.Log("c# debug:" + debugString2);
-        Debug.Log("c# debug:" + debugString3);
+        Debug.Log("c# debug:objectInstanceHandle:" + debugString1);
+        Debug.Log("c# debug:parameterHandle:" + debugString2);
+        Debug.Log("c# debug:value:" + debugString3);
+
+        //int temp = 2;
+        //ReceiveInteractionEvent.Invoke(temp);
+        //HealthChangedAction?.Invoke(2);
     }
     //callback для сообщений о получении интеракции (receiveInteraction)
 
@@ -376,7 +387,7 @@ public class IEEE1516_2010_E_DLL : MonoBehaviour
     {
         Debug.Log("c# callback:" + "RemoveObjectInstance");
         string debugString1 = Marshal.PtrToStringAnsi(message1, size1);
-        Debug.Log("c# debug:" + debugString1);
+        Debug.Log("c# debug:objectInstanceHandle:" + debugString1);
     }
     //callback для сообщений о удалении объекта (removeObjectInstance)
 
