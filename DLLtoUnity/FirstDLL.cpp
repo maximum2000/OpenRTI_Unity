@@ -884,8 +884,8 @@ int MyGetParameterHandle(std::wstring interactionName, std::wstring interactionP
 {
     LastErrorString = L"";
 
-    rti1516e::InteractionClassHandle InteractionClass0Handle;
-    rti1516e::ParameterHandle class0Parameter0Handle;
+    //rti1516e::InteractionClassHandle InteractionClass0Handle;
+    //rti1516e::ParameterHandle class0Parameter0Handle;
 
     //получение класса интеракции
     try
@@ -1111,10 +1111,10 @@ int ResignFederationExecution(char* myString1, int length1)
 {
     std::wstringstream cls1;
     cls1 << myString1;
-    std::wstring interactionName = cls1.str();
+    std::wstring returnString = cls1.str();
 
-    ambassador->SendLog(L"debug DLL: PublishInteractionClass:interactionName=" + interactionName, 0);
-    int ret = MyPublishInteractionClass(interactionName);
+    ambassador->SendLog(L"debug DLL: ResignFederationExecution:FederationName=" + FederationName, 0);
+    int ret = MyResignFederationExecution(returnString);
     if (ret == 1)
     {
         std::string s(LastErrorString.begin(), LastErrorString.end());
