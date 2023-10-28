@@ -33,7 +33,7 @@ use:
 6. Run rtinode.exe (server) on command line
 7. Run Unity, open scene, test work
 
-
+![plot](./UnityTest/Assets/pic/1.png)
 ![plot](./UnityTest/Assets/pic/2.png)
 
 
