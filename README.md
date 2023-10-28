@@ -5,7 +5,8 @@ used in company projects https://Lcontent.ru
 
 based on OpenRTI
 
-![plot](./directory_1/directory_2/.../directory_n/plot.png)
+![plot](./UnityTest/Assets/pic/3.png)
+
 
 genaral OpenRTI repo:
 https://github.com/onox/OpenRTI.git
