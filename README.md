@@ -34,7 +34,7 @@ use:
 7. Run Unity, open scene, test work
 
 
-
+![plot](./UnityTest/Assets/pic/2.png)
 
 
 Состав:
