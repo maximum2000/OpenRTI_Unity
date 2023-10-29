@@ -934,6 +934,8 @@ void OnDestroy()
     // Update is called once per frame
     void Update()
     {
+        GetReadedBytes();
+
         //List<bool> allEvent
         for (int i=0; i < allEvent.Count; i++)
         {
