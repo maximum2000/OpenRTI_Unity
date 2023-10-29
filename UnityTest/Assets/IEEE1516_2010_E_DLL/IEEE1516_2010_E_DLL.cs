@@ -6,23 +6,26 @@ using System.Runtime.InteropServices;
 using System;
 using System.Text;
 using TMPro;
-//using UnityEngine.Events;
+using UnityEngine.Events;
 
 
-//[System.Serializable]
-//public class MyInteractionEvent : UnityEvent<int> { }
+[System.Serializable]
+public class MyInteractionEvent : UnityEvent<int> { }
 
 
 public class IEEE1516_2010_E_DLL : MonoBehaviour
 {
     //Все callback'и расположены в файле...
     //ieee1516\DLLtoUnity\RTI1516EAmbassadorLContent.h
-    //public MyInteractionEvent ReceiveInteractionEvent;
-    //public  Action<int> HealthChangedAction;
 
 
-    //имя класса для создаваемого объекта
-    public TMP_InputField IP;
+    public MyInteractionEvent ReceiveInteractionEvent;
+    public static List<int> allEvent;
+   //public  Action<int> HealthChangedAction;
+
+
+   //имя класса для создаваемого объекта
+   public TMP_InputField IP;
 
     //public TextMeshProUGUI text1;
     public TMP_InputField FedarationName;
@@ -909,15 +912,25 @@ void OnDestroy()
     // Start is called before the first frame update
     void Start()
     {
-        
+        allEvent = new List<int>();
 
-        
+
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        //List<bool> allEvent
+        for (int i=0; i < allEvent.Count; i++)
+        {
+            int z = allEvent[i];
+            if (ReceiveInteractionEvent != null)
+            {
+                ReceiveInteractionEvent.Invoke(z);
+            }
+        }
+            
     }
 }
 
