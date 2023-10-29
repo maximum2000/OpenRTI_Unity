@@ -8,6 +8,8 @@ using System.Text;
 using TMPro;
 using UnityEngine.Events;
 
+using System.Threading;
+
 
 [System.Serializable]
 public class MyInteractionEvent : UnityEvent<int> { }
@@ -17,6 +19,11 @@ public class IEEE1516_2010_E_DLL : MonoBehaviour
 {
     //Все callback'и расположены в файле...
     //ieee1516\DLLtoUnity\RTI1516EAmbassadorLContent.h
+
+    /// Background thread for TcpServer workload.  
+    private Thread My_Thread;
+    private Mutex mutexObj;
+    bool stop = false;
 
 
     public MyInteractionEvent ReceiveInteractionEvent;
@@ -914,7 +921,13 @@ void OnDestroy()
     {
         allEvent = new List<int>();
 
+        mutexObj = new Mutex();
+        My_Thread = new Thread(new ThreadStart(thread_loop));
+        My_Thread.IsBackground = true;
+        My_Thread.Start();
 
+        // mutexObj.Dispose();
+        // My_Thread.Abort();
 
     }
 
@@ -932,6 +945,34 @@ void OnDestroy()
         }
             
     }
+
+
+    private void thread_loop()
+    {
+        while (stop==false)
+        {
+            
+        }
+    }
+
+    public List<int> GetReadedBytes()
+    {
+        if (stop == true)
+        {
+            return new List<int>();
+        }
+
+        mutexObj.WaitOne();
+        List<int> ReadedBytesDeepCopy = new List<int>();
+        foreach (byte b in allEvent)
+        {
+            ReadedBytesDeepCopy.Add(b);
+        }
+        allEvent.Clear();
+        mutexObj.ReleaseMutex();
+        return ReadedBytesDeepCopy;
+    }
+
 }
 
 
