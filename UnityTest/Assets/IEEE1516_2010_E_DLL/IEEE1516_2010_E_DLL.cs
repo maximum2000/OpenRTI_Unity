@@ -856,21 +856,21 @@ void OnDestroy()
 
 
 
-  
-
-   
 
 
 
-   
 
 
 
-    
 
-    
 
-    
+
+
+
+
+
+
+
     /*
     public void  StepTest()
     {
@@ -913,11 +913,13 @@ void OnDestroy()
     }
     */
 
-    
-    
 
-    // Start is called before the first frame update
     void Start()
+    {
+    }
+
+        // Start is called before the first frame update
+    public void StartThread()
     {
         allEvent = new List<int>();
 
@@ -934,6 +936,8 @@ void OnDestroy()
     // Update is called once per frame
     void Update()
     {
+        return;
+
         GetReadedBytes();
 
         //List<bool> allEvent
@@ -953,7 +957,8 @@ void OnDestroy()
     {
         while (stop==false)
         {
-            
+            evokeCallback(0.1);
+            getObjectClassHandle();
         }
     }
 
