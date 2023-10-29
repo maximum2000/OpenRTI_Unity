@@ -922,7 +922,7 @@ void OnDestroy()
         allEvent = new List<int>();
 
         mutexObj = new Mutex();
-        My_Thread = new Thread(new ThreadStart(thread_loop));
+        My_Thread = new Thread(new ThreadStart(Thread_loop));
         My_Thread.IsBackground = true;
         My_Thread.Start();
 
@@ -949,7 +949,7 @@ void OnDestroy()
     }
 
 
-    private void thread_loop()
+    private void Thread_loop()
     {
         while (stop==false)
         {
